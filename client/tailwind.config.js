@@ -24,6 +24,15 @@ module.exports = {
         hardSm: '2px 2px 0px 0px #2d2d2d',
         hardRed: '4px 4px 0px 0px #ff4d4d',
       },
+      keyframes: {
+        fadeIn: {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
+      },
+      animation: {
+        fadeIn: 'fadeIn 0.3s ease-out forwards',
+      },
     },
   },
 }
