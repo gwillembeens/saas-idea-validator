@@ -5,7 +5,8 @@ import cookieParser from 'cookie-parser'
 import { validateRoute } from './routes/validate.js'
 import {
   registerRoute, loginRoute, logoutRoute, refreshRoute,
-  verifyEmailRoute, forgotPasswordRoute, resetPasswordRoute
+  verifyEmailRoute, forgotPasswordRoute, resetPasswordRoute,
+  googleAuthRoute, googleCallbackRoute, githubAuthRoute, githubCallbackRoute,
 } from './routes/auth.js'
 
 const app = express()
@@ -32,6 +33,12 @@ app.post('/api/auth/refresh', refreshRoute)
 app.get('/api/auth/verify-email', verifyEmailRoute)
 app.post('/api/auth/forgot-password', forgotPasswordRoute)
 app.post('/api/auth/reset-password', resetPasswordRoute)
+
+// Mount OAuth routes
+app.get('/api/auth/google', googleAuthRoute)
+app.get('/api/auth/google/callback', googleCallbackRoute)
+app.get('/api/auth/github', githubAuthRoute)
+app.get('/api/auth/github/callback', githubCallbackRoute)
 
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`)
