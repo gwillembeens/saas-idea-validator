@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { setIdea } from '../../store/slices/validatorSlice'
 import { useValidate } from '../../hooks/useValidate'
+import { useAuth } from '../../hooks/useAuth'
 import { Button } from '../ui/Button'
 import { TextArea } from '../ui/TextArea'
 import { Card } from '../ui/Card'
@@ -9,12 +10,22 @@ export function IdeaInput() {
   const dispatch = useDispatch()
   const { idea, status } = useSelector(s => s.validator)
   const { validate } = useValidate()
+  const { user, openModal, setPendingValidation } = useAuth()
 
   const isLoading = status === 'loading' || status === 'streaming'
 
+  function handleValidate() {
+    if (!user) {
+      setPendingValidation(true)
+      openModal('login')
+      return
+    }
+    validate()
+  }
+
   function handleSubmit(e) {
     e.preventDefault()
-    if (!isLoading) validate()
+    if (!isLoading) handleValidate()
   }
 
   return (
