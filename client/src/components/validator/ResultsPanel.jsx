@@ -1,6 +1,12 @@
 import { useSelector } from 'react-redux'
 import ReactMarkdown from 'react-markdown'
 import { Card } from '../ui/Card'
+import { parseSections } from '../../utils/parseSections'
+import { IdeaSummaryCard } from './IdeaSummaryCard'
+import { VerdictCard } from './VerdictCard'
+import { CommentaryCard } from './CommentaryCard'
+import { Scorecard } from './Scorecard'
+import { VerdictBadge } from './VerdictBadge'
 
 const markdownComponents = {
   h1: ({ children }) => (

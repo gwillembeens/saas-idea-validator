@@ -2,21 +2,21 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-current_phase: 7
-status: unknown
-last_updated: "2026-03-21T20:22:44.953Z"
+current_phase: 08
+status: in_progress
+last_updated: "2026-03-21T21:15:00.000Z"
 progress:
-  total_phases: 7
+  total_phases: 8
   completed_phases: 7
-  total_plans: 14
-  completed_plans: 14
+  total_plans: 16
+  completed_plans: 15
 ---
 
 # Project State
 
 **Last updated:** 2026-03-21
-**Current phase:** 7
-**Last completed plan:** 05-02
+**Current phase:** 08
+**Last completed plan:** 08-01
 
 ---
 
@@ -26,7 +26,7 @@ See: `.planning/PROJECT.md` (updated 2026-03-21)
 
 **Core value:** A founder pastes an idea and gets an honest, investor-grade analysis in under a minute, streamed live with a visual scorecard.
 
-**Current focus:** Phase 06 — responsive-layout-polish
+**Current focus:** Phase 08 — results-layout-redesign-option-a-split-cards
 
 ---
 
@@ -39,8 +39,9 @@ See: `.planning/PROJECT.md` (updated 2026-03-21)
 | 3 | Redux Store & Streaming Hook | ✓ Complete (2026-03-21) | 03-01, 03-02 |
 | 4 | Frontend Components & Design System | ✓ Complete (2026-03-21) | 04-01, 04-02, 04-03 |
 | 5 | Validator Logic & Scorecard | ✓ Complete (2026-03-21) | 05-01, 05-02 |
-| 6 | Responsive Layout & Polish | Pending Phase 5 | Page assembly, responsive design, accessibility |
-| 7 | Integration Testing & Deployment Ready | Pending Phase 6 | E2E tests, documentation, local verification |
+| 6 | Responsive Layout & Polish | ✓ Complete (2026-03-21) | Page assembly, responsive design, accessibility |
+| 7 | Integration Testing & Deployment Ready | ✓ Complete (2026-03-21) | E2E tests, documentation, local verification |
+| 8 | Results Layout Redesign — Option A Split Cards | In Progress | 08-01 Complete, 08-02 Pending, 08-03 Pending |
 
 ---
 
@@ -59,7 +60,17 @@ See: `.planning/PROJECT.md` (updated 2026-03-21)
 ## Accumulated Context
 
 ### Roadmap Evolution
+
 - Phase 8 added: Results layout redesign — Option A split cards
+- Plan 08-01 complete: `parseSections` utility and three card components created
+
+### Plan 08-01 Decisions
+
+1. **Markdown parsing by section headings:** Use regex to extract content between `## ` delimiters
+2. **Ignore Scorecard section:** Focus on rendering Idea Summary, Commentary, and Verdict
+3. **Stateless card components:** No Redux — components receive markdown as props only
+4. **Shared markdownComponents pattern:** Duplicate from ResultsPanel for independence and reusability
+5. **Graceful fallback:** Return `null` for falsy markdown to prevent render errors
 
 ---
 
@@ -69,8 +80,9 @@ See: `.planning/PROJECT.md` (updated 2026-03-21)
 - Design system (hand-drawn aesthetic) spans phases 4–6
 - Integration testing deferred to phase 7 to validate full end-to-end flow
 - Streaming architecture critical to UX; implemented early (phase 3)
+- Phase 8 (Results layout redesign) extends v1 polish with split-card option
 
 ---
 
-*State initialized: 2026-03-21*
-*Version: v1 MVP*
+*State updated: 2026-03-21*
+*Version: v1 MVP + Phase 8 Wave 1*

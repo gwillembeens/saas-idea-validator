@@ -207,15 +207,26 @@
 
 ### Phase 8: Results layout redesign — Option A split cards
 
-**Goal:** [To be planned]
-**Requirements**: TBD
+**Goal:** Provide alternative split-card layout for Claude's validation response (Idea Summary, Commentary, Verdict rendered as separate cards)
+**Requirements**: Layout option, cleaner section separation, optional use in ResultsPanel
 **Depends on:** Phase 7
-**Plans:** 0 plans
+**Status:** In Progress
 
-Plans:
-- [ ] TBD (run /gsd:plan-phase 8 to break down)
+**Plan 08-01 ✓ Complete (2026-03-21)**
+- ✓ `parseSections` utility splits markdown by `## ` headings into { ideaSummary, commentary, verdict }
+- ✓ `IdeaSummaryCard` component renders Idea Summary section with `decoration="tape"` `rotate={-1}`
+- ✓ `VerdictCard` component renders Verdict section with `decoration="none"` `rotate={0}`
+- ✓ `CommentaryCard` component renders Commentary section with `decoration="tape"` `rotate={1}`
+- ✓ All cards use consistent markdownComponents (text-pencil, font-heading, font-body)
+- ✓ Graceful fallback: return null for falsy markdown
+
+**Plan 08-02 (pending)**
+- [ ] `ResultsLayoutSplit` container component that calls `parseSections` and renders three cards vertically
+
+**Plan 08-03 (pending)**
+- [ ] Update `ResultsPanel` to optionally render split layout (new prop/toggle) or fall back to full markdown
 
 ---
 
-*Roadmap created: 2026-03-21*
-*Phases: 7 | Plans per phase: 4–10 | Success criteria: 3–10 per phase*
+*Roadmap updated: 2026-03-21*
+*Phases: 8 | Completed: 7 | Plans total: 16 | Completed: 15*
