@@ -101,11 +101,30 @@ export function ResultsPanel() {
     )
   }
 
-  return (
-    <Card decoration="tack" rotate={1} className="w-full max-w-2xl mx-auto">
-      <ReactMarkdown components={markdownComponents}>
-        {result}
-      </ReactMarkdown>
-    </Card>
-  )
+  if (status === 'done') {
+    const sections = parseSections(result)
+
+    if (!sections) {
+      // Fallback: parse failed — render raw markdown in single card (existing behavior)
+      return (
+        <div className="w-full max-w-2xl mx-auto">
+          <Card decoration="none" rotate={0} className="w-full">
+            <ReactMarkdown components={markdownComponents}>{result}</ReactMarkdown>
+          </Card>
+        </div>
+      )
+    }
+
+    return (
+      <div className="w-full flex flex-col items-center gap-8 animate-fadeIn">
+        <VerdictBadge />
+        <IdeaSummaryCard markdown={sections.ideaSummary} />
+        <Scorecard />
+        <VerdictCard markdown={sections.verdict} />
+        <CommentaryCard markdown={sections.commentary} />
+      </div>
+    )
+  }
+
+  return null
 }
