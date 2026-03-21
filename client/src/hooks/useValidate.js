@@ -1,9 +1,12 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { startValidation, startStreaming, appendResult, finishValidation, setError } from '../store/slices/validatorSlice.js'
+import { parseScores } from '../utils/parseResult.js'
+import { fetchWithAuth } from '../utils/fetchWithAuth.js'
 
 export function useValidate() {
   const dispatch = useDispatch()
   const { idea, status, result, error } = useSelector(s => s.validator)
+  const user = useSelector(s => s.auth.user)
 
   async function validate() {
     dispatch(startValidation())
@@ -17,12 +20,36 @@ export function useValidate() {
       dispatch(startStreaming())
       const reader = res.body.getReader()
       const decoder = new TextDecoder()
+      let fullResult = ''
       while (true) {
         const { done, value } = await reader.read()
         if (done) break
-        dispatch(appendResult(decoder.decode(value)))
+        const chunk = decoder.decode(value)
+        fullResult += chunk
+        dispatch(appendResult(chunk))
       }
       dispatch(finishValidation())
+
+      // Auto-save if user is authenticated
+      if (user) {
+        const scores = parseScores(fullResult)
+        if (scores) {
+          try {
+            await fetchWithAuth('/api/history', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                idea_text: idea,
+                markdown_result: fullResult,
+                scores,
+              }),
+            })
+          } catch (saveErr) {
+            console.error('Auto-save failed:', saveErr)
+            // Silent fail — validation result is still visible
+          }
+        }
+      }
     } catch (e) {
       dispatch(setError(e.message))
     }
