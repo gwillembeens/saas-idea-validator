@@ -16,7 +16,11 @@ streamed live with a visual scorecard — fast enough to validate 10 ideas in a 
 
 ### Validated
 
-(None yet — ship to validate)
+- [x] Hand-drawn sketchbook design system applied throughout (Kalam + Patrick Hand fonts, wobbly borders, hard offset shadows) — Validated in Phase 04: Frontend Components Design System
+- [x] Scorecard component parses phase scores and renders them visually (1–5 circles) — Validated in Phase 05: Validator Logic Scorecard
+- [x] Verdict badge displays overall signal strength with colour coding — Validated in Phase 05: Validator Logic Scorecard
+- [x] UI renders the streamed markdown progressively as it arrives — Validated in Phase 05: Validator Logic Scorecard
+- [x] All components assembled into responsive, accessible page layout — Validated in Phase 06: Responsive Layout Polish
 
 ### Active
 
@@ -83,4 +87,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-03-21 after initialization*
+*Last updated: 2026-03-21 — Phase 06 complete: responsive layout assembled, all components wired, accessibility compliance added*
