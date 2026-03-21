@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { AppShell } from './components/layout/AppShell'
 import { IdeaInput } from './components/validator/IdeaInput'
 import { ResultsPanel } from './components/validator/ResultsPanel'
@@ -7,13 +7,56 @@ import { Arrow } from './components/decorative/Arrow'
 import { AuthModal } from './components/auth/AuthModal'
 import { SignInButton } from './components/auth/SignInButton'
 import { useAuth } from './hooks/useAuth'
+import { setUser, setAuthModalMode, setShowAuthModal } from './store/slices/authSlice'
 
 export default function App() {
+  const dispatch = useDispatch()
   const status = useSelector(s => s.validator.status)
   const result = useSelector(s => s.validator.result)
-  const { refreshSession } = useAuth()
+  const { refreshSession, openModal } = useAuth()
 
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+
+    // OAuth callback — backend redirected with accessToken in URL
+    const accessToken = params.get('accessToken')
+    if (accessToken) {
+      // Decode JWT payload (no verify needed — server already verified)
+      try {
+        const payload = JSON.parse(atob(accessToken.split('.')[1]))
+        dispatch(setUser({ user: { id: payload.id, email: payload.email }, accessToken }))
+      } catch {}
+      // Clean URL
+      window.history.replaceState({}, '', '/')
+      return
+    }
+
+    // Email verified redirect
+    if (params.get('verified') === 'true') {
+      openModal('login')
+      window.history.replaceState({}, '', '/')
+      return
+    }
+
+    // Password reset redirect — show reset form in modal
+    const resetToken = params.get('reset')
+    if (resetToken) {
+      // Store token in sessionStorage, open modal in reset mode
+      sessionStorage.setItem('resetToken', resetToken)
+      dispatch(setAuthModalMode('reset'))
+      dispatch(setShowAuthModal(true))
+      window.history.replaceState({}, '', '/')
+      return
+    }
+
+    // Auth error
+    if (params.get('auth_error')) {
+      openModal('login')
+      window.history.replaceState({}, '', '/')
+      return
+    }
+
+    // Normal session restore from httpOnly cookie
     refreshSession()
   }, [])
 
