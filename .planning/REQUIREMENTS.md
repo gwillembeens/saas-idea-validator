@@ -25,10 +25,10 @@
 
 ### Validator Components
 
-- [ ] **COMP-01**: `IdeaInput` renders a full-width textarea that dispatches `setIdea` and a submit button that calls `validate()`; button disabled while `status` is `loading` or `streaming`
-- [ ] **COMP-02**: `ResultsPanel` renders `result` markdown progressively using `react-markdown` as chunks arrive; shows loading skeleton while `status` is `loading`
-- [ ] **COMP-03**: `Scorecard` calls `parseScores(result)` and renders four phase rows each with a `ScoreBar` (1–5 filled circles) and weighted total
-- [ ] **COMP-04**: `VerdictBadge` displays a colour-coded pill (`Strong Signal` / `Promising` / `Needs Work` / `Too Vague`) derived from the weighted score
+- [x] **COMP-01**: `IdeaInput` renders a full-width textarea that dispatches `setIdea` and a submit button that calls `validate()`; button disabled while `status` is `loading` or `streaming`
+- [x] **COMP-02**: `ResultsPanel` renders `result` markdown progressively using `react-markdown` as chunks arrive; shows loading skeleton while `status` is `loading`
+- [x] **COMP-03**: `Scorecard` calls `parseScores(result)` and renders four phase rows each with a `ScoreBar` (1–5 filled circles) and weighted total
+- [x] **COMP-04**: `VerdictBadge` displays a colour-coded pill (`Strong Signal` / `Promising` / `Needs Work` / `Too Vague`) derived from the weighted score
 
 ### Parse Utility
 
@@ -36,13 +36,13 @@
 
 ### Design System
 
-- [ ] **DESIGN-01**: `tailwind.config.js` extends config with `paper`, `pencil`, `muted`, `accent`, `blue`, `postit` colours; `heading`/`body` font families; `wobbly`/`wobblyMd` border-radius tokens; `hard`/`hardLg`/`hardSm`/`hardRed` box-shadow tokens
-- [ ] **DESIGN-02**: Google Fonts loaded in `index.html`: Kalam 700 (headings, `font-heading`) and Patrick Hand 400 (body/inputs/buttons, `font-body`)
-- [ ] **DESIGN-03**: `AppShell` renders dot-grid paper background (`#fdfbf7` with `radial-gradient(#e5e0d8 1px, transparent 1px)` at 24px repeat)
-- [ ] **DESIGN-04**: `Button` component supports `primary` and `secondary` variants with wobbly inline border-radius, hard offset shadow, and press-flat active state
-- [ ] **DESIGN-05**: `Card` component accepts `decoration` (`tape|tack|none`) and `rotate` props with wobbly border-radius and hard shadow
-- [ ] **DESIGN-06**: `TextArea` component uses full wobbly border, Patrick Hand font, no resize handle, blue focus ring
-- [ ] **DESIGN-07**: `ScoreBar` renders 5 circles (filled = `#2d2d2d`, empty = `muted`) with hard shadow on filled; row rotated -1deg
+- [x] **DESIGN-01**: `tailwind.config.js` extends config with `paper`, `pencil`, `muted`, `accent`, `blue`, `postit` colours; `heading`/`body` font families; `wobbly`/`wobblyMd` border-radius tokens; `hard`/`hardLg`/`hardSm`/`hardRed` box-shadow tokens
+- [x] **DESIGN-02**: Google Fonts loaded in `index.html`: Kalam 700 (headings, `font-heading`) and Patrick Hand 400 (body/inputs/buttons, `font-body`)
+- [x] **DESIGN-03**: `AppShell` renders dot-grid paper background (`#fdfbf7` with `radial-gradient(#e5e0d8 1px, transparent 1px)` at 24px repeat)
+- [x] **DESIGN-04**: `Button` component supports `primary` and `secondary` variants with wobbly inline border-radius, hard offset shadow, and press-flat active state
+- [x] **DESIGN-05**: `Card` component accepts `decoration` (`tape|tack|none`) and `rotate` props with wobbly border-radius and hard shadow
+- [x] **DESIGN-06**: `TextArea` component uses full wobbly border, Patrick Hand font, no resize handle, blue focus ring
+- [x] **DESIGN-07**: `ScoreBar` renders 5 circles (filled = `#2d2d2d`, empty = `muted`) with hard shadow on filled; row rotated -1deg
 - [x] **DESIGN-08**: `Arrow` and `Squiggle` decorative SVG components render hand-drawn connectors; hidden on mobile (`hidden md:block`)
 
 ## v2 Requirements
@@ -81,10 +81,10 @@
 | STATE-02 | Phase 3 | Complete |
 | HOOK-01 | Phase 3 | Complete |
 | HOOK-02 | Phase 3 | Complete |
-| COMP-01 | Phase 4 | Pending |
-| COMP-02 | Phase 4 | Pending |
-| COMP-03 | Phase 5 | Pending |
-| COMP-04 | Phase 5 | Pending |
+| COMP-01 | Phase 4 | Complete |
+| COMP-02 | Phase 4 | Complete |
+| COMP-03 | Phase 5 | Complete |
+| COMP-04 | Phase 5 | Complete |
 | PARSE-01 | Phase 5 | Complete |
 | DESIGN-01 | Phase 4 | Complete |
 | DESIGN-02 | Phase 4 | Complete |
@@ -92,7 +92,7 @@
 | DESIGN-04 | Phase 4 | Complete |
 | DESIGN-05 | Phase 4 | Complete |
 | DESIGN-06 | Phase 4 | Complete |
-| DESIGN-07 | Phase 5 | Pending |
+| DESIGN-07 | Phase 5 | Complete |
 | DESIGN-08 | Phase 5 | Complete |
 
 **Coverage:**
@@ -102,4 +102,4 @@
 
 ---
 *Requirements defined: 2026-03-21*
-*Traceability updated: 2026-03-21 after roadmap creation*
+*Traceability updated: 2026-03-21 after Phase 7 traceability audit*
