@@ -86,6 +86,30 @@ export function AuthModal() {
             </Button>
           </form>
 
+          {authModalMode !== 'forgot' && (
+            <div className="mt-4 flex flex-col gap-3">
+              <div className="flex items-center gap-3">
+                <div className="flex-1 h-px bg-muted" />
+                <span className="font-body text-sm text-pencil/60">or</span>
+                <div className="flex-1 h-px bg-muted" />
+              </div>
+              <a
+                href="/api/auth/google"
+                className="flex items-center justify-center gap-2 font-body text-lg text-pencil border-2 border-pencil px-4 py-2 hover:bg-muted transition-colors shadow-hard"
+                style={{ borderRadius: '255px 15px 225px 15px / 15px 225px 15px 255px' }}
+              >
+                Continue with Google
+              </a>
+              <a
+                href="/api/auth/github"
+                className="flex items-center justify-center gap-2 font-body text-lg text-pencil border-2 border-pencil px-4 py-2 hover:bg-muted transition-colors shadow-hard"
+                style={{ borderRadius: '255px 15px 225px 15px / 15px 225px 15px 255px' }}
+              >
+                Continue with GitHub
+              </a>
+            </div>
+          )}
+
           <div className="mt-6 flex flex-col gap-2 text-center">
             {authModalMode === 'login' && (
               <>
