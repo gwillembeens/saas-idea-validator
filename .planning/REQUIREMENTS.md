@@ -9,8 +9,8 @@
 
 - [ ] **BACK-01**: Express server starts on port 3001 and serves the `/api/validate` route
 - [ ] **BACK-02**: POST `/api/validate` reads `ANTHROPIC_API_KEY` from server `.env` — key never exposed to client
-- [ ] **BACK-03**: POST `/api/validate` validates that `idea` body field is present and at least 20 characters, returning 400 on failure
-- [ ] **BACK-04**: POST `/api/validate` streams Claude's response as `text/event-stream` using Anthropic SDK `.stream()`
+- [x] **BACK-03**: POST `/api/validate` validates that `idea` body field is present and at least 20 characters, returning 400 on failure
+- [x] **BACK-04**: POST `/api/validate` streams Claude's response as `text/event-stream` using Anthropic SDK `.stream()`
 - [ ] **BACK-05**: Vite dev server proxies `/api` requests to `http://localhost:3001`
 
 ### State
@@ -74,8 +74,8 @@
 |-------------|-------|--------|
 | BACK-01 | Phase 2 | Pending |
 | BACK-02 | Phase 2 | Pending |
-| BACK-03 | Phase 2 | Pending |
-| BACK-04 | Phase 2 | Pending |
+| BACK-03 | Phase 2 | Complete |
+| BACK-04 | Phase 2 | Complete |
 | BACK-05 | Phase 2 | Pending |
 | STATE-01 | Phase 3 | Pending |
 | STATE-02 | Phase 3 | Pending |
