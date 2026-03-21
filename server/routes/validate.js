@@ -23,11 +23,18 @@ export async function validateRoute(req, res) {
     messages: [{ role: 'user', content: idea }],
   })
 
-  for await (const chunk of stream) {
-    if (chunk.type === 'content_block_delta' && chunk.delta.type === 'text_delta') {
-      res.write(chunk.delta.text)
+  try {
+    for await (const chunk of stream) {
+      if (chunk.type === 'content_block_delta' && chunk.delta.type === 'text_delta') {
+        res.write(chunk.delta.text)
+      }
+    }
+    res.end()
+  } catch (err) {
+    if (!res.headersSent) {
+      res.status(500).json({ error: 'Validation failed. Please try again.' })
+    } else {
+      res.end()
     }
   }
-
-  res.end()
 }
