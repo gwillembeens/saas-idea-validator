@@ -21,17 +21,12 @@ streamed live with a visual scorecard — fast enough to validate 10 ideas in a 
 - [x] Verdict badge displays overall signal strength with colour coding — Validated in Phase 05: Validator Logic Scorecard
 - [x] UI renders the streamed markdown progressively as it arrives — Validated in Phase 05: Validator Logic Scorecard
 - [x] All components assembled into responsive, accessible page layout — Validated in Phase 06: Responsive Layout Polish
+- [x] Error state visible to user (error Card in ResultsPanel) — Validated in Phase 07: Integration Testing & Deployment Ready
+- [x] App ships with root README — developer can run locally from fresh clone — Validated in Phase 07: Integration Testing & Deployment Ready
 
 ### Active
 
-- [ ] User can paste a startup idea into a text area and submit it for analysis
-- [ ] Backend proxies the request to Claude API (API key stays server-side)
-- [ ] Claude streams a structured validation report back to the client in real time
-- [ ] UI renders the streamed markdown progressively as it arrives
-- [ ] Scorecard component parses phase scores and renders them visually (1–5 circles)
-- [ ] Verdict badge displays overall signal strength with colour coding
-- [ ] Hand-drawn sketchbook design system applied throughout (Kalam + Patrick Hand fonts, wobbly borders, hard offset shadows)
-- [ ] App runs locally (Node.js server + Vite dev server)
+_(none — all v1 requirements validated)_
 
 ### Out of Scope
 
@@ -87,4 +82,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-03-21 — Phase 06 complete: responsive layout assembled, all components wired, accessibility compliance added*
+*Last updated: 2026-03-21 — Phase 07 complete: error display added, all 22 v1 requirements marked Complete, root README created. All v1 milestone requirements validated.*
