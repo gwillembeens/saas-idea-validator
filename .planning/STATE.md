@@ -84,6 +84,16 @@ See: `.planning/PROJECT.md` (updated 2026-03-21)
 5. **Fallback strategy:** If parseSections fails, render raw markdown in single Card (existing behavior preserved)
 6. **App.jsx simplification:** Remove duplicate Scorecard/VerdictBadge renders — all card logic moves inside ResultsPanel
 
+### Plan 09-01 Decisions
+
+1. **Database schema:** Five tables (users, oauth_accounts, email_verification_tokens, password_reset_tokens, refresh_tokens)
+2. **JWT tokens:** Separate secrets for access (15m) and refresh (30d) tokens, HS256 algorithm
+3. **Password hashing:** bcrypt with 12 rounds cost factor
+4. **Cookie options:** httpOnly, secure in production, sameSite=none in production / lax in dev
+5. **Email verification:** 24-hour expiry, Resend API for transactional emails
+6. **Token rotation:** Refresh endpoint deletes old token and issues new one
+7. **Security:** Password reset invalidates all refresh tokens; forgot-password returns 200 always (no enumeration)
+
 ---
 
 ## Notes
@@ -93,8 +103,9 @@ See: `.planning/PROJECT.md` (updated 2026-03-21)
 - Integration testing deferred to phase 7 to validate full end-to-end flow
 - Streaming architecture critical to UX; implemented early (phase 3)
 - Phase 8 (Results layout redesign) extends v1 polish with split-card option
+- Phase 9 (Authentication) adds user registration, login, and session management
 
 ---
 
 *State updated: 2026-03-21*
-*Version: v1 MVP + Phase 8 Wave 1*
+*Version: v1 MVP + Phase 8 Complete + Phase 09-01 Backend Infrastructure*
