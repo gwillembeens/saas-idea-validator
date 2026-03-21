@@ -56,6 +56,13 @@ See: `.planning/PROJECT.md` (updated 2026-03-21)
 
 ---
 
+## Accumulated Context
+
+### Roadmap Evolution
+- Phase 8 added: Results layout redesign — Option A split cards
+
+---
+
 ## Notes
 
 - All 22 v1 requirements mapped to phases 1–7 with 100% coverage

@@ -205,6 +205,16 @@
 
 **Coverage:** v1 requirements: 22 total | Mapped to phases: 22 | Unmapped: 0 ✓
 
+### Phase 8: Results layout redesign — Option A split cards
+
+**Goal:** [To be planned]
+**Requirements**: TBD
+**Depends on:** Phase 7
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (run /gsd:plan-phase 8 to break down)
+
 ---
 
 *Roadmap created: 2026-03-21*
