@@ -46,13 +46,14 @@ const markdownComponents = {
   ol: ({ children }) => (
     <ol className="list-decimal list-inside mb-3 space-y-1">{children}</ol>
   ),
-  hr: () => <hr className="border-pencil border-t-2 opacity-20 my-6" />,
+  hr: () => null,
 }
 
 export function IdeaSummaryCard({ markdown }) {
   if (!markdown?.trim()) return null
   return (
     <Card decoration="tape" rotate={-1} className="w-full max-w-2xl mx-auto">
+      <h2 className="font-heading text-2xl text-pencil mb-4">📋 Idea Summary</h2>
       <ReactMarkdown components={markdownComponents}>{markdown}</ReactMarkdown>
     </Card>
   )

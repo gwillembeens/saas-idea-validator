@@ -35,6 +35,7 @@ export function CommentaryCard({ markdown }) {
   if (!markdown?.trim()) return null
   return (
     <Card decoration="tape" rotate={1} className="w-full max-w-2xl mx-auto">
+      <h2 className="font-heading text-2xl text-pencil mb-4">📝 Commentary</h2>
       <ReactMarkdown components={markdownComponents}>{markdown}</ReactMarkdown>
     </Card>
   )

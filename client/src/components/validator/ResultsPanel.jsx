@@ -6,7 +6,6 @@ import { IdeaSummaryCard } from './IdeaSummaryCard'
 import { VerdictCard } from './VerdictCard'
 import { CommentaryCard } from './CommentaryCard'
 import { Scorecard } from './Scorecard'
-import { VerdictBadge } from './VerdictBadge'
 
 const markdownComponents = {
   h1: ({ children }) => (
@@ -117,7 +116,6 @@ export function ResultsPanel() {
 
     return (
       <div className="w-full flex flex-col items-center gap-8 animate-fadeIn">
-        <VerdictBadge />
         <IdeaSummaryCard markdown={sections.ideaSummary} />
         <Scorecard />
         <VerdictCard markdown={sections.verdict} />

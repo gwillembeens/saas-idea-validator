@@ -233,6 +233,26 @@
 - [ ] Visual regression tests: card layouts, animation smoothness
 - [ ] Cross-browser compatibility: fadeIn animation on Safari, Firefox, Chrome, Edge
 
+### Phase 9: Authentication system — user registration and login
+
+**Goal:** [To be planned]
+**Requirements**: TBD
+**Depends on:** Phase 8
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (run /gsd:plan-phase 9 to break down)
+
+### Phase 10: Saved ideas — persist and browse validation history
+
+**Goal:** [To be planned]
+**Requirements**: TBD
+**Depends on:** Phase 9
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (run /gsd:plan-phase 10 to break down)
+
 ---
 
 *Roadmap updated: 2026-03-21*

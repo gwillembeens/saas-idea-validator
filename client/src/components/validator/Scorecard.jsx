@@ -27,7 +27,7 @@ export function Scorecard() {
   }
 
   return (
-    <Card decoration="tack" rotate={1}>
+    <Card decoration="tack" rotate={1} className="w-full max-w-2xl mx-auto">
       <h2 className="font-heading text-2xl text-pencil mb-4">🔬 Scorecard</h2>
       <div className="flex flex-col gap-3">
         {PHASE_LABELS.map(({ key, label, weight }) => (
