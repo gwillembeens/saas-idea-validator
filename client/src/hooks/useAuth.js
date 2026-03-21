@@ -1,0 +1,95 @@
+import { useDispatch, useSelector } from 'react-redux'
+import {
+  setUser, setAuthLoading, setAuthError, clearAuth,
+  setShowAuthModal, setAuthModalMode, setPendingValidation,
+} from '../store/slices/authSlice'
+
+export function useAuth() {
+  const dispatch = useDispatch()
+  const { user, accessToken, status, error, showAuthModal, authModalMode, pendingValidation } =
+    useSelector(s => s.auth)
+
+  async function login(email, password) {
+    dispatch(setAuthLoading())
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ email, password }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || 'Login failed')
+      dispatch(setUser({ user: data.user, accessToken: data.accessToken }))
+      dispatch(setShowAuthModal(false))
+      return true
+    } catch (e) {
+      dispatch(setAuthError(e.message))
+      return false
+    }
+  }
+
+  async function register(email, password) {
+    dispatch(setAuthLoading())
+    try {
+      const res = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || 'Registration failed')
+      dispatch(setAuthModalMode('login'))
+      dispatch(setAuthError(null))
+      return { success: true, message: data.message }
+    } catch (e) {
+      dispatch(setAuthError(e.message))
+      return { success: false }
+    }
+  }
+
+  async function logout() {
+    await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' })
+    dispatch(clearAuth())
+  }
+
+  async function forgotPassword(email) {
+    dispatch(setAuthLoading())
+    try {
+      const res = await fetch('/api/auth/forgot-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || 'Request failed')
+      return { success: true, message: data.message }
+    } catch (e) {
+      dispatch(setAuthError(e.message))
+      return { success: false }
+    }
+  }
+
+  async function refreshSession() {
+    try {
+      const res = await fetch('/api/auth/refresh', { method: 'POST', credentials: 'include' })
+      if (!res.ok) return false
+      const data = await res.json()
+      dispatch(setUser({ user: data.user, accessToken: data.accessToken }))
+      return true
+    } catch {
+      return false
+    }
+  }
+
+  return {
+    user, accessToken, status, error, showAuthModal, authModalMode, pendingValidation,
+    login, register, logout, forgotPassword, refreshSession,
+    openModal: (mode = 'login') => {
+      dispatch(setAuthModalMode(mode))
+      dispatch(setShowAuthModal(true))
+    },
+    closeModal: () => dispatch(setShowAuthModal(false)),
+    setPendingValidation: (val) => dispatch(setPendingValidation(val)),
+  }
+}
