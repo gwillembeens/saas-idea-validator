@@ -1,121 +1,72 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { useSelector } from 'react-redux'
+import { AppShell } from './components/layout/AppShell'
+import { IdeaInput } from './components/validator/IdeaInput'
+import { ResultsPanel } from './components/validator/ResultsPanel'
+import { Scorecard } from './components/validator/Scorecard'
+import { VerdictBadge } from './components/validator/VerdictBadge'
+import { Arrow } from './components/decorative/Arrow'
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
+  const status = useSelector(s => s.validator.status)
+  const result = useSelector(s => s.validator.result)
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
+    <AppShell>
+      <div className="flex flex-col items-center justify-start min-h-screen px-4 py-20 md:px-8">
+
+        {/* Hero Section */}
+        <div className="w-full max-w-2xl text-center mb-20 md:mb-24">
+          <h1 className="font-heading text-5xl md:text-6xl text-pencil mb-6 leading-tight">
+            Validate Your SaaS Idea
+          </h1>
+          <p className="font-body text-lg md:text-xl text-pencil leading-relaxed">
+            Paste your startup idea and get an honest, investor-grade analysis against our
+            30-step framework for building agent-native SaaS businesses.
           </p>
         </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
 
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
+        {/* Input Section */}
+        <div className="w-full max-w-2xl mb-20 md:mb-24">
+          <IdeaInput />
         </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+        {/* Arrow decoration — hidden on mobile */}
+        {status !== 'idle' && (
+          <div className="hidden md:flex justify-center mb-12">
+            <Arrow direction="down" />
+          </div>
+        )}
+
+        {/* Results Section — only render when validation has started */}
+        {status !== 'idle' && (
+          <div className="w-full max-w-2xl space-y-8 md:space-y-12">
+
+            {/* Results Panel */}
+            <div>
+              <ResultsPanel />
+            </div>
+
+            {/* Verdict Badge — below results */}
+            {result && (
+              <div className="flex justify-center">
+                <VerdictBadge />
+              </div>
+            )}
+
+            {/* Scorecard — visual representation */}
+            {result && (
+              <div>
+                <Scorecard />
+              </div>
+            )}
+
+          </div>
+        )}
+
+        {/* Footer spacing */}
+        <div className="mt-20 md:mt-24" />
+
+      </div>
+    </AppShell>
   )
 }
-
-export default App
