@@ -8,6 +8,9 @@ import {
   verifyEmailRoute, forgotPasswordRoute, resetPasswordRoute,
   googleAuthRoute, googleCallbackRoute, githubAuthRoute, githubCallbackRoute,
 } from './routes/auth.js'
+import { saveResultRoute, listHistoryRoute, getResultRoute, updateTitleRoute, deleteResultRoute } from './routes/history.js'
+import { requireAuth } from './middleware/requireAuth.js'
+import { optionalAuth } from './middleware/optionalAuth.js'
 
 const app = express()
 const PORT = process.env.PORT || 3001
@@ -39,6 +42,13 @@ app.get('/api/auth/google', googleAuthRoute)
 app.get('/api/auth/google/callback', googleCallbackRoute)
 app.get('/api/auth/github', githubAuthRoute)
 app.get('/api/auth/github/callback', githubCallbackRoute)
+
+// Mount history routes
+app.post('/api/history', requireAuth, saveResultRoute)
+app.get('/api/history', requireAuth, listHistoryRoute)
+app.get('/api/history/:id', optionalAuth, getResultRoute)
+app.patch('/api/history/:id/title', requireAuth, updateTitleRoute)
+app.delete('/api/history/:id', requireAuth, deleteResultRoute)
 
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`)
