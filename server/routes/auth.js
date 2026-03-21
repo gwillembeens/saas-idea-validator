@@ -167,3 +167,85 @@ export async function resetPasswordRoute(req, res) {
   await pool.query('DELETE FROM refresh_tokens WHERE user_id = $1', [user_id])
   res.json({ message: 'Password updated. Please log in.' })
 }
+
+// GET /api/auth/google — initiate OAuth
+export function googleAuthRoute(req, res) {
+  const params = new URLSearchParams({
+    client_id: process.env.GOOGLE_CLIENT_ID,
+    redirect_uri: `${process.env.BACKEND_URL}/api/auth/google/callback`,
+    response_type: 'code',
+    scope: 'openid email profile',
+    access_type: 'offline',
+    prompt: 'select_account',
+  })
+  res.redirect(`https://accounts.google.com/o/oauth2/v2/auth?${params}`)
+}
+
+// GET /api/auth/google/callback — handle OAuth callback
+export async function googleCallbackRoute(req, res) {
+  const { code } = req.query
+  if (!code) return res.redirect(`${process.env.FRONTEND_URL}/?auth_error=missing_code`)
+
+  try {
+    // Exchange code for tokens
+    const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        client_id: process.env.GOOGLE_CLIENT_ID,
+        client_secret: process.env.GOOGLE_CLIENT_SECRET,
+        code,
+        redirect_uri: `${process.env.BACKEND_URL}/api/auth/google/callback`,
+        grant_type: 'authorization_code',
+      }),
+    })
+    const tokenData = await tokenRes.json()
+    if (!tokenRes.ok) throw new Error('Token exchange failed')
+
+    // Get user info
+    const userRes = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
+      headers: { Authorization: `Bearer ${tokenData.access_token}` },
+    })
+    const googleUser = await userRes.json()
+
+    // Upsert user
+    const { rows: existingUsers } = await pool.query(
+      'SELECT * FROM users WHERE email = $1',
+      [googleUser.email]
+    )
+    let user
+    if (existingUsers.length > 0) {
+      user = existingUsers[0]
+      if (!user.email_verified) {
+        await pool.query('UPDATE users SET email_verified = true WHERE id = $1', [user.id])
+      }
+    } else {
+      const { rows } = await pool.query(
+        'INSERT INTO users (email, email_verified) VALUES ($1, true) RETURNING *',
+        [googleUser.email]
+      )
+      user = rows[0]
+    }
+
+    // Upsert oauth_account
+    await pool.query(
+      `INSERT INTO oauth_accounts (user_id, provider, provider_account_id)
+       VALUES ($1, 'google', $2)
+       ON CONFLICT (provider, provider_account_id) DO NOTHING`,
+      [user.id, String(googleUser.id)]
+    )
+
+    // Issue tokens
+    const accessToken = signAccessToken({ id: user.id, email: user.email })
+    const refreshToken = signRefreshToken({ id: user.id })
+    await pool.query(
+      'INSERT INTO refresh_tokens (user_id, token) VALUES ($1, $2)',
+      [user.id, refreshToken]
+    )
+    res.cookie('refreshToken', refreshToken, COOKIE_OPTIONS)
+    res.redirect(`${process.env.FRONTEND_URL}/?accessToken=${accessToken}`)
+  } catch (err) {
+    console.error('Google OAuth error:', err)
+    res.redirect(`${process.env.FRONTEND_URL}/?auth_error=google_failed`)
+  }
+}
