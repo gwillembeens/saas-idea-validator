@@ -1,25 +1,34 @@
-export function TextArea({ value, onChange, placeholder, disabled = false, className = '' }) {
+export function TextArea({
+  value = '',
+  onChange,
+  placeholder = '',
+  disabled = false,
+  className = '',
+  id,
+  ...props
+}) {
   return (
     <textarea
+      id={id}
       value={value}
       onChange={onChange}
       placeholder={placeholder}
       disabled={disabled}
-      style={{
-        borderRadius: '255px 15px 225px 15px / 15px 225px 15px 255px',
-        borderColor: '#2d2d2d',
-        borderWidth: '2px',
-        borderStyle: 'solid',
-      }}
       className={`
-        font-body text-lg text-pencil
-        w-full p-4 bg-white
-        resize-none min-h-[150px]
-        transition-colors duration-100
-        focus:outline-none focus:border-blue focus:ring-2 focus:ring-blue focus:ring-opacity-20
-        disabled:opacity-50 disabled:cursor-not-allowed
+        w-full font-body text-lg text-pencil
+        bg-white border-2 border-pencil
+        placeholder:text-muted placeholder:opacity-60
+        focus:border-blue focus:ring-2 focus:ring-blue/20
+        focus:outline-none
+        disabled:bg-muted disabled:opacity-50 disabled:cursor-not-allowed
+        resize-none
+        p-4
         ${className}
       `}
+      style={{
+        borderRadius: '255px 15px 225px 15px / 15px 225px 15px 255px',
+      }}
+      {...props}
     />
   )
 }
