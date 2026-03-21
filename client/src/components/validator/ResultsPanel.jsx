@@ -44,7 +44,7 @@ const markdownComponents = {
 }
 
 export function ResultsPanel() {
-  const { status, result } = useSelector(s => s.validator)
+  const { status, result, error } = useSelector(s => s.validator)
 
   if (status === 'idle') return null
 
@@ -64,7 +64,19 @@ export function ResultsPanel() {
     )
   }
 
-  if (status === 'error') return null
+  if (status === 'error') {
+    return (
+      <Card decoration="none" rotate={0} className="w-full max-w-2xl mx-auto">
+        <div className="flex flex-col items-center gap-3 text-center py-4">
+          <span className="text-accent text-4xl" aria-hidden="true">✕</span>
+          <h3 className="font-heading text-2xl text-pencil">Validation Failed</h3>
+          <p className="font-body text-lg text-pencil">
+            {error || 'Something went wrong. Check your connection and try again.'}
+          </p>
+        </div>
+      </Card>
+    )
+  }
 
   return (
     <Card decoration="tack" rotate={1} className="w-full max-w-2xl mx-auto">
