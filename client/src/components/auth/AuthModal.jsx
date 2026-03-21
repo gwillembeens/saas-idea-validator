@@ -3,9 +3,11 @@ import { Card } from '../ui/Card'
 import { Button } from '../ui/Button'
 import { TextInput } from '../ui/TextInput'
 import { useAuth } from '../../hooks/useAuth'
+import { useValidate } from '../../hooks/useValidate'
 
 export function AuthModal() {
-  const { showAuthModal, authModalMode, error, status, login, register, forgotPassword, closeModal, openModal } = useAuth()
+  const { showAuthModal, authModalMode, error, status, login, register, forgotPassword, closeModal, openModal, pendingValidation, setPendingValidation } = useAuth()
+  const { validate } = useValidate()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [successMsg, setSuccessMsg] = useState('')
@@ -18,7 +20,11 @@ export function AuthModal() {
     e.preventDefault()
     setSuccessMsg('')
     if (authModalMode === 'login') {
-      await login(email, password)
+      const success = await login(email, password)
+      if (success && pendingValidation) {
+        setPendingValidation(false)
+        validate()
+      }
     } else if (authModalMode === 'register') {
       const result = await register(email, password)
       if (result.success) setSuccessMsg(result.message)
