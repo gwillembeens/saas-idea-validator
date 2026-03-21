@@ -55,22 +55,24 @@
 
 ---
 
-### Phase 4: Frontend Components & Design System
+### Phase 4: Frontend Components & Design System (in_progress)
 **Goal:** Build React UI components with hand-drawn design system (colors, fonts, shadows, borders)
 
 **Requirements:** DESIGN-01, DESIGN-02, DESIGN-03, DESIGN-04, DESIGN-05, DESIGN-06, COMP-01, COMP-02
 
-**Success criteria:**
-1. `tailwind.config.js` extends with custom colors (`paper`, `pencil`, `muted`, `accent`, `blue`, `postit`), font families (`heading`, `body`), border-radius tokens (`wobbly`, `wobblyMd`), shadow tokens (`hard`, `hardLg`, `hardSm`, `hardRed`)
-2. `index.html` loads Google Fonts: Kalam 700 and Patrick Hand 400
-3. `AppShell` renders dot-grid paper background with correct radial gradient and 24px repeat
-4. `Button` component (primary & secondary) with wobbly inline border-radius, hard shadow, hover/active states
-5. `Card` component with decoration prop (`tape|tack|none`), wobbly border-radius, rotate prop
-6. `TextArea` component with full wobbly border, Patrick Hand font, blue focus ring, no resize
-7. `IdeaInput` component with textarea + submit button, dispatches `setIdea` and `validate()`, button disabled while status is `loading|streaming`
-8. `ResultsPanel` renders streamed markdown using react-markdown, updates as chunks arrive, shows loading skeleton while `loading`
-9. All text uses `text-pencil` color, never pure black
-10. Design system visually cohesive across all components
+**Plan 04-01 ✓ Complete (2026-03-21)**
+- `tailwind.config.js` extends with custom colors (`paper`, `pencil`, `muted`, `accent`, `blue`, `postit`), font families (`heading`, `body`), border-radius tokens (`wobbly`, `wobblyMd`), shadow tokens (`hard`, `hardLg`, `hardSm`, `hardRed`)
+- `index.html` loads Google Fonts: Kalam 700 and Patrick Hand 400
+- `AppShell` renders dot-grid paper background with correct radial gradient and 24px repeat
+
+**Plans 04-02, 04-03 (pending)**
+- `Button` component (primary & secondary) with wobbly inline border-radius, hard shadow, hover/active states
+- `Card` component with decoration prop (`tape|tack|none`), wobbly border-radius, rotate prop
+- `TextArea` component with full wobbly border, Patrick Hand font, blue focus ring, no resize
+- `IdeaInput` component with textarea + submit button, dispatches `setIdea` and `validate()`, button disabled while status is `loading|streaming`
+- `ResultsPanel` renders streamed markdown using react-markdown, updates as chunks arrive, shows loading skeleton while `loading`
+- All text uses `text-pencil` color, never pure black
+- Design system visually cohesive across all components
 
 ---
 
@@ -165,9 +167,9 @@
 | COMP-03 | Phase 5 | Pending |
 | COMP-04 | Phase 5 | Pending |
 | PARSE-01 | Phase 5 | Pending |
-| DESIGN-01 | Phase 4 | Pending |
-| DESIGN-02 | Phase 4 | Pending |
-| DESIGN-03 | Phase 4 | Pending |
+| DESIGN-01 | Phase 4 | Done (04-01) |
+| DESIGN-02 | Phase 4 | Done (04-01) |
+| DESIGN-03 | Phase 4 | Done (04-01) |
 | DESIGN-04 | Phase 4 | Pending |
 | DESIGN-05 | Phase 4 | Pending |
 | DESIGN-06 | Phase 4 | Pending |
