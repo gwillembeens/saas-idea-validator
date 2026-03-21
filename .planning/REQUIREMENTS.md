@@ -15,13 +15,13 @@
 
 ### State
 
-- [ ] **STATE-01**: Redux store initialised with `validatorSlice` managing `idea`, `status` (`idle|loading|streaming|done|error`), `result`, and `error`
-- [ ] **STATE-02**: Slice exports `setIdea`, `startValidation`, `startStreaming`, `appendResult`, `finishValidation`, `setError`, and `reset` actions
+- [x] **STATE-01**: Redux store initialised with `validatorSlice` managing `idea`, `status` (`idle|loading|streaming|done|error`), `result`, and `error`
+- [x] **STATE-02**: Slice exports `setIdea`, `startValidation`, `startStreaming`, `appendResult`, `finishValidation`, `setError`, and `reset` actions
 
 ### Streaming Hook
 
-- [ ] **HOOK-01**: `useValidate` hook sends POST to `/api/validate`, reads response body as `ReadableStream`, and dispatches `appendResult` on each decoded chunk
-- [ ] **HOOK-02**: Hook dispatches `startValidation` → `startStreaming` → `finishValidation` lifecycle actions (or `setError` on failure)
+- [x] **HOOK-01**: `useValidate` hook sends POST to `/api/validate`, reads response body as `ReadableStream`, and dispatches `appendResult` on each decoded chunk
+- [x] **HOOK-02**: Hook dispatches `startValidation` → `startStreaming` → `finishValidation` lifecycle actions (or `setError` on failure)
 
 ### Validator Components
 
@@ -77,10 +77,10 @@
 | BACK-03 | Phase 2 | Complete |
 | BACK-04 | Phase 2 | Complete |
 | BACK-05 | Phase 2 | Complete |
-| STATE-01 | Phase 3 | Pending |
-| STATE-02 | Phase 3 | Pending |
-| HOOK-01 | Phase 3 | Pending |
-| HOOK-02 | Phase 3 | Pending |
+| STATE-01 | Phase 3 | Complete |
+| STATE-02 | Phase 3 | Complete |
+| HOOK-01 | Phase 3 | Complete |
+| HOOK-02 | Phase 3 | Complete |
 | COMP-01 | Phase 4 | Pending |
 | COMP-02 | Phase 4 | Pending |
 | COMP-03 | Phase 5 | Pending |
