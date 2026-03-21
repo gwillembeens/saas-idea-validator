@@ -71,11 +71,16 @@
 - ✓ `TextArea` component with full wobbly border, Patrick Hand font, blue focus ring, no resize
 - ✓ `ScoreBar` component with 5-circle rating display, filled/empty states, hard shadows
 
-**Plan 04-03 (pending)**
-- `IdeaInput` component with textarea + submit button, dispatches `setIdea` and `validate()`, button disabled while status is `loading|streaming`
-- `ResultsPanel` renders streamed markdown using react-markdown, updates as chunks arrive, shows loading skeleton while `loading`
+**Plan 04-03 ✓ Complete (2026-03-21)**
+- ✓ `IdeaInput` component with textarea + submit button, dispatches `setIdea` and `validate()`, button disabled while status is `loading|streaming`
+- ✓ `ResultsPanel` renders streamed markdown using react-markdown, updates as chunks arrive, shows loading skeleton while `loading`
+- Connected to Redux validator slice, design system applied
+
+**Plan 04-04 (pending)**
 - `Scorecard` component with visual phase scores and weighted total
 - `VerdictBadge` component with color-coded verdict pill
+- `parseResult` utility to extract scores from markdown
+- `Arrow` and `Squiggle` decorative components
 - All text uses `text-pencil` color, never pure black
 - Design system visually cohesive across all components
 
@@ -167,8 +172,8 @@
 | STATE-02 | Phase 3 | Pending |
 | HOOK-01 | Phase 3 | Pending |
 | HOOK-02 | Phase 3 | Pending |
-| COMP-01 | Phase 4 | Pending |
-| COMP-02 | Phase 4 | Pending |
+| COMP-01 | Phase 4 | Done (04-03) |
+| COMP-02 | Phase 4 | Done (04-03) |
 | COMP-03 | Phase 5 | Pending |
 | COMP-04 | Phase 5 | Pending |
 | PARSE-01 | Phase 5 | Pending |
