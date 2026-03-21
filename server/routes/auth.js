@@ -249,3 +249,92 @@ export async function googleCallbackRoute(req, res) {
     res.redirect(`${process.env.FRONTEND_URL}/?auth_error=google_failed`)
   }
 }
+
+// GET /api/auth/github — initiate OAuth
+export function githubAuthRoute(req, res) {
+  const params = new URLSearchParams({
+    client_id: process.env.GITHUB_CLIENT_ID,
+    redirect_uri: `${process.env.BACKEND_URL}/api/auth/github/callback`,
+    scope: 'read:user user:email',
+  })
+  res.redirect(`https://github.com/login/oauth/authorize?${params}`)
+}
+
+// GET /api/auth/github/callback — handle OAuth callback
+export async function githubCallbackRoute(req, res) {
+  const { code } = req.query
+  if (!code) return res.redirect(`${process.env.FRONTEND_URL}/?auth_error=missing_code`)
+
+  try {
+    // Exchange code for token
+    const tokenRes = await fetch('https://github.com/login/oauth/access_token', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      body: JSON.stringify({
+        client_id: process.env.GITHUB_CLIENT_ID,
+        client_secret: process.env.GITHUB_CLIENT_SECRET,
+        code,
+        redirect_uri: `${process.env.BACKEND_URL}/api/auth/github/callback`,
+      }),
+    })
+    const tokenData = await tokenRes.json()
+    if (!tokenData.access_token) throw new Error('Token exchange failed')
+
+    // Get user info
+    const userRes = await fetch('https://api.github.com/user', {
+      headers: { Authorization: `Bearer ${tokenData.access_token}`, 'User-Agent': 'SaasValidator' },
+    })
+    const githubUser = await userRes.json()
+
+    // Get primary email (may not be public)
+    const emailRes = await fetch('https://api.github.com/user/emails', {
+      headers: { Authorization: `Bearer ${tokenData.access_token}`, 'User-Agent': 'SaasValidator' },
+    })
+    const emails = await emailRes.json()
+    const primaryEmail = emails.find(e => e.primary && e.verified)?.email
+    if (!primaryEmail) throw new Error('No verified email on GitHub account')
+
+    // Upsert user
+    const { rows: existingUsers } = await pool.query(
+      'SELECT * FROM users WHERE email = $1',
+      [primaryEmail]
+    )
+    let user
+    if (existingUsers.length > 0) {
+      user = existingUsers[0]
+      if (!user.email_verified) {
+        await pool.query('UPDATE users SET email_verified = true WHERE id = $1', [user.id])
+      }
+    } else {
+      const { rows } = await pool.query(
+        'INSERT INTO users (email, email_verified) VALUES ($1, true) RETURNING *',
+        [primaryEmail]
+      )
+      user = rows[0]
+    }
+
+    // Upsert oauth_account
+    await pool.query(
+      `INSERT INTO oauth_accounts (user_id, provider, provider_account_id)
+       VALUES ($1, 'github', $2)
+       ON CONFLICT (provider, provider_account_id) DO NOTHING`,
+      [user.id, String(githubUser.id)]
+    )
+
+    // Issue tokens
+    const accessToken = signAccessToken({ id: user.id, email: user.email })
+    const refreshToken = signRefreshToken({ id: user.id })
+    await pool.query(
+      'INSERT INTO refresh_tokens (user_id, token) VALUES ($1, $2)',
+      [user.id, refreshToken]
+    )
+    res.cookie('refreshToken', refreshToken, COOKIE_OPTIONS)
+    res.redirect(`${process.env.FRONTEND_URL}/?accessToken=${accessToken}`)
+  } catch (err) {
+    console.error('GitHub OAuth error:', err)
+    res.redirect(`${process.env.FRONTEND_URL}/?auth_error=github_failed`)
+  }
+}
