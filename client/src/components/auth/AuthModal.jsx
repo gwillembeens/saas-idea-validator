@@ -1,0 +1,109 @@
+import { useState } from 'react'
+import { Card } from '../ui/Card'
+import { Button } from '../ui/Button'
+import { TextInput } from '../ui/TextInput'
+import { useAuth } from '../../hooks/useAuth'
+
+export function AuthModal() {
+  const { showAuthModal, authModalMode, error, status, login, register, forgotPassword, closeModal, openModal } = useAuth()
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [successMsg, setSuccessMsg] = useState('')
+
+  if (!showAuthModal) return null
+
+  const isLoading = status === 'loading'
+
+  async function handleSubmit(e) {
+    e.preventDefault()
+    setSuccessMsg('')
+    if (authModalMode === 'login') {
+      await login(email, password)
+    } else if (authModalMode === 'register') {
+      const result = await register(email, password)
+      if (result.success) setSuccessMsg(result.message)
+    } else if (authModalMode === 'forgot') {
+      const result = await forgotPassword(email)
+      if (result.success) setSuccessMsg(result.message)
+    }
+  }
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-pencil/40"
+      onClick={(e) => { if (e.target === e.currentTarget) closeModal() }}
+    >
+      <div className="w-full max-w-md mx-4">
+        <Card decoration="tack" rotate={-1} className="w-full">
+          <button
+            onClick={closeModal}
+            className="absolute top-4 right-4 font-body text-pencil text-xl hover:text-accent"
+            aria-label="Close"
+          >
+            ✕
+          </button>
+
+          <h2 className="font-heading text-3xl text-pencil mb-6 text-center">
+            {authModalMode === 'login' && 'Sign In'}
+            {authModalMode === 'register' && 'Create Account'}
+            {authModalMode === 'forgot' && 'Reset Password'}
+          </h2>
+
+          {error && (
+            <p className="font-body text-accent text-sm mb-4 text-center">{error}</p>
+          )}
+          {successMsg && (
+            <p className="font-body text-blue text-sm mb-4 text-center">{successMsg}</p>
+          )}
+
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+            <TextInput
+              label="Email"
+              type="email"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              placeholder="you@example.com"
+              disabled={isLoading}
+            />
+            {authModalMode !== 'forgot' && (
+              <TextInput
+                label="Password"
+                type="password"
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                placeholder="Min. 8 characters"
+                disabled={isLoading}
+              />
+            )}
+            <Button variant="primary" type="submit" disabled={isLoading}>
+              {isLoading ? '...' : authModalMode === 'login' ? 'Sign In' : authModalMode === 'register' ? 'Create Account' : 'Send Reset Link'}
+            </Button>
+          </form>
+
+          <div className="mt-6 flex flex-col gap-2 text-center">
+            {authModalMode === 'login' && (
+              <>
+                <button onClick={() => openModal('register')} className="font-body text-sm text-blue underline">
+                  No account? Register
+                </button>
+                <button onClick={() => openModal('forgot')} className="font-body text-sm text-pencil underline">
+                  Forgot password?
+                </button>
+              </>
+            )}
+            {authModalMode === 'register' && (
+              <button onClick={() => openModal('login')} className="font-body text-sm text-blue underline">
+                Already have an account? Sign in
+              </button>
+            )}
+            {authModalMode === 'forgot' && (
+              <button onClick={() => openModal('login')} className="font-body text-sm text-blue underline">
+                Back to sign in
+              </button>
+            )}
+          </div>
+        </Card>
+      </div>
+    </div>
+  )
+}
