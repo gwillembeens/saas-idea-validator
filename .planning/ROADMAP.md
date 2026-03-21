@@ -7,18 +7,18 @@
 
 ## Phases
 
-### Phase 1: Project Scaffold
+### Phase 1: Project Scaffold ✓ Complete (2026-03-21)
 **Goal:** Set up monorepo structure, package management, env config, and version control foundation
 
 **Requirements:** BACK-01, BACK-02, BACK-05 (prerequisites)
 
 **Success criteria:**
-1. Monorepo root with `server/` and `client/` directories
-2. Server `package.json` with Express, Anthropic SDK, dotenv, cors dependencies installed
-3. Client `package.json` with Vite, React, Redux Toolkit, react-markdown, lucide-react, Tailwind CSS installed
-4. `server/.env` template with `ANTHROPIC_API_KEY` and `PORT=3001` (never committed)
-5. `.gitignore` excludes `.env`, `node_modules/`, dist, build artifacts
-6. Git repo initialized with clean history
+1. ✓ Monorepo root with `server/` and `client/` directories
+2. ✓ Server `package.json` with Express, Anthropic SDK, dotenv, cors dependencies installed
+3. ✓ Client `package.json` with Vite, React, Redux Toolkit, react-markdown, lucide-react, Tailwind CSS installed
+4. ✓ `server/.env` template with `ANTHROPIC_API_KEY` and `PORT=3001` (never committed)
+5. ✓ `.gitignore` excludes `.env`, `node_modules/`, dist, build artifacts
+6. ✓ Git repo initialized with clean history
 
 ---
 
