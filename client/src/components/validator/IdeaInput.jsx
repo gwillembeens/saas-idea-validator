@@ -18,22 +18,24 @@ export function IdeaInput() {
   }
 
   return (
-    <Card decoration="tape" rotate={-1} className="w-full max-w-2xl mx-auto">
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <label className="font-heading text-3xl text-pencil">
+    <Card decoration="tape" rotate={-1} className="w-full">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4 md:gap-6">
+        <label htmlFor="idea-input" className="font-heading text-2xl md:text-3xl text-pencil">
           Your SaaS Idea
         </label>
         <TextArea
+          id="idea-input"
           value={idea}
           onChange={e => dispatch(setIdea(e.target.value))}
           placeholder="Describe your SaaS idea in a few sentences. Include the target customer, the problem, and your proposed solution..."
           disabled={isLoading}
-          className="min-h-[180px]"
+          className="min-h-[180px] md:min-h-[220px]"
         />
         <Button
           type="submit"
           variant="primary"
           disabled={isLoading || idea.trim().length < 20}
+          aria-busy={isLoading}
         >
           {isLoading ? 'Validating...' : 'Validate Idea'}
         </Button>
