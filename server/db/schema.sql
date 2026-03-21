@@ -42,3 +42,19 @@ CREATE TABLE IF NOT EXISTS refresh_tokens (
   expires_at TIMESTAMPTZ NOT NULL DEFAULT now() + INTERVAL '30 days',
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
+
+CREATE TABLE IF NOT EXISTS saved_results (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  title VARCHAR(255) NOT NULL,
+  idea_text TEXT NOT NULL,
+  markdown_result TEXT NOT NULL,
+  scores JSONB NOT NULL DEFAULT '{}'::jsonb,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  deleted_at TIMESTAMPTZ DEFAULT NULL,
+  CONSTRAINT scores_valid CHECK (scores::text ~ '^\{.*\}$')
+);
+
+CREATE INDEX IF NOT EXISTS saved_results_user_id_idx ON saved_results(user_id) WHERE deleted_at IS NULL;
+CREATE INDEX IF NOT EXISTS saved_results_created_at_idx ON saved_results(created_at DESC) WHERE deleted_at IS NULL;
