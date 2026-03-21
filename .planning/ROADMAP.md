@@ -233,15 +233,18 @@
 - [ ] Visual regression tests: card layouts, animation smoothness
 - [ ] Cross-browser compatibility: fadeIn animation on Safari, Firefox, Chrome, Edge
 
-### Phase 9: Authentication system — user registration and login
+### Phase 9: Authentication system — user registration and login ✅
 
-**Goal:** [To be planned]
-**Requirements**: TBD
+**Goal:** Email/password auth + Google/GitHub OAuth + persistent sessions + auth-gated Validate action
+**Requirements**: Auth gates Validate (not page), 30-day refresh token rotation, modal UX preserves idea text
 **Depends on:** Phase 8
-**Plans:** 0 plans
+**Status:** complete
+**Plans:** 3 plans (09-01 backend, 09-02 frontend, 09-03 integration)
 
 Plans:
-- [ ] TBD (run /gsd:plan-phase 9 to break down)
+- [x] 09-01 — Backend: DB schema + 7 auth routes + JWT utils
+- [x] 09-02 — Frontend: authSlice + AuthModal + SignInButton + useAuth hook
+- [x] 09-03 — Integration: auth gate + OAuth flows + URL param handling
 
 ### Phase 10: Saved ideas — persist and browse validation history
 
