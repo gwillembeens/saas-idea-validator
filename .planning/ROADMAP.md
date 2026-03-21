@@ -220,13 +220,20 @@
 - ✓ All cards use consistent markdownComponents (text-pencil, font-heading, font-body)
 - ✓ Graceful fallback: return null for falsy markdown
 
-**Plan 08-02 (pending)**
-- [ ] `ResultsLayoutSplit` container component that calls `parseSections` and renders three cards vertically
+**Plan 08-02 ✓ Complete (2026-03-21)**
+- ✓ Streaming state: pulsing 3-dot bounce indicator ("Analysing your idea")
+- ✓ Split-card layout: `ResultsPanel` integrates `parseSections` → renders VerdictBadge → IdeaSummaryCard → Scorecard → VerdictCard → CommentaryCard
+- ✓ Animation: `animate-fadeIn` (300ms ease-out) applied to split-card wrapper
+- ✓ `ResultsPanel` imports all Wave 1 components and utilities
+- ✓ Graceful fallback: if `parseSections` fails, render raw markdown in single Card
+- ✓ App.jsx cleanup: removed duplicate `Scorecard` and `VerdictBadge` renders
 
 **Plan 08-03 (pending)**
-- [ ] Update `ResultsPanel` to optionally render split layout (new prop/toggle) or fall back to full markdown
+- [ ] E2E tests: streaming → split-card flow, animation timing, fallback behavior
+- [ ] Visual regression tests: card layouts, animation smoothness
+- [ ] Cross-browser compatibility: fadeIn animation on Safari, Firefox, Chrome, Edge
 
 ---
 
 *Roadmap updated: 2026-03-21*
-*Phases: 8 | Completed: 7 | Plans total: 16 | Completed: 15*
+*Phases: 8 | Completed: 7 | Plans total: 16 | Completed: 15 (08-02 just completed)*
