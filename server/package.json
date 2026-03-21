@@ -1,0 +1,20 @@
+{
+  "name": "saas-validator-server",
+  "version": "1.0.0",
+  "description": "Express backend for SaaS Idea Validator",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node --watch index.js",
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.2.1",
+    "@anthropic-ai/sdk": "^0.80.0",
+    "dotenv": "^16.4.5",
+    "cors": "^2.8.5"
+  }
+}
