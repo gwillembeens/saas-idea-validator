@@ -256,6 +256,16 @@ Plans:
 Plans:
 - [ ] TBD (run /gsd:plan-phase 10 to break down)
 
+### Phase 11: improve UI across app
+
+**Goal:** [To be planned]
+**Requirements**: TBD
+**Depends on:** Phase 10
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (run /gsd:plan-phase 11 to break down)
+
 ---
 
 *Roadmap updated: 2026-03-21*

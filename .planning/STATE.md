@@ -67,6 +67,7 @@ See: `.planning/PROJECT.md` (updated 2026-03-21)
 - Phase 8 added: Results layout redesign — Option A split cards
 - Phase 9 added: Authentication system — user registration and login
 - Phase 10 added: Saved ideas — persist and browse validation history
+- Phase 11 added: improve UI across app
 - Plan 08-01 complete: `parseSections` utility and three card components created
 - Phase 09 complete: Full auth system — email/password, OAuth (Google + GitHub), JWT rotation, auth-gated Validate action, AuthModal, SignInButton
 - Note: Password reset UI (reset mode in AuthModal) is a minor gap — backend complete, frontend form not wired

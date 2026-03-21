@@ -5,7 +5,9 @@ import { pool } from '../db/init.js'
 import { signAccessToken, signRefreshToken, verifyRefreshToken } from '../utils/jwt.js'
 import { generateToken } from '../utils/crypto.js'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+function getResend() {
+  return new Resend(process.env.RESEND_API_KEY)
+}
 const BCRYPT_ROUNDS = 12
 
 const COOKIE_OPTIONS = {
@@ -21,29 +23,38 @@ export async function registerRoute(req, res) {
   if (!email || !password || password.length < 8) {
     return res.status(400).json({ error: 'Email and password (min 8 chars) required.' })
   }
-  const existing = await pool.query('SELECT id FROM users WHERE email = $1', [email])
-  if (existing.rows.length > 0) {
-    return res.status(409).json({ error: 'Email already registered.' })
+  try {
+    const existing = await pool.query('SELECT id FROM users WHERE email = $1', [email])
+    if (existing.rows.length > 0) {
+      return res.status(409).json({ error: 'Email already registered.' })
+    }
+    const password_hash = await bcrypt.hash(password, BCRYPT_ROUNDS)
+    const isDev = process.env.NODE_ENV !== 'production'
+    const { rows } = await pool.query(
+      'INSERT INTO users (email, password_hash, email_verified) VALUES ($1, $2, $3) RETURNING id, email',
+      [email, password_hash, isDev]
+    )
+    const user = rows[0]
+    if (isDev) {
+      return res.status(201).json({ message: 'Account created. You can sign in now.' })
+    }
+    const token = generateToken()
+    await pool.query(
+      'INSERT INTO email_verification_tokens (user_id, token) VALUES ($1, $2)',
+      [user.id, token]
+    )
+    const verifyUrl = `${process.env.BACKEND_URL}/api/auth/verify-email?token=${token}`
+    await getResend().emails.send({
+      from: 'noreply@yourdomain.com',
+      to: email,
+      subject: 'Verify your email',
+      html: `<p>Click <a href="${verifyUrl}">here</a> to verify your email. Link expires in 24 hours.</p>`,
+    })
+    res.status(201).json({ message: 'Registered. Check your email to verify your account.' })
+  } catch (err) {
+    console.error('Register error:', err)
+    res.status(500).json({ error: 'Server error. Please try again.' })
   }
-  const password_hash = await bcrypt.hash(password, BCRYPT_ROUNDS)
-  const { rows } = await pool.query(
-    'INSERT INTO users (email, password_hash) VALUES ($1, $2) RETURNING id, email',
-    [email, password_hash]
-  )
-  const user = rows[0]
-  const token = generateToken()
-  await pool.query(
-    'INSERT INTO email_verification_tokens (user_id, token) VALUES ($1, $2)',
-    [user.id, token]
-  )
-  const verifyUrl = `${process.env.BACKEND_URL}/api/auth/verify-email?token=${token}`
-  await resend.emails.send({
-    from: 'noreply@yourdomain.com',
-    to: email,
-    subject: 'Verify your email',
-    html: `<p>Click <a href="${verifyUrl}">here</a> to verify your email. Link expires in 24 hours.</p>`,
-  })
-  res.status(201).json({ message: 'Registered. Check your email to verify your account.' })
 }
 
 // POST /api/auth/login
@@ -144,7 +155,7 @@ export async function forgotPasswordRoute(req, res) {
     [user.id, token]
   )
   const resetUrl = `${process.env.FRONTEND_URL}/?reset=${token}`
-  await resend.emails.send({
+  await getResend().emails.send({
     from: 'noreply@yourdomain.com',
     to: email,
     subject: 'Reset your password',
