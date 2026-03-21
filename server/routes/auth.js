@@ -52,24 +52,29 @@ export async function loginRoute(req, res) {
   if (!email || !password) {
     return res.status(400).json({ error: 'Email and password required.' })
   }
-  const { rows } = await pool.query('SELECT * FROM users WHERE email = $1', [email])
-  const user = rows[0]
-  if (!user || !user.password_hash) {
-    return res.status(401).json({ error: 'Invalid credentials.' })
+  try {
+    const { rows } = await pool.query('SELECT * FROM users WHERE email = $1', [email])
+    const user = rows[0]
+    if (!user || !user.password_hash) {
+      return res.status(401).json({ error: 'Invalid credentials.' })
+    }
+    const valid = await bcrypt.compare(password, user.password_hash)
+    if (!valid) return res.status(401).json({ error: 'Invalid credentials.' })
+    if (!user.email_verified) {
+      return res.status(403).json({ error: 'Please verify your email before logging in.' })
+    }
+    const accessToken = signAccessToken({ id: user.id, email: user.email })
+    const refreshToken = signRefreshToken({ id: user.id })
+    await pool.query(
+      'INSERT INTO refresh_tokens (user_id, token) VALUES ($1, $2)',
+      [user.id, refreshToken]
+    )
+    res.cookie('refreshToken', refreshToken, COOKIE_OPTIONS)
+    res.json({ accessToken, user: { id: user.id, email: user.email } })
+  } catch (err) {
+    console.error('Login error:', err)
+    res.status(500).json({ error: 'Server error. Please try again.' })
   }
-  const valid = await bcrypt.compare(password, user.password_hash)
-  if (!valid) return res.status(401).json({ error: 'Invalid credentials.' })
-  if (!user.email_verified) {
-    return res.status(403).json({ error: 'Please verify your email before logging in.' })
-  }
-  const accessToken = signAccessToken({ id: user.id, email: user.email })
-  const refreshToken = signRefreshToken({ id: user.id })
-  await pool.query(
-    'INSERT INTO refresh_tokens (user_id, token) VALUES ($1, $2)',
-    [user.id, refreshToken]
-  )
-  res.cookie('refreshToken', refreshToken, COOKIE_OPTIONS)
-  res.json({ accessToken, user: { id: user.id, email: user.email } })
 }
 
 // POST /api/auth/logout
