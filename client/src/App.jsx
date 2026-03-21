@@ -2,8 +2,6 @@ import { useSelector } from 'react-redux'
 import { AppShell } from './components/layout/AppShell'
 import { IdeaInput } from './components/validator/IdeaInput'
 import { ResultsPanel } from './components/validator/ResultsPanel'
-import { Scorecard } from './components/validator/Scorecard'
-import { VerdictBadge } from './components/validator/VerdictBadge'
 import { Arrow } from './components/decorative/Arrow'
 
 export default function App() {
@@ -39,27 +37,8 @@ export default function App() {
 
         {/* Results Section — only render when validation has started */}
         {status !== 'idle' && (
-          <div className="w-full max-w-2xl space-y-8 md:space-y-12">
-
-            {/* Results Panel */}
-            <div>
-              <ResultsPanel />
-            </div>
-
-            {/* Verdict Badge — below results */}
-            {result && (
-              <div className="flex justify-center">
-                <VerdictBadge />
-              </div>
-            )}
-
-            {/* Scorecard — visual representation */}
-            {result && (
-              <div>
-                <Scorecard />
-              </div>
-            )}
-
+          <div className="w-full">
+            <ResultsPanel />
           </div>
         )}
 
