@@ -32,7 +32,7 @@
 
 ### Parse Utility
 
-- [ ] **PARSE-01**: `parseScores(markdown)` extracts four phase scores from the scorecard table and returns `{ phase1, phase2, phase3, phase4, weighted }` — returns `null` on parse failure (graceful fallback to raw markdown)
+- [x] **PARSE-01**: `parseScores(markdown)` extracts four phase scores from the scorecard table and returns `{ phase1, phase2, phase3, phase4, weighted }` — returns `null` on parse failure (graceful fallback to raw markdown)
 
 ### Design System
 
@@ -43,7 +43,7 @@
 - [ ] **DESIGN-05**: `Card` component accepts `decoration` (`tape|tack|none`) and `rotate` props with wobbly border-radius and hard shadow
 - [ ] **DESIGN-06**: `TextArea` component uses full wobbly border, Patrick Hand font, no resize handle, blue focus ring
 - [ ] **DESIGN-07**: `ScoreBar` renders 5 circles (filled = `#2d2d2d`, empty = `muted`) with hard shadow on filled; row rotated -1deg
-- [ ] **DESIGN-08**: `Arrow` and `Squiggle` decorative SVG components render hand-drawn connectors; hidden on mobile (`hidden md:block`)
+- [x] **DESIGN-08**: `Arrow` and `Squiggle` decorative SVG components render hand-drawn connectors; hidden on mobile (`hidden md:block`)
 
 ## v2 Requirements
 
@@ -85,15 +85,15 @@
 | COMP-02 | Phase 4 | Pending |
 | COMP-03 | Phase 5 | Pending |
 | COMP-04 | Phase 5 | Pending |
-| PARSE-01 | Phase 5 | Pending |
-| DESIGN-01 | Phase 4 | Pending |
-| DESIGN-02 | Phase 4 | Pending |
-| DESIGN-03 | Phase 4 | Pending |
-| DESIGN-04 | Phase 4 | Pending |
-| DESIGN-05 | Phase 4 | Pending |
-| DESIGN-06 | Phase 4 | Pending |
+| PARSE-01 | Phase 5 | Complete |
+| DESIGN-01 | Phase 4 | Complete |
+| DESIGN-02 | Phase 4 | Complete |
+| DESIGN-03 | Phase 4 | Complete |
+| DESIGN-04 | Phase 4 | Complete |
+| DESIGN-05 | Phase 4 | Complete |
+| DESIGN-06 | Phase 4 | Complete |
 | DESIGN-07 | Phase 5 | Pending |
-| DESIGN-08 | Phase 5 | Pending |
+| DESIGN-08 | Phase 5 | Complete |
 
 **Coverage:**
 - v1 requirements: 22 total

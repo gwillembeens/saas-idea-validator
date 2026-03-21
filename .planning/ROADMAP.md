@@ -91,6 +91,23 @@
 
 **Requirements:** PARSE-01, COMP-03, COMP-04, DESIGN-07, DESIGN-08
 
+**Plan 05-01 ✓ Complete (2026-03-21)**
+- ✓ `parseScores(markdown)` utility with regex `/\|\s*([\d.]+)\/5\s*\|/g`, extracts 4 phase scores, calculates weighted total (30% + 25% + 35% + 10%), returns object or null
+- ✓ `Arrow` decorative SVG component with wobbly shaft, arrowhead, directional rotation, hidden on mobile
+- ✓ `Squiggle` decorative SVG component with quadratic Bézier wave, directional rotation, hidden on mobile
+
+**Plan 05-02 (pending)**
+- `Scorecard` component calls `parseScores` and renders four phase rows with labels, scores, and `ScoreBar`
+- `ScoreBar` renders 5 circles: filled (pencil black) + hard shadow, empty (muted), row rotated -1deg
+- `Scorecard` displays weighted total at bottom
+- `VerdictBadge` maps weighted score to colour-coded pill with emoji:
+   - 4.5–5.0: green → "🟢 Strong Signal"
+   - 3.5–4.4: yellow → "🟡 Promising"
+   - 2.5–3.4: orange → "🟠 Needs Work"
+   - 1.0–2.4: red → "🔴 Too Vague"
+- Graceful fallback: if parsing fails, `Scorecard` shows raw markdown without visual rendering
+- Integration test: parse Claude response → extract scores → render scorecard with correct visual representation
+
 **Success criteria:**
 1. `parseScores(markdown)` extracts 4 phase scores from scorecard table regex, calculates weighted total (30% + 25% + 35% + 10%), returns `{ phase1, phase2, phase3, phase4, weighted }` or `null`
 2. Graceful fallback: if parsing fails, `Scorecard` shows raw markdown without visual rendering
@@ -176,7 +193,7 @@
 | COMP-02 | Phase 4 | Done (04-03) |
 | COMP-03 | Phase 5 | Pending |
 | COMP-04 | Phase 5 | Pending |
-| PARSE-01 | Phase 5 | Pending |
+| PARSE-01 | Phase 5 | Done (05-01) |
 | DESIGN-01 | Phase 4 | Done (04-01) |
 | DESIGN-02 | Phase 4 | Done (04-01) |
 | DESIGN-03 | Phase 4 | Done (04-01) |
@@ -184,7 +201,7 @@
 | DESIGN-05 | Phase 4 | Done (04-02) |
 | DESIGN-06 | Phase 4 | Done (04-02) |
 | DESIGN-07 | Phase 5 | Pending |
-| DESIGN-08 | Phase 5 | Pending |
+| DESIGN-08 | Phase 5 | Done (05-01) |
 
 **Coverage:** v1 requirements: 22 total | Mapped to phases: 22 | Unmapped: 0 ✓
 
