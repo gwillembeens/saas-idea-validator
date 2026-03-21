@@ -65,12 +65,17 @@
 - `index.html` loads Google Fonts: Kalam 700 and Patrick Hand 400
 - `AppShell` renders dot-grid paper background with correct radial gradient and 24px repeat
 
-**Plans 04-02, 04-03 (pending)**
-- `Button` component (primary & secondary) with wobbly inline border-radius, hard shadow, hover/active states
-- `Card` component with decoration prop (`tape|tack|none`), wobbly border-radius, rotate prop
-- `TextArea` component with full wobbly border, Patrick Hand font, blue focus ring, no resize
+**Plan 04-02 ✓ Complete (2026-03-21)**
+- ✓ `Button` component (primary & secondary) with wobbly inline border-radius, hard shadow, hover/active states
+- ✓ `Card` component with decoration prop (`tape|tack|none`), wobbly border-radius, rotate prop
+- ✓ `TextArea` component with full wobbly border, Patrick Hand font, blue focus ring, no resize
+- ✓ `ScoreBar` component with 5-circle rating display, filled/empty states, hard shadows
+
+**Plan 04-03 (pending)**
 - `IdeaInput` component with textarea + submit button, dispatches `setIdea` and `validate()`, button disabled while status is `loading|streaming`
 - `ResultsPanel` renders streamed markdown using react-markdown, updates as chunks arrive, shows loading skeleton while `loading`
+- `Scorecard` component with visual phase scores and weighted total
+- `VerdictBadge` component with color-coded verdict pill
 - All text uses `text-pencil` color, never pure black
 - Design system visually cohesive across all components
 
@@ -170,9 +175,9 @@
 | DESIGN-01 | Phase 4 | Done (04-01) |
 | DESIGN-02 | Phase 4 | Done (04-01) |
 | DESIGN-03 | Phase 4 | Done (04-01) |
-| DESIGN-04 | Phase 4 | Pending |
-| DESIGN-05 | Phase 4 | Pending |
-| DESIGN-06 | Phase 4 | Pending |
+| DESIGN-04 | Phase 4 | Done (04-02) |
+| DESIGN-05 | Phase 4 | Done (04-02) |
+| DESIGN-06 | Phase 4 | Done (04-02) |
 | DESIGN-07 | Phase 5 | Pending |
 | DESIGN-08 | Phase 5 | Pending |
 
