@@ -72,28 +72,28 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| BACK-01 | Phase 1 | Pending |
-| BACK-02 | Phase 1 | Pending |
-| BACK-03 | Phase 1 | Pending |
-| BACK-04 | Phase 1 | Pending |
-| BACK-05 | Phase 1 | Pending |
-| STATE-01 | Phase 2 | Pending |
-| STATE-02 | Phase 2 | Pending |
+| BACK-01 | Phase 2 | Pending |
+| BACK-02 | Phase 2 | Pending |
+| BACK-03 | Phase 2 | Pending |
+| BACK-04 | Phase 2 | Pending |
+| BACK-05 | Phase 2 | Pending |
+| STATE-01 | Phase 3 | Pending |
+| STATE-02 | Phase 3 | Pending |
 | HOOK-01 | Phase 3 | Pending |
 | HOOK-02 | Phase 3 | Pending |
-| COMP-01 | Phase 3 | Pending |
-| COMP-02 | Phase 3 | Pending |
-| COMP-03 | Phase 4 | Pending |
-| COMP-04 | Phase 4 | Pending |
-| PARSE-01 | Phase 4 | Pending |
-| DESIGN-01 | Phase 2 | Pending |
-| DESIGN-02 | Phase 2 | Pending |
-| DESIGN-03 | Phase 2 | Pending |
-| DESIGN-04 | Phase 2 | Pending |
-| DESIGN-05 | Phase 2 | Pending |
-| DESIGN-06 | Phase 2 | Pending |
-| DESIGN-07 | Phase 4 | Pending |
-| DESIGN-08 | Phase 4 | Pending |
+| COMP-01 | Phase 4 | Pending |
+| COMP-02 | Phase 4 | Pending |
+| COMP-03 | Phase 5 | Pending |
+| COMP-04 | Phase 5 | Pending |
+| PARSE-01 | Phase 5 | Pending |
+| DESIGN-01 | Phase 4 | Pending |
+| DESIGN-02 | Phase 4 | Pending |
+| DESIGN-03 | Phase 4 | Pending |
+| DESIGN-04 | Phase 4 | Pending |
+| DESIGN-05 | Phase 4 | Pending |
+| DESIGN-06 | Phase 4 | Pending |
+| DESIGN-07 | Phase 5 | Pending |
+| DESIGN-08 | Phase 5 | Pending |
 
 **Coverage:**
 - v1 requirements: 22 total
@@ -102,4 +102,4 @@
 
 ---
 *Requirements defined: 2026-03-21*
-*Last updated: 2026-03-21 after initial definition*
+*Traceability updated: 2026-03-21 after roadmap creation*
