@@ -16,7 +16,7 @@ progress:
 
 **Last updated:** 2026-03-21
 **Current phase:** 08
-**Last completed plan:** 08-01
+**Last completed plan:** 08-02
 
 ---
 
@@ -41,7 +41,7 @@ See: `.planning/PROJECT.md` (updated 2026-03-21)
 | 5 | Validator Logic & Scorecard | ✓ Complete (2026-03-21) | 05-01, 05-02 |
 | 6 | Responsive Layout & Polish | ✓ Complete (2026-03-21) | Page assembly, responsive design, accessibility |
 | 7 | Integration Testing & Deployment Ready | ✓ Complete (2026-03-21) | E2E tests, documentation, local verification |
-| 8 | Results Layout Redesign — Option A Split Cards | In Progress | 08-01 Complete, 08-02 Pending, 08-03 Pending |
+| 8 | Results Layout Redesign — Option A Split Cards | In Progress | 08-01 Complete, 08-02 Complete, 08-03 Pending |
 
 ---
 
@@ -71,6 +71,15 @@ See: `.planning/PROJECT.md` (updated 2026-03-21)
 3. **Stateless card components:** No Redux — components receive markdown as props only
 4. **Shared markdownComponents pattern:** Duplicate from ResultsPanel for independence and reusability
 5. **Graceful fallback:** Return `null` for falsy markdown to prevent render errors
+
+### Plan 08-02 Decisions
+
+1. **Streaming state UX:** Pulsing 3-dot bounce indicator with staggered delays (150ms offset)
+2. **Split-card layout:** 5-card render order locked: VerdictBadge → IdeaSummaryCard → Scorecard → VerdictCard → CommentaryCard
+3. **Redux-connected in ResultsPanel:** Scorecard and VerdictBadge remain Redux-connected (read state internally, render with no props)
+4. **Animation timing:** fadeIn 300ms ease-out forwards (gentle, not jarring)
+5. **Fallback strategy:** If parseSections fails, render raw markdown in single Card (existing behavior preserved)
+6. **App.jsx simplification:** Remove duplicate Scorecard/VerdictBadge renders — all card logic moves inside ResultsPanel
 
 ---
 
