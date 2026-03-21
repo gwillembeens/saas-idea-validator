@@ -70,6 +70,23 @@ export function ResultsPanel() {
     )
   }
 
+  if (status === 'streaming') {
+    return (
+      <div className="w-full max-w-2xl mx-auto">
+        <Card decoration="none" rotate={0} className="w-full">
+          <div className="flex items-center gap-2 py-4">
+            <p className="font-body text-lg text-pencil">Analysing your idea</p>
+            <span className="flex gap-1">
+              <span className="w-2 h-2 rounded-full bg-pencil animate-bounce" style={{ animationDelay: '0ms' }} />
+              <span className="w-2 h-2 rounded-full bg-pencil animate-bounce" style={{ animationDelay: '150ms' }} />
+              <span className="w-2 h-2 rounded-full bg-pencil animate-bounce" style={{ animationDelay: '300ms' }} />
+            </span>
+          </div>
+        </Card>
+      </div>
+    )
+  }
+
   if (status === 'error') {
     return (
       <Card decoration="none" rotate={0} className="w-full max-w-2xl mx-auto">
