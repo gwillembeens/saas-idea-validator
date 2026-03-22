@@ -1,10 +1,10 @@
 import { useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import { AppShell } from '../components/layout/AppShell'
-import { SignInButton } from '../components/auth/SignInButton'
 import { AuthModal } from '../components/auth/AuthModal'
 import { HistoryCard } from '../components/history/HistoryCard'
 import { useHistory } from '../hooks/useHistory'
+import { selectFilteredHistory } from '../store/slices/historySlice'
 import { useAuth } from '../hooks/useAuth'
 import { Button } from '../components/ui/Button'
 
@@ -12,6 +12,7 @@ export function HistoryPage() {
   const user = useSelector(s => s.auth.user)
   const { openModal } = useAuth()
   const { items, status, hasMore, sort, fetchHistory, loadMore, deleteItem, renameItem, toggleSort } = useHistory()
+  const filteredItems = useSelector(selectFilteredHistory)
   const sentinelRef = useRef(null)
 
   // Fetch history on mount and when sort changes
@@ -41,11 +42,7 @@ export function HistoryPage() {
   if (!user) {
     return (
       <AppShell>
-        <div className="flex flex-col items-center justify-center min-h-screen px-4 py-20 relative">
-          <header className="absolute top-4 right-4 md:top-6 md:right-6">
-            <SignInButton />
-          </header>
-
+        <div className="flex flex-col items-center justify-center min-h-screen px-4 py-20">
           <div className="w-full max-w-2xl text-center">
             <h1 className="font-heading text-5xl md:text-6xl text-pencil mb-6">
               Your Validation History
@@ -66,11 +63,6 @@ export function HistoryPage() {
   return (
     <AppShell>
       <div className="flex flex-col items-center justify-start min-h-screen px-4 py-20 md:px-8 relative">
-
-        {/* Header with SignInButton */}
-        <header className="absolute top-4 right-4 md:top-6 md:right-6">
-          <SignInButton />
-        </header>
 
         {/* Title and sort toggle */}
         <div className="w-full max-w-4xl mb-12">
@@ -96,7 +88,7 @@ export function HistoryPage() {
           </div>
         ) : (
           <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-            {items.map((item) => (
+            {filteredItems.map((item) => (
               <HistoryCard
                 key={item.id}
                 item={item}
