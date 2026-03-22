@@ -23,5 +23,14 @@ export async function runMigrations() {
     ALTER TABLE users
       ADD COLUMN IF NOT EXISTS username VARCHAR(50) UNIQUE
   `)
+  // Phase 19: idea versioning — parent chain
+  await pool.query(`
+    ALTER TABLE saved_results
+      ADD COLUMN IF NOT EXISTS parent_id INTEGER REFERENCES saved_results(id) ON DELETE SET NULL
+  `)
+  await pool.query(`
+    ALTER TABLE saved_results
+      ADD COLUMN IF NOT EXISTS suggested_parent_id INTEGER REFERENCES saved_results(id) ON DELETE SET NULL
+  `)
   console.log('DB migrations applied')
 }

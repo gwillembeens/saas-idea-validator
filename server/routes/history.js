@@ -1,5 +1,6 @@
 import Anthropic from '@anthropic-ai/sdk'
 import { pool } from '../db/init.js'
+import stringSimilarity from 'string-similarity'
 
 const VALID_NICHES = ['Fintech', 'Logistics', 'Creator Economy', 'PropTech', 'HealthTech', 'EdTech', 'HRTech', 'Other']
 
@@ -44,6 +45,32 @@ export async function saveResultRoute(req, res) {
 
     const result = rows[0]
 
+    // Similarity detection — compare against all user's past ideas
+    let similarTo = null
+    const pastRows = await pool.query(
+      `SELECT id, title, idea_text, scores FROM saved_results
+       WHERE user_id = $1 AND id != $2 AND deleted_at IS NULL`,
+      [req.user.id, result.id]
+    )
+
+    if (pastRows.rows.length > 0) {
+      const pastTexts = pastRows.rows.map(r => r.idea_text)
+      const match = stringSimilarity.findBestMatch(idea_text, pastTexts)
+      if (match.bestMatch.rating >= 0.75) {
+        const matchedRow = pastRows.rows[match.bestMatchIndex]
+        similarTo = {
+          id: matchedRow.id,
+          title: matchedRow.title,
+          scores: matchedRow.scores,
+        }
+        // Store suggested_parent_id so banner persists if user navigates away
+        await pool.query(
+          'UPDATE saved_results SET suggested_parent_id = $1 WHERE id = $2',
+          [matchedRow.id, result.id]
+        )
+      }
+    }
+
     // Fire async title generation via Claude (non-blocking)
     generateAITitle(result.id, idea_text, req.user.id).catch(err => {
       console.error('Title generation failed:', err)
@@ -59,6 +86,7 @@ export async function saveResultRoute(req, res) {
       title: result.title,
       is_public: true,
       createdAt: result.created_at,
+      similarTo,
     })
   } catch (err) {
     console.error('Save failed:', err)
@@ -172,7 +200,8 @@ export async function getResultRoute(req, res) {
 
   try {
     const { rows } = await pool.query(
-      `SELECT id, user_id, title, idea_text, markdown_result, scores, created_at, niche, is_public
+      `SELECT id, user_id, title, idea_text, markdown_result, scores, created_at, niche, is_public,
+              parent_id, suggested_parent_id
        FROM saved_results
        WHERE id = $1 AND deleted_at IS NULL`,
       [id]
@@ -190,6 +219,32 @@ export async function getResultRoute(req, res) {
       generateNiche(result.id, result.idea_text, result.markdown_result || '', result.user_id).catch(() => {})
     }
 
+    // Fetch parent scores if parent_id is set
+    let parent_scores = null
+    let parent_title = null
+    if (result.parent_id) {
+      const parentResult = await pool.query(
+        'SELECT scores, title FROM saved_results WHERE id = $1 AND deleted_at IS NULL',
+        [result.parent_id]
+      )
+      if (parentResult.rows.length) {
+        parent_scores = parentResult.rows[0].scores
+        parent_title = parentResult.rows[0].title
+      }
+    }
+
+    // Fetch suggested parent title if suggested_parent_id is set
+    let suggested_parent_title = null
+    if (result.suggested_parent_id) {
+      const suggestedResult = await pool.query(
+        'SELECT title, scores FROM saved_results WHERE id = $1 AND deleted_at IS NULL',
+        [result.suggested_parent_id]
+      )
+      if (suggestedResult.rows.length) {
+        suggested_parent_title = suggestedResult.rows[0].title
+      }
+    }
+
     res.json({
       id: result.id,
       title: result.title,
@@ -200,6 +255,11 @@ export async function getResultRoute(req, res) {
       niche: result.niche,
       is_public: result.is_public,
       isOwner,
+      parent_id: result.parent_id || null,
+      parent_scores,
+      parent_title,
+      suggested_parent_id: result.suggested_parent_id || null,
+      suggested_parent_title,
     })
   } catch (err) {
     console.error('Get result error:', err)
@@ -324,5 +384,75 @@ export async function deleteResultRoute(req, res) {
   } catch (err) {
     console.error('Delete error:', err)
     res.status(500).json({ error: 'Failed to delete result' })
+  }
+}
+
+// PATCH /api/history/:id/parent — confirm revision link
+export async function setParentRoute(req, res) {
+  if (!req.user) {
+    return res.status(401).json({ error: 'Unauthorized' })
+  }
+
+  const { id } = req.params
+  const { parent_id } = req.body
+
+  if (!parent_id || typeof parent_id !== 'number') {
+    return res.status(400).json({ error: 'parent_id must be a number' })
+  }
+
+  try {
+    // Verify ownership
+    const { rows } = await pool.query(
+      'SELECT user_id FROM saved_results WHERE id = $1 AND deleted_at IS NULL',
+      [id]
+    )
+    if (!rows.length) return res.status(404).json({ error: 'Result not found' })
+    if (rows[0].user_id !== req.user.id) return res.status(403).json({ error: 'Forbidden' })
+
+    // Verify parent also belongs to this user
+    const parentRows = await pool.query(
+      'SELECT id FROM saved_results WHERE id = $1 AND user_id = $2 AND deleted_at IS NULL',
+      [parent_id, req.user.id]
+    )
+    if (!parentRows.rows.length) return res.status(404).json({ error: 'Parent not found' })
+
+    await pool.query(
+      'UPDATE saved_results SET parent_id = $1, suggested_parent_id = NULL, updated_at = now() WHERE id = $2',
+      [parent_id, id]
+    )
+
+    res.json({ id: parseInt(id), parent_id })
+  } catch (err) {
+    console.error('setParent error:', err)
+    res.status(500).json({ error: 'Failed to set parent' })
+  }
+}
+
+// PATCH /api/history/:id/dismiss-revision — dismiss suggestion
+export async function dismissRevisionRoute(req, res) {
+  if (!req.user) {
+    return res.status(401).json({ error: 'Unauthorized' })
+  }
+
+  const { id } = req.params
+
+  try {
+    // Verify ownership
+    const { rows } = await pool.query(
+      'SELECT user_id FROM saved_results WHERE id = $1 AND deleted_at IS NULL',
+      [id]
+    )
+    if (!rows.length) return res.status(404).json({ error: 'Result not found' })
+    if (rows[0].user_id !== req.user.id) return res.status(403).json({ error: 'Forbidden' })
+
+    await pool.query(
+      'UPDATE saved_results SET suggested_parent_id = NULL, updated_at = now() WHERE id = $1',
+      [id]
+    )
+
+    res.json({ id: parseInt(id), suggested_parent_id: null })
+  } catch (err) {
+    console.error('dismissRevision error:', err)
+    res.status(500).json({ error: 'Failed to dismiss revision' })
   }
 }
