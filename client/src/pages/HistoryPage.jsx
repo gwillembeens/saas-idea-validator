@@ -1,12 +1,15 @@
 import { useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
+import { History } from 'lucide-react'
 import { AppShell } from '../components/layout/AppShell'
 import { AuthModal } from '../components/auth/AuthModal'
 import { HistoryCard } from '../components/history/HistoryCard'
+import { Card } from '../components/ui/Card'
+import { Button } from '../components/ui/Button'
 import { useHistory } from '../hooks/useHistory'
 import { selectFilteredHistory } from '../store/slices/historySlice'
 import { useAuth } from '../hooks/useAuth'
-import { Button } from '../components/ui/Button'
 
 export function HistoryPage() {
   const user = useSelector(s => s.auth.user)
@@ -62,39 +65,64 @@ export function HistoryPage() {
 
   return (
     <AppShell>
-      <div className="flex flex-col items-center justify-start min-h-screen px-4 py-20 md:px-8 relative">
+      <div className="flex flex-col items-center justify-start min-h-screen px-4 py-20 md:px-8">
 
-        {/* Title and sort toggle */}
-        <div className="w-full max-w-4xl mb-12">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <h1 className="font-heading text-5xl md:text-6xl text-pencil">
-              Your Validation History
-            </h1>
-            <button
-              onClick={toggleSort}
-              className="font-body text-lg text-blue hover:text-accent transition-colors"
-            >
-              Sort by: {sort === 'date' ? 'Date ↓' : 'Score ↓'}
-            </button>
-          </div>
+        {/* Title — its own line */}
+        <div className="w-full max-w-4xl mb-6">
+          <h1 className="font-heading text-5xl md:text-6xl text-pencil">
+            Your Validation History
+          </h1>
         </div>
 
-        {/* Results grid */}
-        {items.length === 0 && status === 'idle' ? (
-          <div className="w-full max-w-4xl text-center py-20">
-            <p className="font-body text-lg text-pencil opacity-60">
-              No saved validations yet. Validate your first idea →
-            </p>
+        {/* Sort toggle — separate line below title */}
+        <div className="w-full max-w-4xl mb-8 flex items-center justify-end">
+          <button
+            onClick={toggleSort}
+            className="font-body text-lg text-blue hover:text-accent transition-colors underline decoration-dotted"
+          >
+            Sort by: {sort === 'date' ? 'Date ↓' : 'Score ↓'}
+          </button>
+        </div>
+
+        {/* Results — full-width rows with ranking numbers */}
+        {items.length === 0 && status !== 'loading' ? (
+          <div className="w-full max-w-4xl py-16 px-4">
+            <Card decoration="none" rotate={0}>
+              <div className="flex flex-col items-center text-center py-8 gap-6">
+                <History size={48} className="text-pencil opacity-50" strokeWidth={2.5} />
+                <h2 className="font-heading text-3xl md:text-4xl text-pencil">
+                  No validations yet
+                </h2>
+                <p className="font-body text-lg text-pencil opacity-70 max-w-sm leading-relaxed">
+                  Validate your first SaaS idea to start building your history.
+                </p>
+                <Link to="/">
+                  <Button variant="primary">
+                    Validate Your First Idea
+                  </Button>
+                </Link>
+              </div>
+            </Card>
           </div>
         ) : (
-          <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-            {filteredItems.map((item) => (
-              <HistoryCard
-                key={item.id}
-                item={item}
-                onDelete={deleteItem}
-                onRename={renameItem}
-              />
+          <div className="w-full max-w-4xl flex flex-col gap-4 mb-12">
+            {filteredItems.map((item, index) => (
+              <div key={item.id} className="flex items-start gap-4">
+                {/* Ranking number */}
+                <div className="flex items-center justify-center w-10 pt-4 flex-shrink-0">
+                  <span className="font-heading text-2xl text-pencil">
+                    #{index + 1}
+                  </span>
+                </div>
+                {/* HistoryCard — full width */}
+                <div className="flex-1 min-w-0">
+                  <HistoryCard
+                    item={item}
+                    onDelete={deleteItem}
+                    onRename={renameItem}
+                  />
+                </div>
+              </div>
             ))}
           </div>
         )}
