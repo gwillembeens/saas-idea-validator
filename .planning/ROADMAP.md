@@ -286,17 +286,19 @@ Plans:
 Plans:
 - [ ] TBD (run /gsd:plan-phase 13 to break down)
 
-### Phase 14: improve code on ResultPage
+### Phase 14: improve code on ResultPage ✅ Complete (2026-03-22)
 
-**Goal:** [To be planned]
-**Requirements**: TBD
+**Goal:** Refactor ResultPage.jsx for cleaner architecture — extract constants, components, hooks, and utilities
+**Requirements**: Code quality, single-responsibility components, <200 line ResultPage
 **Depends on:** Phase 13
-**Plans:** 2/3 plans executed
+**Plans:** 3/3 plans executed
 
 Plans:
-- [ ] TBD (run /gsd:plan-phase 14 to break down)
+- [x] 14-01 — Foundations: verdictColors.js constants, fix page width, remove inline getVerdict
+- [x] 14-02 — Component & Hook Extraction: useHistoryResult, TitleHeader, ActionButtons, DeleteConfirmModal
+- [x] 14-03 — Wave 3 Polish & Optimization: formatResultDate utility, memoized share URLs, user-friendly errors
 
 ---
 
-*Roadmap updated: 2026-03-21*
-*Phases: 8 | Completed: 7 | Plans total: 16 | Completed: 15 (08-02 just completed)*
+*Roadmap updated: 2026-03-22*
+*Phases: 14 | Completed: 14 | Plans total: 35 | Completed: 35*
