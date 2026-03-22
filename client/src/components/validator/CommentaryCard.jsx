@@ -28,7 +28,7 @@ const markdownComponents = {
   ol: ({ children }) => (
     <ol className="list-decimal list-inside mb-3 space-y-1">{children}</ol>
   ),
-  hr: () => <hr className="border-pencil border-t-2 opacity-20 my-6" />,
+  hr: () => null,
 }
 
 export function CommentaryCard({ markdown }) {

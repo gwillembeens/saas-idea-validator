@@ -16,7 +16,7 @@ const validatorSlice = createSlice({
     appendResult: (state, action) => { state.result += action.payload },
     finishValidation: (state) => { state.status = 'done'; state.progress = 100 },
     setError: (state, action) => { state.status = 'error'; state.error = action.payload },
-    reset: (state) => { state.status = 'idle'; state.result = ''; state.error = null; state.progress = 0 },
+    reset: (state) => { state.idea = ''; state.status = 'idle'; state.result = ''; state.error = null; state.progress = 0 },
     setProgress: (state, action) => { state.progress = action.payload },
   },
 })

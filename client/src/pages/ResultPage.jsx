@@ -185,8 +185,8 @@ export function ResultPage() {
         </div>
 
         {/* Action buttons */}
-        <div className="w-full max-w-4xl mb-12">
-          <div className="flex flex-wrap gap-4 justify-center md:justify-start">
+        <div className="w-full max-w-2xl mb-12">
+          <div className="flex flex-wrap gap-4 justify-start">
 
             {/* Re-validate */}
             <Button variant="primary" onClick={handleRevalidate}>
@@ -250,9 +250,9 @@ export function ResultPage() {
           </div>
         )}
 
-        {/* Non-owner CTA */}
-        {!result?.isOwner && (
-          <div className="w-full max-w-4xl text-center mb-12">
+        {/* Non-owner CTA — only for unauthenticated visitors viewing someone else's result */}
+        {!result?.isOwner && !user && (
+          <div className="w-full max-w-2xl text-center mb-12">
             <p className="font-body text-lg text-pencil opacity-60">
               Interested in validating your own idea?{' '}
               <a href="/" className="text-blue underline hover:text-accent transition-colors">
