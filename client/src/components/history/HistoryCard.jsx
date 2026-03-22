@@ -67,7 +67,7 @@ export function HistoryCard({ item, onDelete, onToggleVisibility }) {
           {ideaSnippet}
         </p>
 
-        {/* Footer: verdict, niche, visibility badge, toggle, date, delete */}
+        {/* Footer: verdict, niche, date — left; visibility + delete — right */}
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-4">
             <div
@@ -78,15 +78,19 @@ export function HistoryCard({ item, onDelete, onToggleVisibility }) {
 
             <NichePill niche={niche} size="sm" />
 
-            {/* Public/Private badge */}
-            <span
-              className="px-3 py-1 font-body text-xs text-pencil border border-pencil"
-              style={{ backgroundColor: '#e5e0d8', borderRadius: '255px 15px 225px 15px / 15px 225px 15px 255px' }}
-            >
+            <span className="font-body text-xs text-pencil opacity-50">
+              {createdDate}
+            </span>
+          </div>
+
+          {/* Right side: visibility state + toggle button + delete */}
+          <div className="flex items-center gap-2">
+            {/* State label — plain muted text */}
+            <span className="font-body text-xs text-pencil opacity-50">
               {item.is_public ? 'Public' : 'Private'}
             </span>
 
-            {/* Toggle visibility button */}
+            {/* Toggle button — styled pill */}
             <button
               onClick={(e) => {
                 e.stopPropagation()
@@ -96,7 +100,8 @@ export function HistoryCard({ item, onDelete, onToggleVisibility }) {
                 }
               }}
               disabled={isTogglingVisibility}
-              className="flex items-center gap-1 font-body text-xs text-pencil opacity-60 hover:opacity-100 transition-opacity disabled:opacity-30"
+              className="flex items-center gap-1 px-3 py-1 font-body text-xs text-pencil border border-pencil hover:shadow-hardSm transition-shadow disabled:opacity-40"
+              style={{ backgroundColor: '#e5e0d8', borderRadius: '255px 15px 225px 15px / 15px 225px 15px 255px' }}
             >
               {item.is_public
                 ? <><Lock size={12} strokeWidth={2.5} /> Make Private</>
@@ -104,19 +109,15 @@ export function HistoryCard({ item, onDelete, onToggleVisibility }) {
               }
             </button>
 
-            <span className="font-body text-xs text-pencil opacity-50">
-              {createdDate}
-            </span>
+            {/* Delete button */}
+            <button
+              onClick={handleDeleteClick}
+              className="p-1 hover:opacity-70 transition"
+              aria-label="Delete result"
+            >
+              <Trash2 size={18} className="text-accent" strokeWidth={2.5} />
+            </button>
           </div>
-
-          {/* Delete button */}
-          <button
-            onClick={handleDeleteClick}
-            className="p-1 hover:opacity-70 transition"
-            aria-label="Delete result"
-          >
-            <Trash2 size={18} className="text-accent" strokeWidth={2.5} />
-          </button>
         </div>
       </Card>
 
