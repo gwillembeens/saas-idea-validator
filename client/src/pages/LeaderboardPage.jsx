@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux'
 import { useSearchParams, Link } from 'react-router-dom'
 import { AppShell } from '../components/layout/AppShell'
 import { LeaderboardCard } from '../components/leaderboard/LeaderboardCard'
+import ChallengeSection from '../components/leaderboard/ChallengeSection'
 import { Card } from '../components/ui/Card'
 import { Button } from '../components/ui/Button'
 import { useLeaderboard } from '../hooks/useLeaderboard'
@@ -65,6 +66,11 @@ export function LeaderboardPage() {
             </Card>
           </div>
         )}
+
+        {/* Beat the Leaderboard challenge section */}
+        <div className="w-full max-w-3xl mb-8">
+          <ChallengeSection />
+        </div>
 
         {/* Niche filter pill row */}
         <div className="w-full max-w-3xl mb-8">
