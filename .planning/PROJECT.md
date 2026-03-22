@@ -5,7 +5,8 @@
 A React web app that lets founders paste a startup idea and receive a structured
 validation report scored against a 30-step framework for building agent-native SaaS
 businesses. The Claude API powers the analysis and the response streams in real time.
-No auth, no database — a single-purpose validation tool.
+Users authenticate, save validated ideas, browse their history, and share public result
+links — built with a hand-drawn sketchbook design aesthetic throughout.
 
 ## Core Value
 
@@ -16,33 +17,46 @@ streamed live with a visual scorecard — fast enough to validate 10 ideas in a 
 
 ### Validated
 
-- [x] Hand-drawn sketchbook design system applied throughout (Kalam + Patrick Hand fonts, wobbly borders, hard offset shadows) — Validated in Phase 04: Frontend Components Design System
-- [x] Scorecard component parses phase scores and renders them visually (1–5 circles) — Validated in Phase 05: Validator Logic Scorecard
-- [x] Verdict badge displays overall signal strength with colour coding — Validated in Phase 05: Validator Logic Scorecard
-- [x] UI renders the streamed markdown progressively as it arrives — Validated in Phase 05: Validator Logic Scorecard
-- [x] All components assembled into responsive, accessible page layout — Validated in Phase 06: Responsive Layout Polish
-- [x] Error state visible to user (error Card in ResultsPanel) — Validated in Phase 07: Integration Testing & Deployment Ready
-- [x] App ships with root README — developer can run locally from fresh clone — Validated in Phase 07: Integration Testing & Deployment Ready
+- ✓ Express server proxies Claude API, API key stays server-side — v1.0
+- ✓ POST /api/validate streams Claude response as text/event-stream — v1.0
+- ✓ Redux Toolkit slice manages idea/status/result/error state machine — v1.0
+- ✓ useValidate custom hook reads ReadableStream, dispatches appendResult per chunk — v1.0
+- ✓ IdeaInput component dispatches setIdea and validate(), button disabled while streaming — v1.0
+- ✓ ResultsPanel renders streamed markdown progressively via react-markdown — v1.0
+- ✓ Hand-drawn sketchbook design system applied throughout (Kalam + Patrick Hand fonts, wobbly borders, hard offset shadows) — v1.0
+- ✓ Scorecard component parses phase scores and renders them visually (1–5 circles) — v1.0
+- ✓ Verdict badge displays overall signal strength with colour coding — v1.0
+- ✓ All components assembled into responsive, accessible page layout — v1.0
+- ✓ Error state visible to user (error Card in ResultsPanel) — v1.0
+- ✓ App ships with root README — developer can run locally from fresh clone — v1.0
+- ✓ Split-card results layout: Idea Summary, Scorecard, Commentary, Verdict as separate animated cards — v1.0
+- ✓ Full authentication: email/password + Google/GitHub OAuth, JWT rotation, bcrypt, 30-day refresh tokens — v1.0
+- ✓ PostgreSQL persistence: validation history saved per user with title editing and delete — v1.0
+- ✓ Public sharing: shareable result links accessible without login — v1.0
+- ✓ HistoryPage: infinite scroll, sort toggle, empty state, filtered selector — v1.0
+- ✓ NavBar with sticky header, auth actions, and route links — v1.0
+- ✓ Framework page at /framework showing all 30 steps grouped by phase — v1.0
+- ✓ ResultPage refactored: <200 lines, clean component/hook/utility extraction — v1.0
 
 ### Active
 
-_(none — all v1 requirements validated)_
+_(none — all v1.0 requirements shipped)_
 
 ### Out of Scope
 
-- Authentication / user accounts — v1 is single-use, no sessions needed
-- Database / history — no persistence in v1
-- Deployment / hosting — local only for v1
-- Mobile app — web-first
+- Mobile app — web-first; sketchbook design works on desktop
 - Real-time collaboration — single-user tool
+- PDF export (SHARE-02) — not in v1.0; useful but non-critical for early validation
+- Password reset frontend form — backend complete, frontend form not wired (minor gap)
 
 ## Context
 
-- Stack is fully prescribed in CLAUDE.md: React 18 + Vite + Redux Toolkit + Tailwind CSS v3 frontend; Node.js + Express backend; Anthropic SDK for Claude streaming.
-- Design system is hand-drawn/sketchbook aesthetic — wobbly border-radius (inline styles), hard offset shadows, Kalam (headings) + Patrick Hand (body) fonts, dot-grid paper background.
-- The 30-step framework and full system prompt are defined in CLAUDE.md and must be implemented verbatim in `client/src/utils/systemPrompt.js`.
+- Stack: React 19 + Vite + Redux Toolkit + Tailwind CSS v3 frontend; Node.js + Express 5 backend; Anthropic SDK for Claude streaming; PostgreSQL for persistence.
+- Design system: hand-drawn/sketchbook aesthetic — wobbly border-radius (inline styles), hard offset shadows, Kalam (headings) + Patrick Hand (body) fonts, dot-grid paper background.
 - Claude model: `claude-sonnet-4-20250514` with streaming enabled.
-- Vite proxies `/api` to `localhost:3001` to keep API key server-side.
+- Auth: JWT with 15m access tokens + 30d refresh rotation, bcrypt 12 rounds, Google/GitHub OAuth.
+- Shipped v1.0 with ~3,425 LOC JavaScript/JSX across 14 phases.
+- Known technical debt: password reset frontend not wired, E2E tests for split-card layout not written (08-03 pending).
 
 ## Constraints
 
@@ -51,29 +65,24 @@ _(none — all v1 requirements validated)_
 - **Shadows**: Hard offset only (`4px 4px 0px 0px #2d2d2d`) — never soft/blurred
 - **Borders**: Wobbly inline style always on primary elements — never `rounded-*` Tailwind classes
 - **State**: Redux Toolkit slice only — no local component state for app data
-- **Data fetching**: `useValidate` custom hook only — no `useEffect` for fetching
+- **Data fetching**: Custom hooks only — no `useEffect` for fetching
 - **Streaming**: Always stream — never wait for full response before rendering
 
 ## Key Decisions
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| Express backend proxy for Claude API | Keep API key server-side; client never touches Anthropic directly | — Pending |
-| Redux Toolkit for all app state | Prevents prop drilling; slice manages idea/status/result/error | — Pending |
-| Streaming via ReadableStream | UX depends on progressive rendering; full response wait is too slow | — Pending |
-| Tailwind CSS v3 with custom config | Extended tokens for design system colours, fonts, shadows | — Pending |
-| No auth/database for v1 | Single-purpose tool; complexity not justified until validated | — Pending |
+| Express backend proxy for Claude API | Keep API key server-side; client never touches Anthropic directly | ✓ Good — clean security boundary |
+| Redux Toolkit for all app state | Prevents prop drilling; slice manages idea/status/result/error | ✓ Good — historySlice + authSlice added cleanly |
+| Streaming via ReadableStream | UX depends on progressive rendering; full response wait is too slow | ✓ Good — sub-200ms chunk latency |
+| Tailwind CSS v3 with custom config | Extended tokens for design system colours, fonts, shadows | ✓ Good — consistent design language |
+| JWT + PostgreSQL auth (not "no auth") | Founders need to save and revisit validations — history is core value | ✓ Good — enabled history feature |
+| Split-card layout for results | Section-level readability over monolithic markdown dump | ✓ Good — Idea Summary / Scorecard / Commentary / Verdict as separate cards |
+| Public sharing via share token | Founders share results with co-founders/investors without requiring login | ✓ Good — low friction sharing |
 
 ## Evolution
 
 This document evolves at phase transitions and milestone boundaries.
-
-**After each phase transition** (via `/gsd:transition`):
-1. Requirements invalidated? → Move to Out of Scope with reason
-2. Requirements validated? → Move to Validated with phase reference
-3. New requirements emerged? → Add to Active
-4. Decisions to log? → Add to Key Decisions
-5. "What This Is" still accurate? → Update if drifted
 
 **After each milestone** (via `/gsd:complete-milestone`):
 1. Full review of all sections
@@ -82,4 +91,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-03-21 — Phase 07 complete: error display added, all 22 v1 requirements marked Complete, root README created. All v1 milestone requirements validated.*
+*Last updated: 2026-03-22 after v1.0 milestone*

@@ -1,8 +1,8 @@
 ---
 gsd_state_version: 1.0
 milestone: v1.0
-milestone_name: milestone
-current_phase: 14
+milestone_name: MVP
+current_phase: 14 (complete)
 status: complete
 last_updated: "2026-03-22"
 progress:
@@ -17,17 +17,17 @@ progress:
 **Last updated:** 2026-03-22
 **Current phase:** 14 (complete)
 **Last completed plan:** 14-03
-**All phases complete — milestone v1.0 done**
+**v1.0 milestone archived — all phases complete**
 
 ---
 
 ## Project Reference
 
-See: `.planning/PROJECT.md` (updated 2026-03-21)
+See: `.planning/PROJECT.md` (updated 2026-03-22)
 
 **Core value:** A founder pastes an idea and gets an honest, investor-grade analysis in under a minute, streamed live with a visual scorecard.
 
-**Current focus:** Phase 14 — improve-code-on-resultpage
+**Current focus:** v1.0 milestone complete — run `/gsd:new-milestone` to plan v1.1
 
 ---
 
@@ -36,16 +36,16 @@ See: `.planning/PROJECT.md` (updated 2026-03-21)
 | Phase | Name | Status | Plans |
 |-------|------|--------|-------|
 | 1 | Project Scaffold | ✓ Complete (2026-03-21) | 01-01 |
-| 2 | Backend Express Server | ✓ Complete (2026-03-21) | 02-01 |
+| 2 | Backend Express Server | ✓ Complete (2026-03-21) | 02-01, 02-02 |
 | 3 | Redux Store & Streaming Hook | ✓ Complete (2026-03-21) | 03-01, 03-02 |
 | 4 | Frontend Components & Design System | ✓ Complete (2026-03-21) | 04-01, 04-02, 04-03 |
 | 5 | Validator Logic & Scorecard | ✓ Complete (2026-03-21) | 05-01, 05-02 |
-| 6 | Responsive Layout & Polish | ✓ Complete (2026-03-21) | Page assembly, responsive design, accessibility |
-| 7 | Integration Testing & Deployment Ready | ✓ Complete (2026-03-21) | E2E tests, documentation, local verification |
+| 6 | Responsive Layout & Polish | ✓ Complete (2026-03-21) | 06-01, 06-02 |
+| 7 | Integration Testing & Deployment Ready | ✓ Complete (2026-03-21) | 07-01, 07-02 |
 | 8 | Results Layout Redesign — Option A Split Cards | ✓ Complete (2026-03-21) | 08-01, 08-02 |
 | 9 | Authentication System — User Registration & Login | ✓ Complete (2026-03-21) | 09-01, 09-02, 09-03 |
 | 10 | Saved Ideas — Persist & Browse Validation History | ✓ Complete (2026-03-22) | 10-01, 10-02, 10-03, 10-04 |
-| 11 | UI Polish | ✓ Complete (2026-03-22) | — |
+| 11 | UI Polish | ✓ Complete (2026-03-22) | 11-01, 11-02, 11-03, 11-04 |
 | 12 | History Detail View | ✓ Complete (2026-03-22) | — |
 | 13 | Framework Page | ✓ Complete (2026-03-22) | 13-01, 13-02 |
 | 14 | Improve Code on ResultPage | ✓ Complete (2026-03-22) | 14-01, 14-02, 14-03 |
@@ -56,68 +56,21 @@ See: `.planning/PROJECT.md` (updated 2026-03-21)
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| Express backend proxy for Claude API | Keep API key server-side; client never touches Anthropic directly | Pending implementation |
-| Redux Toolkit for all app state | Prevents prop drilling; slice manages idea/status/result/error | Pending implementation |
-| Streaming via ReadableStream | UX depends on progressive rendering; full response wait is too slow | Pending implementation |
-| Tailwind CSS v3 with custom config | Extended tokens for design system colours, fonts, shadows | Implemented (04-01-01) |
-| No auth/database for v1 | Single-purpose tool; complexity not justified until validated | Out of Scope |
-
----
-
-## Accumulated Context
-
-### Roadmap Evolution
-
-- Phase 8 added: Results layout redesign — Option A split cards
-- Phase 9 added: Authentication system — user registration and login
-- Phase 10 added: Saved ideas — persist and browse validation history
-- Phase 11 added: improve UI across app
-- Phase 12 added: History Detail View — clicking a history row opens full validation result
-- Phase 13 added: Framework Page — dedicated /framework route with 30-step framework, linked from navbar and home hero
-- Phase 14 added: improve code on ResultPage
-- Plan 08-01 complete: `parseSections` utility and three card components created
-- Phase 09 complete: Full auth system — email/password, OAuth (Google + GitHub), JWT rotation, auth-gated Validate action, AuthModal, SignInButton
-- Note: Password reset UI (reset mode in AuthModal) is a minor gap — backend complete, frontend form not wired
-
-### Plan 08-01 Decisions
-
-1. **Markdown parsing by section headings:** Use regex to extract content between `## ` delimiters
-2. **Ignore Scorecard section:** Focus on rendering Idea Summary, Commentary, and Verdict
-3. **Stateless card components:** No Redux — components receive markdown as props only
-4. **Shared markdownComponents pattern:** Duplicate from ResultsPanel for independence and reusability
-5. **Graceful fallback:** Return `null` for falsy markdown to prevent render errors
-
-### Plan 08-02 Decisions
-
-1. **Streaming state UX:** Pulsing 3-dot bounce indicator with staggered delays (150ms offset)
-2. **Split-card layout:** 5-card render order locked: VerdictBadge → IdeaSummaryCard → Scorecard → VerdictCard → CommentaryCard
-3. **Redux-connected in ResultsPanel:** Scorecard and VerdictBadge remain Redux-connected (read state internally, render with no props)
-4. **Animation timing:** fadeIn 300ms ease-out forwards (gentle, not jarring)
-5. **Fallback strategy:** If parseSections fails, render raw markdown in single Card (existing behavior preserved)
-6. **App.jsx simplification:** Remove duplicate Scorecard/VerdictBadge renders — all card logic moves inside ResultsPanel
-
-### Plan 09-01 Decisions
-
-1. **Database schema:** Five tables (users, oauth_accounts, email_verification_tokens, password_reset_tokens, refresh_tokens)
-2. **JWT tokens:** Separate secrets for access (15m) and refresh (30d) tokens, HS256 algorithm
-3. **Password hashing:** bcrypt with 12 rounds cost factor
-4. **Cookie options:** httpOnly, secure in production, sameSite=none in production / lax in dev
-5. **Email verification:** 24-hour expiry, Resend API for transactional emails
-6. **Token rotation:** Refresh endpoint deletes old token and issues new one
-7. **Security:** Password reset invalidates all refresh tokens; forgot-password returns 200 always (no enumeration)
+| Express backend proxy for Claude API | Keep API key server-side; client never touches Anthropic directly | ✓ Good |
+| Redux Toolkit for all app state | Prevents prop drilling; slice manages idea/status/result/error | ✓ Good — scaled to 3 slices |
+| Streaming via ReadableStream | UX depends on progressive rendering; full response wait is too slow | ✓ Good |
+| Tailwind CSS v3 with custom config | Extended tokens for design system colours, fonts, shadows | ✓ Good |
+| JWT + PostgreSQL auth (added Phase 9) | Founders need to save and revisit validations | ✓ Good |
+| Split-card layout (Phase 8) | Section-level readability over monolithic markdown dump | ✓ Good |
 
 ---
 
 ## Notes
 
-- All 22 v1 requirements mapped to phases 1–7 with 100% coverage
-- Design system (hand-drawn aesthetic) spans phases 4–6
-- Integration testing deferred to phase 7 to validate full end-to-end flow
-- Streaming architecture critical to UX; implemented early (phase 3)
-- Phase 8 (Results layout redesign) extends v1 polish with split-card option
-- Phase 9 (Authentication) adds user registration, login, and session management
+- Tech debt: password reset frontend form not wired (backend complete)
+- Tech debt: E2E tests for split-card layout not written (Phase 08-03 was pending)
+- Public sharing via shareToken enabled in Phase 10-04
 
 ---
 
-*State updated: 2026-03-21*
-*Version: v1 MVP + Phase 8 Complete + Phase 09-01 Backend Infrastructure*
+*State updated: 2026-03-22 — v1.0 milestone complete*
