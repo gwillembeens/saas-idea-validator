@@ -37,8 +37,8 @@ export function HomePage() {
           label={status === 'loading' ? 'Sending to Claude…' : 'Analyzing your idea…'}
         />
 
-        {/* Arrow decoration — hidden on mobile */}
-        {status !== 'idle' && (
+        {/* Arrow decoration — hidden on mobile, hidden during loading */}
+        {status === 'done' && (
           <div className="hidden md:flex justify-center mb-12">
             <Arrow direction="down" />
           </div>

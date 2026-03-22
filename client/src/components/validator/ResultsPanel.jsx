@@ -53,38 +53,7 @@ export function ResultsPanel() {
 
   if (status === 'idle') return null
 
-  if (status === 'loading') {
-    return (
-      <Card decoration="tack" rotate={1} className="w-full max-w-2xl mx-auto">
-        <div className="animate-pulse flex flex-col gap-4">
-          <div className="h-6 bg-muted rounded w-3/4" />
-          <div className="h-4 bg-muted rounded w-full" />
-          <div className="h-4 bg-muted rounded w-5/6" />
-          <div className="h-4 bg-muted rounded w-4/5" />
-          <div className="h-6 bg-muted rounded w-2/3 mt-4" />
-          <div className="h-4 bg-muted rounded w-full" />
-          <div className="h-4 bg-muted rounded w-3/4" />
-        </div>
-      </Card>
-    )
-  }
-
-  if (status === 'streaming') {
-    return (
-      <div className="w-full max-w-2xl mx-auto">
-        <Card decoration="none" rotate={0} className="w-full">
-          <div className="flex items-center gap-2 py-4">
-            <p className="font-body text-lg text-pencil">Analysing your idea</p>
-            <span className="flex gap-1">
-              <span className="w-2 h-2 rounded-full bg-pencil animate-bounce" style={{ animationDelay: '0ms' }} />
-              <span className="w-2 h-2 rounded-full bg-pencil animate-bounce" style={{ animationDelay: '150ms' }} />
-              <span className="w-2 h-2 rounded-full bg-pencil animate-bounce" style={{ animationDelay: '300ms' }} />
-            </span>
-          </div>
-        </Card>
-      </div>
-    )
-  }
+  if (status === 'loading' || status === 'streaming') return null
 
   if (status === 'error') {
     return (
