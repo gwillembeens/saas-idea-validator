@@ -151,7 +151,6 @@ export function HistoryPage() {
                   <HistoryCard
                     item={item}
                     onDelete={deleteItem}
-                    onRename={renameItem}
                   />
                 </div>
               </div>

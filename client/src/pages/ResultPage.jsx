@@ -42,6 +42,9 @@ export function ResultPage() {
   const [error, setError] = useState(null)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
+  const [isEditingTitle, setIsEditingTitle] = useState(false)
+  const [editingTitle, setEditingTitle] = useState('')
+  const [isSavingTitle, setIsSavingTitle] = useState(false)
 
   useEffect(() => {
     async function fetchResult() {
@@ -58,6 +61,34 @@ export function ResultPage() {
     }
     fetchResult()
   }, [id])
+
+  const handleTitleClick = () => {
+    if (!result?.isOwner) return
+    setEditingTitle(result.title)
+    setIsEditingTitle(true)
+  }
+
+  const handleTitleSave = async () => {
+    if (editingTitle.trim() === result.title || !editingTitle.trim()) {
+      setIsEditingTitle(false)
+      return
+    }
+    setIsSavingTitle(true)
+    try {
+      const res = await fetchWithAuth(`/api/history/${id}/title`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title: editingTitle.trim() }),
+      })
+      if (res.ok) {
+        const data = await res.json()
+        setResult(prev => ({ ...prev, title: data.title }))
+      }
+    } finally {
+      setIsSavingTitle(false)
+      setIsEditingTitle(false)
+    }
+  }
 
   const handleRevalidate = () => {
     if (result) {
@@ -185,8 +216,8 @@ export function ResultPage() {
         </div>
 
         {/* Action buttons */}
-        <div className="w-full max-w-2xl mb-12">
-          <div className="flex flex-wrap gap-4 justify-start">
+        <div className="w-full max-w-4xl mb-12">
+          <div className="flex flex-wrap gap-4 justify-center">
 
             {/* Re-validate */}
             <Button variant="primary" onClick={handleRevalidate}>

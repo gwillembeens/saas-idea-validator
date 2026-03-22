@@ -18,35 +18,16 @@ function getVerdictLabel(weighted) {
   return '🔴 Too Vague'
 }
 
-export function HistoryCard({ item, onDelete, onRename }) {
+export function HistoryCard({ item, onDelete }) {
   const navigate = useNavigate()
-  const [isEditing, setIsEditing] = useState(false)
-  const [editingTitle, setEditingTitle] = useState(item.title)
-  const [isSaving, setIsSaving] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
 
-  // scores are stored as JSONB in DB; use them directly
   const weighted = item.scores?.weighted || 0
   const ideaSnippet = item.idea_text.substring(0, 100).replace(/\n/g, ' ') + (item.idea_text.length > 100 ? '...' : '')
   const createdDate = new Date(item.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
 
-  const handleTitleSave = async () => {
-    if (editingTitle.trim() === item.title) {
-      setIsEditing(false)
-      return
-    }
-    setIsSaving(true)
-    await onRename(item.id, editingTitle.trim())
-    setIsEditing(false)
-    setIsSaving(false)
-  }
-
-  const handleCardClick = () => {
-    if (!isEditing) {
-      navigate(`/history/${item.id}`)
-    }
-  }
+  const handleCardClick = () => navigate(`/history/${item.id}`)
 
   const handleDeleteClick = (e) => {
     e.stopPropagation()
@@ -71,46 +52,11 @@ export function HistoryCard({ item, onDelete, onRename }) {
         className="cursor-pointer hover:shadow-lg transition-shadow"
         onClick={handleCardClick}
       >
-        {/* Title — click-to-edit */}
-        <div className="mb-3 flex items-start gap-2">
-          {isEditing ? (
-            <div className="flex-1 flex gap-2">
-              <input
-                type="text"
-                value={editingTitle}
-                onChange={(e) => setEditingTitle(e.target.value)}
-                autoFocus
-                className="flex-1 font-body text-lg text-pencil bg-paper border-2 border-pencil px-3 py-2 focus:border-blue focus:ring-2 focus:ring-blue/20 outline-none w-full"
-                style={{ borderRadius: '255px 15px 225px 15px / 15px 225px 15px 255px' }}
-                onClick={(e) => e.stopPropagation()}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') handleTitleSave()
-                  if (e.key === 'Escape') setIsEditing(false)
-                }}
-              />
-              <button
-                onClick={(e) => {
-                  e.stopPropagation()
-                  handleTitleSave()
-                }}
-                disabled={isSaving}
-                className="px-3 py-1 font-body text-sm bg-blue text-white"
-                style={{ borderRadius: '8px' }}
-              >
-                {isSaving ? 'Saving...' : 'Save'}
-              </button>
-            </div>
-          ) : (
-            <h3
-              className="font-heading text-xl text-pencil flex-1 cursor-text hover:opacity-70"
-              onClick={(e) => {
-                e.stopPropagation()
-                setIsEditing(true)
-              }}
-            >
-              {item.title}
-            </h3>
-          )}
+        {/* Title */}
+        <div className="mb-3">
+          <h3 className="font-heading text-xl text-pencil">
+            {item.title}
+          </h3>
         </div>
 
         {/* Idea snippet */}
