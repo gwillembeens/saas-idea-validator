@@ -53,7 +53,7 @@ See archive: `.planning/milestones/v1.0-ROADMAP.md`
 | 18. Public Leaderboard | v2.0 | 2/2 | Complete | 2026-03-22 |
 | 19. Idea Versioning | v2.0 | 2/2 | Complete | 2026-03-22 |
 | 20. User Profiles | v2.0 | 4/4 | Complete | 2026-03-22 |
-| 21. Challenge Cards | v2.0 | 2/2 | Complete | 2026-03-23 |
+| 21. Challenge Cards | v2.0 | 2/2 | Complete    | 2026-03-22 |
 
 ---
 
