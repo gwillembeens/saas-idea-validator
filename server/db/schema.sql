@@ -58,3 +58,7 @@ CREATE TABLE IF NOT EXISTS saved_results (
 
 CREATE INDEX IF NOT EXISTS saved_results_user_id_idx ON saved_results(user_id) WHERE deleted_at IS NULL;
 CREATE INDEX IF NOT EXISTS saved_results_created_at_idx ON saved_results(created_at DESC) WHERE deleted_at IS NULL;
+
+-- Phase 16: niche auto-detection
+ALTER TABLE IF EXISTS saved_results
+  ADD COLUMN IF NOT EXISTS niche VARCHAR(50) NOT NULL DEFAULT 'Other';
