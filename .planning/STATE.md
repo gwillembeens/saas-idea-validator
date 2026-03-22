@@ -3,20 +3,20 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 current_phase: 19
-status: executing
-last_updated: "2026-03-22T21:32:08.800Z"
+status: complete
+last_updated: "2026-03-22T21:35:00.000Z"
 progress:
   total_phases: 5
-  completed_phases: 3
+  completed_phases: 4
   total_plans: 11
-  completed_plans: 8
+  completed_plans: 9
 ---
 
 # Project State
 
 **Last updated:** 2026-03-22
 **Current phase:** 19
-**Status:** Executing Phase 19
+**Status:** Phase 19 Complete ✓
 
 ---
 
@@ -26,10 +26,12 @@ See: `.planning/PROJECT.md` (updated 2026-03-22)
 
 **Core value:** A founder pastes an idea and gets an honest, investor-grade analysis in under a minute, streamed live with a visual scorecard.
 
-**Current focus:** Phase 19 — idea-versioning
+**Current focus:** Phase 19 — idea-versioning (COMPLETED ✓)
 
 - Plan 15-01 (Password Reset Frontend Wiring): COMPLETED ✓
 - Plan 15-02 (E2E Tests for Split-Card Layout): COMPLETED ✓
+- Plan 19-01 (Backend — Similarity Detection & Versioning): COMPLETED ✓
+- Plan 19-02 (Frontend — Revision Modal & Score Deltas): COMPLETED ✓
 
 ---
 
@@ -171,10 +173,49 @@ Key implementation:
 
 All 8 tasks executed per 18-02-PLAN.md. Wave 0 (18-01) + Wave 1 (18-02) = Phase 18 complete.
 
+## 19-01 Completion Details
+
+**Plan:** Backend — Similarity Detection & Versioning
+**Tasks:** 5/5 completed
+**Commits:** Multiple implementation commits
+**Status:** Complete ✓
+
+Key implementation:
+
+- DB migration: `parent_id` and `suggested_parent_id` columns added to `saved_results` with proper referential integrity
+- `saveResultRoute()`: Integrated `string-similarity` package, compares new idea against all user's past ideas with ≥0.75 threshold
+- `getResultRoute()`: Returns `parent_scores`, `parent_title`, `suggested_parent_id`, `suggested_parent_title` in API response
+- `setParentRoute()`: New PATCH `/api/history/:id/parent` endpoint sets `parent_id`, clears `suggested_parent_id`, verifies ownership
+- `dismissRevisionRoute()`: New PATCH `/api/history/:id/dismiss-revision` endpoint clears `suggested_parent_id`, verifies ownership
+- Tests: 6 unit tests for similarity threshold logic
+
+Version chain storage supports arbitrarily deep chains (v1 → v2 → v3...). Multiple children allowed per original.
+
+## 19-02 Completion Details
+
+**Plan:** Frontend — Revision Modal & Score Deltas
+**Tasks:** 6/6 completed
+**Commits:** Multiple implementation commits
+**Status:** Complete ✓
+
+Key implementation:
+
+- Redux: Added `revisionCandidate` state + `setRevisionCandidate` and `clearRevisionCandidate` reducers to `validatorSlice`
+- `useValidate()`: Reads `similarTo` from save response, dispatches `setRevisionCandidate()` when match found
+- `RevisionModal.jsx`: New modal component shows candidate title & score, implements "Link as revision" and "New idea" actions
+- `ResultsPanel.jsx`: Mounts `<RevisionModal />` when status is done (live streaming page)
+- `Scorecard.jsx`: Accepts `parentScores` prop, renders per-phase deltas inline (green for improvement, red for decline)
+- `ResultPage.jsx`: Displays per-phase deltas on saved result page, shows ↑ Improved badge when weighted score improves, renders revision banner with confirm/dismiss buttons for unlinked suggestions
+- Tests: Modal render and button behavior validated
+
+Live revision modal appears after streaming completes. Saved result page shows revision banner that persists until confirmed or dismissed.
+
+**Phase 19 is now COMPLETE.** Idea versioning fully implemented and verified.
+
 ## Next Phase
 
-**Phase 18-03 or Phase 19:** User profiles, challenge cards, or next milestone feature
+**Phase 20:** User profiles with version chains, or next milestone feature
 
 ---
 
-*State updated: 2026-03-22 — Phase 18 (18-01 + 18-02) complete, SUMMARY.md files created*
+*State updated: 2026-03-22 — Phase 19 (19-01 + 19-02) complete, all requirements verified*
