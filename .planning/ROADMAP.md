@@ -59,7 +59,7 @@ See archive: `.planning/milestones/v1.0-ROADMAP.md`
 
 | Phase | Name | Goal | Requirements | Status |
 |-------|------|------|--------------|--------|
-| 15 | Tech Debt Resolution | Wire password reset frontend and write split-card E2E tests | DEBT-01, DEBT-02 | Complete ✓ |
+| 15 | Tech Debt Resolution | Wire password reset frontend and write split-card E2E tests | Complete    | 2026-03-22 |
 | 16 | Niche Auto-Detection | Implement secondary Claude call to auto-detect 7-value niche taxonomy | NICHE-01, NICHE-02, NICHE-03 | Pending |
 | 17 | Publish & Privacy | Add public/private toggle and publishing controls | PUB-01, PUB-02, PUB-03 | Pending |
 | 18 | Public Leaderboard | Build ranked leaderboard by score, filterable by niche | LEAD-01, LEAD-02, LEAD-03, LEAD-04, LEAD-05 | Pending |

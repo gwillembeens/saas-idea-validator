@@ -1,10 +1,10 @@
 ---
 gsd_state_version: 1.0
-milestone: v2.0
-milestone_name: Social Layer
+milestone: v1.0
+milestone_name: milestone
 current_phase: 15
-status: executing
-last_updated: "2026-03-22T15:45:00.000Z"
+status: completed
+last_updated: "2026-03-22T14:54:15.063Z"
 progress:
   total_phases: 1
   completed_phases: 1
@@ -16,7 +16,7 @@ progress:
 
 **Last updated:** 2026-03-22
 **Current phase:** 15
-**Status:** Phase 15 Complete — Awaiting Phase 16
+**Status:** Milestone complete
 
 ---
 
@@ -27,6 +27,7 @@ See: `.planning/PROJECT.md` (updated 2026-03-22)
 **Core value:** A founder pastes an idea and gets an honest, investor-grade analysis in under a minute, streamed live with a visual scorecard.
 
 **Current focus:** Phase 15 — tech-debt-resolution
+
 - Plan 15-01 (Password Reset Frontend Wiring): COMPLETED ✓
 - Plan 15-02 (E2E Tests for Split-Card Layout): COMPLETED ✓
 
@@ -42,12 +43,13 @@ See: `.planning/PROJECT.md` (updated 2026-03-22)
 
 ## 15-01 Completion Details
 
-**Plan:** Password Reset Frontend Wiring
+**Plan:** Not started
 **Tasks:** 3/3 completed
 **Commits:** 2 implementation commits + 1 state update commit
 **Status:** Ready for testing
 
 Key changes:
+
 - useAuth.js: Added resetPassword(token, newPassword) function
 - AuthModal.jsx: Implemented reset mode UI with password confirmation validation
 - App.jsx: Verified (no changes needed — already correct)
@@ -62,6 +64,7 @@ Backend was already complete from previous phase. Full end-to-end password reset
 **Status:** All 8 tests passing
 
 Key implementation:
+
 - playwright.config.js: Configured Playwright with baseURL http://localhost:5173, webServer auto-start
 - tests/e2e/split-cards.spec.js: 8 test cases covering form rendering, component visibility, responsive layouts, font validation
 - client/package.json: Added test:e2e, test:e2e:ui, test:e2e:debug scripts
