@@ -14,7 +14,7 @@ export function ActionButtons({ result, isDeleting, onRevalidate, onDelete }) {
 
   return (
     <div className="flex flex-nowrap gap-4 justify-center items-center mb-12 overflow-x-auto px-4">
-      <Button variant="primary" onClick={onRevalidate}>
+      <Button variant="primary" onClick={onRevalidate} className="bg-white">
         <RefreshCw size={18} className="mr-2 inline" strokeWidth={2.5} />
         Re-validate This Idea
       </Button>

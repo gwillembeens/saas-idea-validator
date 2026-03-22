@@ -11,6 +11,7 @@ import { VerdictCard } from '../components/validator/VerdictCard'
 import { TitleHeader } from '../components/validator/TitleHeader'
 import { ActionButtons } from '../components/validator/ActionButtons'
 import { DeleteConfirmModal } from '../components/validator/DeleteConfirmModal'
+import { NichePill } from '../components/ui/NichePill'
 import { parseSections } from '../utils/parseSections'
 import { parseScores } from '../utils/parseResult'
 import { getVerdict } from '../constants/verdictColors'
@@ -138,18 +139,7 @@ export function ResultPage() {
                 <span className="font-body text-base opacity-60">({weighted}/5)</span>
               </div>
             )}
-            {result?.niche && (
-              <div
-                className="inline-flex items-center px-4 py-2 font-body text-xs text-pencil"
-                style={{
-                  backgroundColor: '#e5e0d8',
-                  border: '1px solid #2d2d2d',
-                  borderRadius: '255px 15px 225px 15px / 15px 225px 15px 255px',
-                }}
-              >
-                {result.niche}
-              </div>
-            )}
+            <NichePill niche={result?.niche} />
           </div>
         )}
 

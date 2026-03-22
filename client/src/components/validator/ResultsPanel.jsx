@@ -1,8 +1,10 @@
 import { useSelector } from 'react-redux'
 import ReactMarkdown from 'react-markdown'
 import { Card } from '../ui/Card'
+import { NichePill } from '../ui/NichePill'
 import { parseSections } from '../../utils/parseSections'
 import { parseScores } from '../../utils/parseResult'
+import { inferNiche } from '../../utils/inferNiche'
 import { getVerdict } from '../../constants/verdictColors'
 import { IdeaSummaryCard } from './IdeaSummaryCard'
 import { VerdictCard } from './VerdictCard'
@@ -49,7 +51,7 @@ const markdownComponents = {
 }
 
 export function ResultsPanel() {
-  const { status, result, error } = useSelector(s => s.validator)
+  const { status, result, idea, error } = useSelector(s => s.validator)
 
   if (status === 'idle') return null
 
@@ -86,22 +88,28 @@ export function ResultsPanel() {
     const scores = parseScores(result)
     const weighted = scores?.weighted || 0
     const verdict = weighted > 0 ? getVerdict(weighted) : null
+    const niche = inferNiche(idea)
 
     return (
       <div className="w-full flex flex-col items-center gap-8 animate-fadeIn">
-        {verdict && (
-          <div
-            className="inline-flex items-center gap-2 px-6 py-3 font-heading text-pencil text-xl shadow-hard"
-            style={{
-              backgroundColor: verdict.bg,
-              border: `2px solid ${verdict.border}`,
-              borderRadius: '255px 15px 225px 15px / 15px 225px 15px 255px',
-              transform: 'rotate(-1deg)',
-            }}
-          >
-            <span>{verdict.emoji}</span>
-            <span>{verdict.label}</span>
-            <span className="font-body text-base opacity-60">({weighted}/5)</span>
+        {(verdict || niche) && (
+          <div className="flex flex-wrap justify-center items-center gap-3">
+            {verdict && (
+              <div
+                className="inline-flex items-center gap-2 px-6 py-3 font-heading text-pencil text-xl shadow-hard"
+                style={{
+                  backgroundColor: verdict.bg,
+                  border: `2px solid ${verdict.border}`,
+                  borderRadius: '255px 15px 225px 15px / 15px 225px 15px 255px',
+                  transform: 'rotate(-1deg)',
+                }}
+              >
+                <span>{verdict.emoji}</span>
+                <span>{verdict.label}</span>
+                <span className="font-body text-base opacity-60">({weighted}/5)</span>
+              </div>
+            )}
+            <NichePill niche={niche} />
           </div>
         )}
         <IdeaSummaryCard markdown={sections.ideaSummary} />

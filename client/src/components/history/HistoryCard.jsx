@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Trash2 } from 'lucide-react'
 import { Card } from '../ui/Card'
 import { Button } from '../ui/Button'
+import { NichePill } from '../ui/NichePill'
 
 function getVerdictColor(weighted) {
   if (weighted >= 4.5) return 'bg-green-100 border-green-400'
@@ -75,12 +76,7 @@ export function HistoryCard({ item, onDelete }) {
 
             {/* Niche pill — hidden on mobile, visible md+ (D-17) */}
             {item.niche && (
-              <div
-                className="hidden md:inline-flex px-3 py-1 font-body text-xs text-pencil border border-pencil rounded"
-                style={{ backgroundColor: '#e5e0d8' }}
-              >
-                {item.niche}
-              </div>
+              <NichePill niche={item.niche} size="sm" className="hidden md:inline-flex" />
             )}
 
             <span className="font-body text-xs text-pencil opacity-50">
