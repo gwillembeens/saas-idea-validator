@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux'
 import {
   setUser, setAuthLoading, setAuthError, clearAuth,
-  setShowAuthModal, setAuthModalMode, setPendingValidation,
+  setShowAuthModal, setAuthModalMode, setPendingValidation, setUserProfile,
 } from '../store/slices/authSlice'
 
 export function useAuth() {
@@ -95,6 +95,19 @@ export function useAuth() {
       if (!res.ok) return false
       const data = await res.json()
       dispatch(setUser({ user: data.user, accessToken: data.accessToken }))
+
+      // Fetch display name + username for NavBar avatar and settings
+      try {
+        const meRes = await fetch('/api/me', {
+          headers: { Authorization: `Bearer ${data.accessToken}` },
+          credentials: 'include',
+        })
+        if (meRes.ok) {
+          const me = await meRes.json()
+          dispatch(setUserProfile({ displayName: me.display_name, username: me.username }))
+        }
+      } catch {}
+
       return true
     } catch {
       return false

@@ -42,6 +42,15 @@ const authSlice = createSlice({
     setPendingValidation: (state, action) => {
       state.pendingValidation = action.payload
     },
+    setUserProfile: (state, action) => {
+      if (state.user) {
+        state.user = {
+          ...state.user,
+          displayName: action.payload.displayName ?? state.user.displayName,
+          username: action.payload.username ?? state.user.username,
+        }
+      }
+    },
     clearError: (state) => {
       state.error = null
     },
@@ -51,6 +60,7 @@ const authSlice = createSlice({
 export const {
   setUser, setAuthLoading, setAuthError, clearAuth,
   setShowAuthModal, setAuthModalMode, setPendingValidation, clearError,
+  setUserProfile,
 } = authSlice.actions
 
 export default authSlice.reducer
