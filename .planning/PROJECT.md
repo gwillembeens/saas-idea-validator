@@ -40,14 +40,36 @@ streamed live with a visual scorecard — fast enough to validate 10 ideas in a 
 
 ### Active
 
-_(none — all v1.0 requirements shipped)_
+- [ ] Public leaderboard showing all public validations ranked by weighted score, filterable by niche
+- [ ] Auto-detected niche tag (secondary Claude call) stored per validation — Fintech, Logistics, Creator Economy, PropTech, HealthTech, EdTech, Other
+- [ ] Public/private toggle on result page (default private), with unpublish from history page
+- [ ] Idea versioning: auto-similarity detection prompts user to link new validation as revision; result page shows score delta per phase
+- [ ] User profile page (/profile/:username) — public validations, stats/badges, display name + avatar, revision chains
+- [ ] "Beat the Leaderboard" challenge section on leaderboard — top score per niche (score + niche only, no idea text) with validate CTA
+- [ ] Password reset frontend form wired to existing backend endpoint
+- [ ] E2E tests for split-card layout (Phase 08-03 debt)
 
 ### Out of Scope
 
 - Mobile app — web-first; sketchbook design works on desktop
 - Real-time collaboration — single-user tool
-- PDF export (SHARE-02) — not in v1.0; useful but non-critical for early validation
-- Password reset frontend form — backend complete, frontend form not wired (minor gap)
+- PDF export (SHARE-02) — not in v1.0 or v2.0; useful but non-critical
+- Paid leaderboard ranking boosts — gamification without integrity
+- Voting / likes on leaderboard entries — adds social complexity, defers to v3.0
+
+## Current Milestone: v2.0 Social Layer
+
+**Goal:** Add a public social layer that turns private validations into a competitive, community-visible leaderboard — driving engagement through niche ranking, idea versioning, and user profiles.
+
+**Target features:**
+- Public leaderboard with niche filter and score ranking
+- Auto-detected niche tag via secondary Claude API call
+- Public/private toggle per validation
+- Idea versioning with per-phase score delta
+- User profile pages (clickable from leaderboard)
+- "Beat the Leaderboard" challenge cards
+- Password reset frontend (tech debt)
+- E2E tests for split-card layout (tech debt)
 
 ## Context
 
@@ -91,4 +113,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-03-22 after v1.0 milestone*
+*Last updated: 2026-03-22 after v2.0 milestone start*
