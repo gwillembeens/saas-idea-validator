@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Button } from '../ui/Button'
+import { formatResultDate } from '../../utils/formatResultDate'
 
 export function TitleHeader({
   result,
@@ -50,7 +51,7 @@ export function TitleHeader({
         </h1>
       )}
       <p className="font-body text-sm text-pencil opacity-50">
-        {new Date(result?.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+        {formatResultDate(result?.created_at)}
       </p>
     </div>
   )
