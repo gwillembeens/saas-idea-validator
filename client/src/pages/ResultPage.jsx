@@ -142,6 +142,22 @@ export function ResultPage() {
         <div className="w-full max-w-2xl mb-12 flex flex-col gap-8">
           {sections?.ideaSummary && <IdeaSummaryCard markdown={sections.ideaSummary} />}
 
+          {/* Niche pill — only when niche is present (D-11, D-13) */}
+          {result?.niche && (
+            <div className="flex justify-center">
+              <div
+                className="inline-flex items-center px-4 py-2 font-body text-xs text-pencil"
+                style={{
+                  backgroundColor: '#e5e0d8',
+                  border: '1px solid #2d2d2d',
+                  borderRadius: '255px 15px 225px 15px / 15px 225px 15px 255px',
+                }}
+              >
+                {result.niche}
+              </div>
+            </div>
+          )}
+
           {scores && (
             <Card decoration="tack" rotate={1} className="w-full max-w-2xl mx-auto">
               <h2 className="font-heading text-2xl text-pencil mb-4">🔬 Scorecard</h2>
