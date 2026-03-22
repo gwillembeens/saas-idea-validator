@@ -79,7 +79,7 @@ Frontend E2E test suite now validates all critical UI components across responsi
 **Plan:** Backend — Niche Detection
 **Tasks:** 7/7 completed (Wave 0: 1, Wave 1: 3, Wave 2: 3)
 **Commits:** 7 implementation commits
-**Status:** Ready for Phase 16-02 (client-side display)
+**Status:** Complete ✓
 
 Key implementation:
 
@@ -89,12 +89,27 @@ Key implementation:
 - API routes: niche field added to listHistoryRoute and getResultRoute responses
 - All tests passing: 13/13, including 5 unit tests for parseNiche
 
-Backend infrastructure now complete. Phase 16-02 will add client-side UI (NichePill component, standalone niche row on result page).
+## 16-02 Completion Details
+
+**Plan:** Frontend — Niche Pill UI
+**Tasks:** 4/4 completed (Wave 0: 1, Wave 1: 3)
+**Commits:** 5 implementation commits
+**Status:** Complete ✓
+
+Key implementation:
+
+- ResultPage: standalone niche pill between IdeaSummaryCard and Scorecard, conditional render `{result?.niche}`
+- HistoryCard: niche pill in footer row after verdict pill, hidden on mobile via `hidden md:inline-flex`
+- Test stubs: 5 pending tests in 2 files, all implemented and passing
+- Styling: muted bg (#e5e0d8), pencil border, wobbly border-radius (inline), Patrick Hand font-body text-xs
+- All tests passing: 12/12 (7 existing + 5 new niche tests)
+
+**Phase 16 is now COMPLETE.** Backend + Frontend niche auto-detection fully implemented and tested.
 
 ## Next Phase
 
-**Phase 16-02:** Client-side — Display niche pills on result pages and history cards.
+**Phase 17:** Publish & Privacy — Add public/private toggle on result page and unpublish action on history page.
 
 ---
 
-*State updated: 2026-03-22 — Phase 16-01 complete, backend niche detection ready*
+*State updated: 2026-03-22 — Phase 16 complete (16-01 ✓ + 16-02 ✓), Phase 16 ROADMAP entry ready for update*

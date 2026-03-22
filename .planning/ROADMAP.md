@@ -60,7 +60,7 @@ See archive: `.planning/milestones/v1.0-ROADMAP.md`
 | Phase | Name | Goal | Requirements | Status |
 |-------|------|------|--------------|--------|
 | 15 | Tech Debt Resolution | Wire password reset frontend and write split-card E2E tests | Complete    | 2026-03-22 |
-| 16 | Niche Auto-Detection | Implement secondary Claude call to auto-detect 7-value niche taxonomy | NICHE-01, NICHE-02, NICHE-03 | In Progress |
+| 16 | Niche Auto-Detection | Implement secondary Claude call to auto-detect 7-value niche taxonomy | NICHE-01, NICHE-02, NICHE-03 | Complete ✓ 2026-03-22 |
 | 17 | Publish & Privacy | Add public/private toggle and publishing controls | PUB-01, PUB-02, PUB-03 | Pending |
 | 18 | Public Leaderboard | Build ranked leaderboard by score, filterable by niche | LEAD-01, LEAD-02, LEAD-03, LEAD-04, LEAD-05 | Pending |
 | 19 | Idea Versioning | Implement similarity detection and revision chains with score delta | VER-01, VER-02, VER-03, VER-04 | Pending |
@@ -102,7 +102,7 @@ See archive: `.planning/milestones/v1.0-ROADMAP.md`
 
 **Requirements:** NICHE-01, NICHE-02, NICHE-03
 
-**Status:** In Progress (Plan 16-01 Complete ✓, Plan 16-02 Pending)
+**Status:** Complete ✓ (Plan 16-01 Complete ✓, Plan 16-02 Complete ✓)
 
 **Plan 16-01 Complete (2026-03-22):**
 - ✅ Implemented `parseNiche()` utility with case-insensitive matching for 7 niches
@@ -112,14 +112,19 @@ See archive: `.planning/milestones/v1.0-ROADMAP.md`
 - ✅ Updated `listHistoryRoute` and `getResultRoute` to return niche field
 - ✅ All tests passing: 13/13 (5 unit tests for parseNiche, 1 integration test)
 
-**Plan 16-02 Pending:**
-- Frontend: NichePill component, standalone niche row on result page, Redux integration
+**Plan 16-02 Complete (2026-03-22):**
+- ✅ Added standalone niche pill on ResultPage between IdeaSummaryCard and Scorecard
+- ✅ Added niche pill to HistoryCard footer row (after verdict pill, hidden on mobile)
+- ✅ Conditional renders: `{result?.niche && ...}` and `{item.niche && ...}`
+- ✅ Styling: muted bg (#e5e0d8), pencil border, wobbly border-radius, font-body text-xs
+- ✅ Test suite: 5 new unit tests (2 ResultPage, 3 HistoryCard) all passing
+- ✅ Full test coverage: 12/12 tests passing, exit 0
 
 **Success Criteria:**
 1. ✅ After validation completes, system makes automatic secondary Claude call with idea + result text (max_tokens=10) requesting niche from [Fintech, Logistics, Creator Economy, PropTech, HealthTech, EdTech, Other]
 2. ✅ Parsed niche value is stored in PostgreSQL `saved_results.niche` column; defaults to 'Other' on parse failure
-3. ⏳ Niche tag is rendered as a coloured pill on the result page and history cards with consistent styling (Plan 16-02)
-4. ⏳ User can see niche tag on all their historical entries (Plan 16-02)
+3. ✅ Niche tag is rendered as a coloured pill on the result page and history cards with consistent styling (Plan 16-02)
+4. ✅ User can see niche tag on all their historical entries (Plan 16-02)
 
 ---
 
@@ -201,7 +206,7 @@ All v2.0 requirements mapped:
 | DEBT-02 | Phase 15 | Complete ✓ |
 | NICHE-01 | Phase 16 | Complete ✓ (Plan 16-01) |
 | NICHE-02 | Phase 16 | Complete ✓ (Plan 16-01) |
-| NICHE-03 | Phase 16 | In Progress (Plan 16-02) |
+| NICHE-03 | Phase 16 | Complete ✓ (Plan 16-02) |
 | PUB-01 | Phase 17 | Pending |
 | PUB-02 | Phase 17 | Pending |
 | PUB-03 | Phase 17 | Pending |
@@ -232,5 +237,5 @@ All v2.0 requirements mapped:
 *Phases: 14 | All complete | Plans total: 35 | Completed: 35*
 
 *v2.0 Social Layer roadmap created: 2026-03-22*
-*Phases: 15-21 | Phase 15 complete ✓, Phase 16 in progress (Plan 16-01 complete ✓) | Requirements: 24 | Coverage: 100%*
-*Updated: 2026-03-22 after Phase 16-01 completion (backend niche detection ready)*
+*Phases: 15-21 | Phase 15 complete ✓, Phase 16 complete ✓ | Requirements: 24 | Completed: 6/24*
+*Updated: 2026-03-22 after Phase 16 completion (frontend niche pill UI complete, full niche auto-detection ready for v2.0)*
