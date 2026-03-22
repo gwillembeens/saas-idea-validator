@@ -97,14 +97,14 @@ export function ProfilePage() {
                 >
                   <StatItem label="validations" value={profile.stats.total_public} />
                   <span className="text-pencil opacity-20 font-body text-lg">·</span>
-                  <StatItem label="avg score" value={`${profile.stats.avg_score}/5`} />
+                  <StatItem label="avg score" value={`${parseFloat(profile.stats.avg_score).toFixed(1)}/5`} />
                   <span className="text-pencil opacity-20 font-body text-lg">·</span>
                   <div className="flex flex-col items-center gap-0.5">
                     <NichePill niche={profile.stats.top_niche} size="sm" />
                     <span className="font-body text-xs text-pencil opacity-50">top niche</span>
                   </div>
                   <span className="text-pencil opacity-20 font-body text-lg">·</span>
-                  <StatItem label="personal best" value={`${profile.stats.personal_best}/5`} />
+                  <StatItem label="personal best" value={`${parseFloat(profile.stats.personal_best).toFixed(1)}/5`} />
                 </div>
               )}
             </div>

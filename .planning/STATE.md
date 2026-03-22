@@ -2,21 +2,21 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-current_phase: 20
-status: complete
-last_updated: "2026-03-22T23:00:00.000Z"
+current_phase: 21
+status: executing
+last_updated: "2026-03-22T23:30:33.333Z"
 progress:
-  total_phases: 5
-  completed_phases: 5
-  total_plans: 19
-  completed_plans: 13
+  total_phases: 3
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
 ---
 
 # Project State
 
 **Last updated:** 2026-03-22
-**Current phase:** 20
-**Status:** Phase 20 COMPLETE ✓
+**Current phase:** 21
+**Status:** Executing Phase 21
 
 ---
 
@@ -26,7 +26,7 @@ See: `.planning/PROJECT.md` (updated 2026-03-22)
 
 **Core value:** A founder pastes an idea and gets an honest, investor-grade analysis in under a minute, streamed live with a visual scorecard.
 
-**Current focus:** Phase 20 — user-profiles (COMPLETE ✓)
+**Current focus:** Phase 21 — challenge-cards
 
 - Plan 20-01 (Backend — DB Migration, Profile Route & Settings Routes): COMPLETED ✓
 - Plan 20-02 (Frontend Wave 1A — Avatar Component, authSlice Update & Settings Page): COMPLETED ✓
@@ -36,6 +36,13 @@ See: `.planning/PROJECT.md` (updated 2026-03-22)
 ---
 
 ## Accumulated Context
+
+### Roadmap Evolution
+
+- Phase 22 added: Profile Analytics (expanded stats + activity heatmap)
+- Phase 23 added: Social Interactions (likes, comments, public validations on profile page)
+- Phase 24 added: Notifications (in-app alerts for likes, comments, unread badge in NavBar)
+- Phase 25 added: Feed (personalised engagement feed, distinct from leaderboard)
 
 - Stack: React 19 + Vite + Redux Toolkit + Tailwind CSS v3 frontend; Node.js + Express 5 backend; Anthropic SDK (streaming); PostgreSQL for persistence.
 - Auth: JWT 15m access + 30d refresh rotation, bcrypt 12 rounds, Google/GitHub OAuth, password reset flow now complete.

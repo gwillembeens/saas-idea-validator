@@ -3,7 +3,7 @@
 ## Milestones
 
 - ✅ **v1.0 MVP** — Phases 1–14 (shipped 2026-03-22)
-- 🔜 **v2.0 Social Layer** — Phases 15–22 (roadmap created 2026-03-22)
+- 🔜 **v2.0 Social Layer** — Phases 15–25 (roadmap created 2026-03-22)
 
 ## Phases
 
@@ -264,6 +264,45 @@ All v2.0 requirements mapped:
 **Coverage:** 24/24 requirements mapped ✓
 
 </details>
+
+### Phase 23: Social Interactions
+**Goal:** Add the ability to like and comment on public ideas. Public validations are shown on the profile page so visitors can browse what a user has shared.
+
+**Requirements:** SOC-01, SOC-02, SOC-03
+
+**Success Criteria:**
+1. Logged-in users can like any public validation; like count is visible to everyone; users can un-like
+2. Logged-in users can post a comment on any public validation; comments are shown chronologically below the result
+3. Public profile page shows the user's public validations (idea preview, score, niche, like count) so visitors can browse their work
+4. Anonymous visitors can see likes and comments but cannot interact (read-only)
+
+---
+
+### Phase 24: Notifications
+**Goal:** Notify users when social activity happens on their validations — likes, comments, and other in-app events (scope to be refined during planning).
+
+**Requirements:** NOTIF-01, NOTIF-02
+
+**Success Criteria:**
+1. Users receive an in-app notification when someone likes one of their public validations
+2. Users receive an in-app notification when someone comments on one of their public validations
+3. Unread notification count is visible in the NavBar (badge on avatar or bell icon)
+4. Notifications page or dropdown lists recent events with links to the relevant validation
+5. Users can mark notifications as read; read notifications are visually distinct
+
+---
+
+### Phase 25: Feed
+**Goal:** A personalised feed page that surfaces public validations using a ranking algorithm — distinct from the static score-sorted leaderboard, optimised for discovery and engagement.
+
+**Requirements:** FEED-01, FEED-02, FEED-03
+
+**Success Criteria:**
+1. `/feed` route renders a scrollable feed of public validations ranked by an engagement algorithm (recency + likes + comments + niche affinity based on user's own validation history)
+2. Feed is paginated / infinite-scroll; new items load as user scrolls
+3. Each feed card shows: idea preview, score, niche, author (linked), like count, comment count, time ago
+4. Logged-out users see a generic feed (no personalisation); logged-in users get a personalised ranking
+5. Feed is accessible from the NavBar; visually distinct from the leaderboard (different card layout or sort label)
 
 ---
 

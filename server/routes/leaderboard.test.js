@@ -24,9 +24,9 @@ describe('truncateIdeaText', () => {
     assert.equal(truncateIdeaText(short), short)
   })
 
-  it('truncates text to 150 chars', () => {
+  it('truncates text to 150 chars plus ellipsis', () => {
     const long = 'A'.repeat(200)
-    assert.equal(truncateIdeaText(long).length, 150)
+    assert.equal(truncateIdeaText(long).length, 151) // 150 + ellipsis
   })
 
   it('replaces newlines with spaces', () => {
@@ -37,5 +37,31 @@ describe('truncateIdeaText', () => {
 
   it('handles empty string', () => {
     assert.equal(truncateIdeaText(''), '')
+  })
+})
+
+describe('GET /api/leaderboard/top-per-niche', () => {
+  it('returns { topScores } array with HTTP 200', () => {
+    // TODO: implement
+  })
+
+  it('returns exactly 8 entries — one per VALID_NICHE', () => {
+    // TODO: implement
+  })
+
+  it('score field contains MAX weighted score for that niche from public non-deleted results', () => {
+    // TODO: implement
+  })
+
+  it('niches with no public entries return score: null, count: 0', () => {
+    // TODO: implement
+  })
+
+  it('excludes private validations (is_public=false)', () => {
+    // TODO: implement
+  })
+
+  it('excludes soft-deleted validations (deleted_at IS NOT NULL)', () => {
+    // TODO: implement
   })
 })
