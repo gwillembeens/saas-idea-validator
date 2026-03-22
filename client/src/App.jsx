@@ -5,6 +5,7 @@ import { HomePage } from './pages/HomePage'
 import { HistoryPage } from './pages/HistoryPage'
 import { ResultPage } from './pages/ResultPage'
 import { FrameworkPage } from './pages/FrameworkPage'
+import { LeaderboardPage } from './pages/LeaderboardPage'
 import { useAuth } from './hooks/useAuth'
 import { setUser, setAuthModalMode, setShowAuthModal } from './store/slices/authSlice'
 
@@ -60,6 +61,7 @@ export default function App() {
       <Route path="/history" element={<HistoryPage />} />
       <Route path="/history/:id" element={<ResultPage />} />
       <Route path="/framework" element={<FrameworkPage />} />
+      <Route path="/leaderboard" element={<LeaderboardPage />} />
     </Routes>
   )
 }
