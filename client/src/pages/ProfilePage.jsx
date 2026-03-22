@@ -3,7 +3,6 @@ import { useParams, Link } from 'react-router-dom'
 import { AppShell } from '../components/layout/AppShell'
 import { Avatar } from '../components/ui/Avatar'
 import { NichePill } from '../components/ui/NichePill'
-import { ProfileValidationCard } from '../components/profile/ProfileValidationCard'
 import { RevisionChains } from '../components/profile/RevisionChains'
 
 function StatItem({ label, value }) {
@@ -109,21 +108,6 @@ export function ProfilePage() {
                 </div>
               )}
             </div>
-
-            {/* Validation Grid */}
-            {profile.validations.length === 0 ? (
-              <div className="text-center py-16">
-                <p className="font-body text-lg text-pencil opacity-60">
-                  No public validations yet.
-                </p>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {profile.validations.map(validation => (
-                  <ProfileValidationCard key={validation.id} validation={validation} />
-                ))}
-              </div>
-            )}
 
             {/* Revision Chains */}
             <RevisionChains chains={profile.chains} />

@@ -3,7 +3,7 @@
 ## Milestones
 
 - ✅ **v1.0 MVP** — Phases 1–14 (shipped 2026-03-22)
-- 🔜 **v2.0 Social Layer** — Phases 15–21 (roadmap created 2026-03-22)
+- 🔜 **v2.0 Social Layer** — Phases 15–22 (roadmap created 2026-03-22)
 
 ## Phases
 
@@ -214,6 +214,19 @@ See archive: `.planning/milestones/v1.0-ROADMAP.md`
 2. Each challenge card includes a "Try This Niche" CTA button that navigates to `/validate` with a pre-filled niche context hint
 3. Card styling matches the hand-drawn design system (wobbly borders, hard shadows, Patrick Hand font)
 4. Challenge section is hidden if user is already in the top 1 position for all niches (optional polish for power users)
+
+---
+
+### Phase 22: Profile Analytics
+**Goal:** Enhance user profile pages with an expanded stats section and an activity heatmap showing validation activity over time.
+
+**Requirements:** PROF-06, PROF-07
+
+**Success Criteria:**
+1. Profile displays an expanded stats section: streak (active days), most-improved revision (largest score delta), score distribution histogram (how many 1s, 2s, 3s, 4s, 5s)
+2. Profile displays a GitHub-style activity heatmap grid showing validation frequency by week; styled to match the sketchbook design system (wobbly cell borders, pencil/muted palette)
+3. Both sections are hidden when the user has no public validations
+4. Stats and heatmap data are returned from the existing `/api/profile/:username` route (no new endpoints needed)
 
 ---
 
