@@ -2,21 +2,21 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-current_phase: 17
-status: completed
-last_updated: "2026-03-22T19:35:09.526Z"
+current_phase: 18
+status: executing
+last_updated: "2026-03-22T20:25:00.000Z"
 progress:
-  total_phases: 3
+  total_phases: 4
   completed_phases: 3
-  total_plans: 7
-  completed_plans: 7
+  total_plans: 9
+  completed_plans: 8
 ---
 
 # Project State
 
 **Last updated:** 2026-03-22
-**Current phase:** 17
-**Status:** Milestone complete
+**Current phase:** 18
+**Status:** Executing Phase 18
 
 ---
 
@@ -26,7 +26,7 @@ See: `.planning/PROJECT.md` (updated 2026-03-22)
 
 **Core value:** A founder pastes an idea and gets an honest, investor-grade analysis in under a minute, streamed live with a visual scorecard.
 
-**Current focus:** Phase 17 — publish-privacy
+**Current focus:** Phase 18 — public-leaderboard
 
 - Plan 15-01 (Password Reset Frontend Wiring): COMPLETED ✓
 - Plan 15-02 (E2E Tests for Split-Card Layout): COMPLETED ✓
@@ -106,10 +106,56 @@ Key implementation:
 
 **Phase 16 is now COMPLETE.** Backend + Frontend niche auto-detection fully implemented and tested.
 
+## 17-01 Completion Details
+
+**Plan:** Publish & Privacy — Backend
+**Tasks:** 3/3 completed
+**Commits:** 3 implementation commits
+**Status:** Complete ✓
+
+Key implementation:
+
+- DB migration: `is_public BOOLEAN NOT NULL DEFAULT true` on `saved_results`
+- `updateVisibilityRoute()`: PATCH `/api/history/:id/visibility` with `{ is_public }` payload
+- `getResultRoute()`: Checks visibility, returns 403 if private and not owner
+- All tests passing: 8/8
+
+## 17-02 Completion Details
+
+**Plan:** Publish & Privacy — Frontend
+**Tasks:** 2/2 completed
+**Commits:** 2 implementation commits
+**Status:** Complete ✓
+
+Key implementation:
+
+- `ResultPage`: Toggle switch for is_public visibility
+- `HistoryCard`: Unpublish action in context menu (calls updateVisibility API)
+- All tests passing: 5/5
+
+## 18-01 Completion Details
+
+**Plan:** Backend — Leaderboard Route
+**Tasks:** 4/4 completed
+**Commits:** 4 implementation commits
+**Status:** Complete ✓
+
+Key implementation:
+
+- DB migration: `username VARCHAR(50) UNIQUE` on `users` table (backward compatible)
+- `leaderboardRoute()`: GET `/api/leaderboard` with ?niche= and ?page= query params
+- Pagination: 20 items per page, sorted by weighted score descending
+- Exports `VALID_NICHES` (8 niches) and `truncateIdeaText()` helper
+- Entry shape: `{ id, idea_text (≤150 chars), scores, niche, user_id, author_username (nullable), created_at }`
+- Response: `{ entries, total, page, hasMore }`
+- All tests passing: 7/7 (VALID_NICHES: 3, truncateIdeaText: 4)
+
+Coverage: LEAD-01 ✓ LEAD-02 ✓ LEAD-03 ✓ LEAD-04 ✓ LEAD-05 ✓
+
 ## Next Phase
 
-**Phase 17:** Publish & Privacy — Add public/private toggle on result page and unpublish action on history page.
+**Phase 18-02:** Frontend — Leaderboard Page (with pagination, niche filter, score visualization)
 
 ---
 
-*State updated: 2026-03-22 — Phase 16 complete (16-01 ✓ + 16-02 ✓), Phase 16 ROADMAP entry ready for update*
+*State updated: 2026-03-22 — 18-01 complete, SUMMARY.md created*

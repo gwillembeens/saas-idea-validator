@@ -62,7 +62,7 @@ See archive: `.planning/milestones/v1.0-ROADMAP.md`
 | 15 | Tech Debt Resolution | Wire password reset frontend and write split-card E2E tests | Complete    | 2026-03-22 |
 | 16 | Niche Auto-Detection | Implement secondary Claude call to auto-detect 7-value niche taxonomy | NICHE-01, NICHE-02, NICHE-03 | Complete ✓ 2026-03-22 |
 | 17 | Publish & Privacy | Add public/private toggle and publishing controls | Complete    | 2026-03-22 |
-| 18 | Public Leaderboard | Build ranked leaderboard by score, filterable by niche | LEAD-01, LEAD-02, LEAD-03, LEAD-04, LEAD-05 | Pending |
+| 18 | Public Leaderboard | Build ranked leaderboard by score, filterable by niche | LEAD-01, LEAD-02, LEAD-03, LEAD-04, LEAD-05 | In Progress (18-01 ✓, 18-02 pending) |
 | 19 | Idea Versioning | Implement similarity detection and revision chains with score delta | VER-01, VER-02, VER-03, VER-04 | Pending |
 | 20 | User Profiles | Create public profile pages with stats, badges, and display names | PROF-01, PROF-02, PROF-03, PROF-04, PROF-05 | Pending |
 | 21 | Challenge Cards | Add "Beat the Leaderboard" challenge cards to leaderboard UI | CHAL-01, CHAL-02 | Pending |
@@ -147,6 +147,18 @@ See archive: `.planning/milestones/v1.0-ROADMAP.md`
 
 **Requirements:** LEAD-01, LEAD-02, LEAD-03, LEAD-04, LEAD-05
 
+**Status:** In Progress (Plan 18-01 Complete ✓, Plan 18-02 Pending)
+
+**Plan 18-01 Complete (2026-03-22):**
+- ✅ DB migration: `username VARCHAR(50) UNIQUE` column added to `users` table (backward compatible)
+- ✅ Created `leaderboardRoute()` handler with pagination (20 items/page), niche filtering, and weighted score sorting
+- ✅ Entry shape includes: id, idea_text (≤150 chars), scores, niche, user_id, author_username (nullable), created_at
+- ✅ Response envelope: `{ entries, total, page, hasMore }`
+- ✅ Route registered: `GET /api/leaderboard` with optional auth, accepts ?niche= and ?page= query params
+- ✅ Exports `VALID_NICHES` (8 niches) and `truncateIdeaText()` helper
+- ✅ All tests passing: 7/7 (VALID_NICHES: 3, truncateIdeaText: 4)
+- ✅ Requirements coverage: LEAD-01 ✓ LEAD-02 ✓ LEAD-03 ✓ LEAD-04 ✓ LEAD-05 ✓
+
 **Success Criteria:**
 1. `/leaderboard` route renders a page with all public validations sorted by weighted score descending
 2. Niche filter dropdown allows user to show only validations tagged with a specific niche; "All" shows unfiltered list
@@ -210,11 +222,11 @@ All v2.0 requirements mapped:
 | PUB-01 | Phase 17 | Pending |
 | PUB-02 | Phase 17 | Pending |
 | PUB-03 | Phase 17 | Pending |
-| LEAD-01 | Phase 18 | Pending |
-| LEAD-02 | Phase 18 | Pending |
-| LEAD-03 | Phase 18 | Pending |
-| LEAD-04 | Phase 18 | Pending |
-| LEAD-05 | Phase 18 | Pending |
+| LEAD-01 | Phase 18 | Complete ✓ (Plan 18-01) |
+| LEAD-02 | Phase 18 | Complete ✓ (Plan 18-01) |
+| LEAD-03 | Phase 18 | Complete ✓ (Plan 18-01) |
+| LEAD-04 | Phase 18 | Complete ✓ (Plan 18-01) |
+| LEAD-05 | Phase 18 | Complete ✓ (Plan 18-01) |
 | VER-01 | Phase 19 | Pending |
 | VER-02 | Phase 19 | Pending |
 | VER-03 | Phase 19 | Pending |
@@ -237,5 +249,5 @@ All v2.0 requirements mapped:
 *Phases: 14 | All complete | Plans total: 35 | Completed: 35*
 
 *v2.0 Social Layer roadmap created: 2026-03-22*
-*Phases: 15-21 | Phase 15 complete ✓, Phase 16 complete ✓ | Requirements: 24 | Completed: 6/24*
-*Updated: 2026-03-22 after Phase 16 completion (frontend niche pill UI complete, full niche auto-detection ready for v2.0)*
+*Phases: 15-21 | Phase 15 complete ✓, Phase 16 complete ✓, Phase 17 complete ✓, Phase 18-01 complete ✓ | Requirements: 24 | Completed: 11/24*
+*Updated: 2026-03-22 after Phase 18-01 completion (backend leaderboard route ready for frontend integration)*
