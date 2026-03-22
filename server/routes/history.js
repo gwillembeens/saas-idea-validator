@@ -172,7 +172,7 @@ export async function getResultRoute(req, res) {
 
   try {
     const { rows } = await pool.query(
-      `SELECT id, user_id, title, idea_text, markdown_result, scores, created_at, niche
+      `SELECT id, user_id, title, idea_text, markdown_result, scores, created_at, niche, is_public
        FROM saved_results
        WHERE id = $1 AND deleted_at IS NULL`,
       [id]
@@ -198,6 +198,7 @@ export async function getResultRoute(req, res) {
       scores: result.scores,
       created_at: result.created_at,
       niche: result.niche,
+      is_public: result.is_public,
       isOwner,
     })
   } catch (err) {
