@@ -1,7 +1,7 @@
 import Anthropic from '@anthropic-ai/sdk'
 import { pool } from '../db/init.js'
 
-const VALID_NICHES = ['Fintech', 'Logistics', 'Creator Economy', 'PropTech', 'HealthTech', 'EdTech', 'Other']
+const VALID_NICHES = ['Fintech', 'Logistics', 'Creator Economy', 'PropTech', 'HealthTech', 'EdTech', 'HRTech', 'Other']
 
 export function parseNiche(raw) {
   if (!raw || !raw.trim()) return 'Other'
@@ -57,6 +57,7 @@ export async function saveResultRoute(req, res) {
     res.status(201).json({
       id: result.id,
       title: result.title,
+      is_public: true,
       createdAt: result.created_at,
     })
   } catch (err) {
@@ -88,9 +89,9 @@ async function generateNiche(resultId, ideaText, markdownResult, userId) {
   const client = new Anthropic()
   try {
     const response = await client.messages.create({
-      model: 'claude-sonnet-4-20250514',
+      model: 'claude-haiku-4-5-20251001',
       max_tokens: 10,
-      system: 'You are a niche classifier for startup validation. Categorize the idea into exactly one of these 7 niches: Fintech, Logistics, Creator Economy, PropTech, HealthTech, EdTech, Other. Return ONLY the niche name. No preamble, no explanation.',
+      system: 'You are a niche classifier for startup validation. Categorize the idea into exactly one of these 8 niches: Fintech, Logistics, Creator Economy, PropTech, HealthTech, EdTech, HRTech, Other. HRTech covers HR software, recruiting tools, employee engagement, meeting analytics, team productivity, and workplace tools. Return ONLY the niche name. No preamble, no explanation.',
       messages: [{
         role: 'user',
         content: `Idea: ${ideaText}\n\nResult summary:\n${markdownResult.substring(0, 2000)}\n\nReturn the niche name only:`
@@ -151,6 +152,12 @@ export async function listHistoryRoute(req, res) {
       niche: r.niche,
     }))
 
+    // Lazy backfill: fire niche generation for items still at default 'Other'
+    const needsNiche = items.filter(r => !r.niche || r.niche === 'Other')
+    for (const r of needsNiche) {
+      generateNiche(r.id, r.idea_text, '', req.user.id).catch(() => {})
+    }
+
     res.json({ items, hasMore })
   } catch (err) {
     console.error('List history error:', err)
@@ -176,6 +183,11 @@ export async function getResultRoute(req, res) {
 
     const result = rows[0]
     const isOwner = req.user?.id === result.user_id
+
+    // Lazy backfill: fire niche generation if still at default
+    if ((!result.niche || result.niche === 'Other') && result.user_id) {
+      generateNiche(result.id, result.idea_text, result.markdown_result || '', result.user_id).catch(() => {})
+    }
 
     res.json({
       id: result.id,
