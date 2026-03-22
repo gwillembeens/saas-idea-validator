@@ -42,7 +42,7 @@ export function Scorecard() {
       </div>
       <div className="mt-4 pt-4 border-t border-muted flex justify-between items-center">
         <span className="font-heading text-pencil text-lg">Weighted Total</span>
-        <span className="font-heading text-pencil text-2xl">{scores.weighted}/5</span>
+        <span className="font-heading text-pencil text-2xl">{scores.weighted.toFixed(1)}/5</span>
       </div>
     </Card>
   )

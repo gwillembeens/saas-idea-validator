@@ -30,11 +30,7 @@ export function LeaderboardCard({ entry, rank, isOwn }) {
   const authorDisplay = hasUsername ? entry.author_username : 'Anonymous'
 
   return (
-    <Card decoration="none" rotate={0}>
-      <div
-        className="p-5 cursor-pointer hover:shadow-hardLg transition-shadow"
-        onClick={handleCardClick}
-      >
+    <Card decoration="none" rotate={0} onClick={handleCardClick} className="cursor-pointer hover:shadow-hardLg transition-shadow">
         {/* Author row + You badge */}
         <div className="flex items-center justify-between mb-3 gap-2">
           {hasUsername ? (
@@ -78,7 +74,6 @@ export function LeaderboardCard({ entry, rank, isOwn }) {
             <div className="font-body text-xs mt-0.5 opacity-80">{verdictLabel}</div>
           </div>
         </div>
-      </div>
     </Card>
   )
 }

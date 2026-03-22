@@ -30,7 +30,7 @@ export function VerdictBadge() {
     >
       <span>{emoji}</span>
       <span>{label}</span>
-      <span className="font-body text-base opacity-60">({scores.weighted}/5)</span>
+      <span className="font-body text-base opacity-60">({scores.weighted.toFixed(1)}/5)</span>
     </div>
   )
 }

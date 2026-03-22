@@ -106,7 +106,7 @@ export function ResultsPanel() {
               >
                 <span>{verdict.emoji}</span>
                 <span>{verdict.label}</span>
-                <span className="font-body text-base opacity-60">({weighted}/5)</span>
+                <span className="font-body text-base opacity-60">({weighted.toFixed(1)}/5)</span>
               </div>
             )}
             <NichePill niche={niche} />

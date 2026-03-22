@@ -156,7 +156,7 @@ export function ResultPage() {
               >
                 <span>{verdict.emoji}</span>
                 <span>{verdict.label}</span>
-                <span className="font-body text-base opacity-60">({weighted}/5)</span>
+                <span className="font-body text-base opacity-60">({weighted.toFixed(1)}/5)</span>
               </div>
             )}
             <NichePill niche={niche} />
@@ -182,7 +182,7 @@ export function ResultPage() {
               </div>
               <div className="mt-4 pt-4 border-t border-muted flex justify-between items-center">
                 <span className="font-heading text-pencil text-lg">Weighted Total</span>
-                <span className="font-heading text-pencil text-2xl">{scores.weighted}/5</span>
+                <span className="font-heading text-pencil text-2xl">{scores.weighted.toFixed(1)}/5</span>
               </div>
             </Card>
           )}

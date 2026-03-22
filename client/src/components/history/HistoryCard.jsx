@@ -73,7 +73,7 @@ export function HistoryCard({ item, onDelete, onToggleVisibility }) {
             <div
               className={`px-3 py-1 font-body text-xs rounded border ${getVerdictColor(weighted)}`}
             >
-              {getVerdictLabel(weighted)} ({weighted}/5)
+              {getVerdictLabel(weighted)} ({weighted.toFixed(1)}/5)
             </div>
 
             <NichePill niche={niche} size="sm" />
