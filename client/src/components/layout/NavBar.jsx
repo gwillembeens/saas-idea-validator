@@ -9,10 +9,7 @@ export function NavBar() {
   const isHistoryPage = location.pathname === '/history'
 
   return (
-    <header
-      className="w-full bg-paper border-b-2 border-pencil shadow-hard z-50 sticky top-0"
-      style={{ borderRadius: '0 0 15px 15px / 0 0 15px 15px' }}
-    >
+    <header className="w-full z-50 sticky top-0">
       <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
         {/* LEFT: Logo */}
         <Link
