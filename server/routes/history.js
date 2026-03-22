@@ -121,7 +121,7 @@ export async function listHistoryRoute(req, res) {
 
     if (sort === 'score') {
       query = `
-        SELECT id, title, idea_text, scores, created_at
+        SELECT id, title, idea_text, scores, created_at, niche
         FROM saved_results
         WHERE user_id = $1 AND deleted_at IS NULL
         ORDER BY (scores->>'weighted')::float DESC, created_at DESC
@@ -131,7 +131,7 @@ export async function listHistoryRoute(req, res) {
     } else {
       // date (default)
       query = `
-        SELECT id, title, idea_text, scores, created_at
+        SELECT id, title, idea_text, scores, created_at, niche
         FROM saved_results
         WHERE user_id = $1 AND deleted_at IS NULL
         ORDER BY created_at DESC
@@ -148,6 +148,7 @@ export async function listHistoryRoute(req, res) {
       idea_text: r.idea_text,
       scores: r.scores,
       created_at: r.created_at,
+      niche: r.niche,
     }))
 
     res.json({ items, hasMore })
