@@ -59,7 +59,7 @@ See archive: `.planning/milestones/v1.0-ROADMAP.md`
 
 | Phase | Name | Goal | Requirements | Status |
 |-------|------|------|--------------|--------|
-| 15 | Tech Debt Resolution | Wire password reset frontend and write split-card E2E tests | DEBT-01, DEBT-02 | Pending |
+| 15 | Tech Debt Resolution | Wire password reset frontend and write split-card E2E tests | DEBT-01, DEBT-02 | In Progress: 15-01 ✓ Complete |
 | 16 | Niche Auto-Detection | Implement secondary Claude call to auto-detect 7-value niche taxonomy | NICHE-01, NICHE-02, NICHE-03 | Pending |
 | 17 | Publish & Privacy | Add public/private toggle and publishing controls | PUB-01, PUB-02, PUB-03 | Pending |
 | 18 | Public Leaderboard | Build ranked leaderboard by score, filterable by niche | LEAD-01, LEAD-02, LEAD-03, LEAD-04, LEAD-05 | Pending |
@@ -74,11 +74,22 @@ See archive: `.planning/milestones/v1.0-ROADMAP.md`
 
 **Requirements:** DEBT-01, DEBT-02
 
+**Status:** In Progress (Plan 15-01 Complete ✓, Plan 15-02 Pending)
+
+**Plan 15-01 Complete (2026-03-22):**
+- ✅ Added `resetPassword(token, newPassword)` to useAuth hook
+- ✅ Implemented reset mode UI in AuthModal with password confirmation validation
+- ✅ Verified App.jsx correctly handles reset token from URL query parameter
+- ✅ User can click reset link, submit new password, and log in with updated credentials
+
+**Plan 15-02 Pending:**
+- E2E tests for split-card layout visibility, animation timing, and card content accuracy
+
 **Success Criteria:**
-1. User can submit password reset request from `/password-reset` form; backend sends reset email
-2. User can click reset link in email and set new password; login succeeds with new password
-3. E2E tests cover split-card layout visibility, animation timing, and card content accuracy
-4. All tests pass; coverage metrics recorded
+1. ✅ User can submit password reset request; backend sends reset email (DEBT-01 Complete)
+2. ✅ User can click reset link in email and set new password; login succeeds (DEBT-01 Complete)
+3. ⏳ E2E tests cover split-card layout visibility, animation timing, and card content accuracy (DEBT-02 Pending)
+4. ⏳ All tests pass; coverage metrics recorded (DEBT-02 Pending)
 
 ---
 
