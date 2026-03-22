@@ -1,3 +1,5 @@
+import { NavBar } from './NavBar'
+
 export function AppShell({ children }) {
   return (
     <div
@@ -8,6 +10,7 @@ export function AppShell({ children }) {
       }}
       className="min-h-screen w-full"
     >
+      <NavBar />
       {children}
     </div>
   )
