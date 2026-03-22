@@ -2,6 +2,44 @@ import { pool } from '../db/init.js'
 
 const VALID_NICHES = ['Fintech', 'Logistics', 'Creator Economy', 'PropTech', 'HealthTech', 'EdTech', 'HRTech', 'Other']
 
+export async function topPerNicheRoute(req, res) {
+  try {
+    const result = await pool.query(`
+      SELECT
+        sr.niche,
+        MAX((sr.scores->>'weighted')::float) AS top_score,
+        COUNT(*) AS total_public
+      FROM saved_results sr
+      WHERE sr.is_public = true
+        AND sr.deleted_at IS NULL
+      GROUP BY sr.niche
+      ORDER BY sr.niche
+    `)
+
+    // Build a map of niche -> data from DB rows
+    const dbMap = {}
+    for (const row of result.rows) {
+      dbMap[row.niche] = {
+        niche: row.niche,
+        score: row.top_score !== null ? parseFloat(row.top_score) : null,
+        count: parseInt(row.total_public, 10),
+      }
+    }
+
+    // Ensure all 8 VALID_NICHES are present (even if no entries in DB)
+    const topScores = VALID_NICHES.map(niche => dbMap[niche] || {
+      niche,
+      score: null,
+      count: 0,
+    })
+
+    res.json({ topScores })
+  } catch (err) {
+    console.error('topPerNicheRoute error:', err)
+    res.status(500).json({ error: 'Failed to fetch top scores per niche' })
+  }
+}
+
 export async function leaderboardRoute(req, res) {
   const { niche, page } = req.query
   const pageNum = parseInt(page) || 0
