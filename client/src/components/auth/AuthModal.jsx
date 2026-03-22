@@ -1,15 +1,19 @@
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { Card } from '../ui/Card'
 import { Button } from '../ui/Button'
 import { TextInput } from '../ui/TextInput'
 import { useAuth } from '../../hooks/useAuth'
 import { useValidate } from '../../hooks/useValidate'
+import { setAuthError } from '../../store/slices/authSlice'
 
 export function AuthModal() {
-  const { showAuthModal, authModalMode, error, status, login, register, forgotPassword, closeModal, openModal, pendingValidation, setPendingValidation } = useAuth()
+  const dispatch = useDispatch()
+  const { showAuthModal, authModalMode, error, status, login, register, forgotPassword, resetPassword, closeModal, openModal, pendingValidation, setPendingValidation } = useAuth()
   const { validate } = useValidate()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
   const [successMsg, setSuccessMsg] = useState('')
 
   if (!showAuthModal) return null
@@ -31,6 +35,23 @@ export function AuthModal() {
     } else if (authModalMode === 'forgot') {
       const result = await forgotPassword(email)
       if (result.success) setSuccessMsg(result.message)
+    } else if (authModalMode === 'reset') {
+      if (!password || !confirmPassword) {
+        setSuccessMsg('')
+        return
+      }
+      if (password !== confirmPassword) {
+        dispatch(setAuthError('Passwords do not match'))
+        return
+      }
+      const token = sessionStorage.getItem('resetToken')
+      const result = await resetPassword(token, password)
+      if (result.success) {
+        setSuccessMsg('Password reset! Redirecting to login...')
+        setPassword('')
+        setConfirmPassword('')
+        setTimeout(() => openModal('login'), 2000)
+      }
     }
   }
 
@@ -53,6 +74,7 @@ export function AuthModal() {
             {authModalMode === 'login' && 'Sign In'}
             {authModalMode === 'register' && 'Create Account'}
             {authModalMode === 'forgot' && 'Reset Password'}
+            {authModalMode === 'reset' && 'Set New Password'}
           </h2>
 
           {error && (
@@ -63,15 +85,17 @@ export function AuthModal() {
           )}
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-            <TextInput
-              label="Email"
-              type="email"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              placeholder="you@example.com"
-              disabled={isLoading}
-            />
-            {authModalMode !== 'forgot' && (
+            {authModalMode !== 'reset' && (
+              <TextInput
+                label="Email"
+                type="email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                placeholder="you@example.com"
+                disabled={isLoading}
+              />
+            )}
+            {authModalMode !== 'forgot' && authModalMode !== 'reset' && (
               <TextInput
                 label="Password"
                 type="password"
@@ -81,12 +105,32 @@ export function AuthModal() {
                 disabled={isLoading}
               />
             )}
+            {authModalMode === 'reset' && (
+              <>
+                <TextInput
+                  label="New Password"
+                  type="password"
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                  placeholder="Min. 8 characters"
+                  disabled={isLoading}
+                />
+                <TextInput
+                  label="Confirm Password"
+                  type="password"
+                  value={confirmPassword}
+                  onChange={e => setConfirmPassword(e.target.value)}
+                  placeholder="Confirm new password"
+                  disabled={isLoading}
+                />
+              </>
+            )}
             <Button variant="primary" type="submit" disabled={isLoading}>
-              {isLoading ? '...' : authModalMode === 'login' ? 'Sign In' : authModalMode === 'register' ? 'Create Account' : 'Send Reset Link'}
+              {isLoading ? '...' : authModalMode === 'login' ? 'Sign In' : authModalMode === 'register' ? 'Create Account' : authModalMode === 'forgot' ? 'Send Reset Link' : 'Reset Password'}
             </Button>
           </form>
 
-          {authModalMode !== 'forgot' && (
+          {authModalMode !== 'forgot' && authModalMode !== 'reset' && (
             <div className="mt-4 flex flex-col gap-3">
               <div className="flex items-center gap-3">
                 <div className="flex-1 h-px bg-muted" />
@@ -126,7 +170,7 @@ export function AuthModal() {
                 Already have an account? Sign in
               </button>
             )}
-            {authModalMode === 'forgot' && (
+            {(authModalMode === 'forgot' || authModalMode === 'reset') && (
               <button onClick={() => openModal('login')} className="font-body text-sm text-blue underline">
                 Back to sign in
               </button>
