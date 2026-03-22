@@ -33,6 +33,12 @@ export function NavBar() {
           {user ? (
             <>
               <Link
+                to="/framework"
+                className="font-body text-lg text-blue hover:text-accent transition-colors"
+              >
+                Framework
+              </Link>
+              <Link
                 to="/history"
                 className="font-body text-lg text-blue hover:text-accent transition-colors"
               >

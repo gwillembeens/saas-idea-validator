@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux'
 import { HomePage } from './pages/HomePage'
 import { HistoryPage } from './pages/HistoryPage'
 import { ResultPage } from './pages/ResultPage'
+import { FrameworkPage } from './pages/FrameworkPage'
 import { useAuth } from './hooks/useAuth'
 import { setUser, setAuthModalMode, setShowAuthModal } from './store/slices/authSlice'
 
@@ -58,6 +59,7 @@ export default function App() {
       <Route path="/" element={<HomePage />} />
       <Route path="/history" element={<HistoryPage />} />
       <Route path="/history/:id" element={<ResultPage />} />
+      <Route path="/framework" element={<FrameworkPage />} />
     </Routes>
   )
 }

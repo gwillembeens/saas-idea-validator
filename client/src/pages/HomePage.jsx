@@ -1,4 +1,5 @@
 import { useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
 import { AppShell } from '../components/layout/AppShell'
 import { IdeaInput } from '../components/validator/IdeaInput'
 import { ResultsPanel } from '../components/validator/ResultsPanel'
@@ -22,6 +23,14 @@ export function HomePage() {
           <p className="font-body text-lg md:text-xl text-pencil leading-relaxed">
             Paste your startup idea and get an honest, investor-grade analysis against our
             30-step framework for building agent-native SaaS businesses.
+          </p>
+          <p className="font-body text-base md:text-lg mt-4">
+            <Link
+              to="/framework"
+              className="font-body text-blue hover:text-accent transition-colors"
+            >
+              See the full 30-step framework →
+            </Link>
           </p>
         </div>
 
