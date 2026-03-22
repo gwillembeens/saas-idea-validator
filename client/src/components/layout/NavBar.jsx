@@ -28,16 +28,22 @@ export function NavBar() {
           <SearchBar isVisible={isHistoryPage} />
         </div>
 
-        {/* RIGHT: Auth actions */}
+        {/* RIGHT: Nav links + Auth */}
         <div className="flex items-center gap-3 flex-shrink-0">
+          <Link
+            to="/leaderboard"
+            className="font-body text-lg text-blue hover:text-accent transition-colors"
+          >
+            Leaderboard
+          </Link>
+          <Link
+            to="/framework"
+            className="font-body text-lg text-blue hover:text-accent transition-colors"
+          >
+            Framework
+          </Link>
           {user ? (
             <>
-              <Link
-                to="/framework"
-                className="font-body text-lg text-blue hover:text-accent transition-colors"
-              >
-                Framework
-              </Link>
               <Link
                 to="/history"
                 className="font-body text-lg text-blue hover:text-accent transition-colors"
