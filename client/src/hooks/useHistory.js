@@ -1,6 +1,7 @@
+import { useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
-  setItems, appendItems, setStatus, setSort, setHasMore, removeItem, updateItemTitle, setError,
+  setItems, appendItems, setStatus, setSort, setHasMore, removeItem, updateItemTitle, updateItemVisibility, setError,
 } from '../store/slices/historySlice.js'
 import { fetchWithAuth } from '../utils/fetchWithAuth.js'
 
@@ -71,5 +72,22 @@ export function useHistory() {
     dispatch(setSort(newSort))
   }
 
-  return { items, status, hasMore, sort, fetchHistory, loadMore, deleteItem, renameItem, toggleSort }
+  const toggleItemVisibility = useCallback(async (id, currentIsPublic) => {
+    const newIsPublic = !currentIsPublic
+    dispatch(updateItemVisibility({ id, is_public: newIsPublic }))
+    try {
+      const res = await fetchWithAuth(`/api/history/${id}/visibility`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ is_public: newIsPublic }),
+      })
+      if (!res.ok) {
+        dispatch(updateItemVisibility({ id, is_public: currentIsPublic }))
+      }
+    } catch {
+      dispatch(updateItemVisibility({ id, is_public: currentIsPublic }))
+    }
+  }, [dispatch])
+
+  return { items, status, hasMore, sort, fetchHistory, loadMore, deleteItem, renameItem, toggleSort, toggleItemVisibility }
 }
