@@ -61,18 +61,16 @@ export function LeaderboardCard({ entry, rank, isOwn }) {
           {entry.idea_text}
         </p>
 
-        {/* Footer: niche + score */}
-        <div className="flex items-center justify-between gap-4 pt-3 border-t border-muted">
-          <div className="min-w-0">
-            <NichePill niche={entry.niche || 'Other'} size="sm" />
-          </div>
+        {/* Footer: score + niche */}
+        <div className="flex items-center gap-3 pt-3 border-t border-muted">
           <div
-            className={`flex-shrink-0 px-3 py-1.5 border rounded text-center ${verdictColor}`}
+            className={`flex-shrink-0 inline-flex items-center gap-1.5 px-3 py-1 border font-body text-xs ${verdictColor}`}
             style={{ borderRadius: '15px 225px 15px 255px / 225px 15px 255px 15px' }}
           >
-            <div className="font-heading text-xl leading-none">{weighted.toFixed(1)}/5</div>
-            <div className="font-body text-xs mt-0.5 opacity-80">{verdictLabel}</div>
+            <span className="font-heading text-sm leading-none">{weighted.toFixed(1)}/5</span>
+            <span className="opacity-80">{verdictLabel}</span>
           </div>
+          <NichePill niche={entry.niche || 'Other'} size="sm" />
         </div>
     </Card>
   )

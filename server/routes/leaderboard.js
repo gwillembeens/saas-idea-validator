@@ -79,5 +79,9 @@ export async function leaderboardRoute(req, res) {
 // Exported for testing
 export { VALID_NICHES }
 export function truncateIdeaText(text) {
-  return text.substring(0, 150).replace(/\n/g, ' ')
+  const cleaned = text.replace(/\n/g, ' ')
+  if (cleaned.length <= 150) return cleaned
+  const cut = cleaned.substring(0, 150)
+  const lastSpace = cut.lastIndexOf(' ')
+  return (lastSpace > 100 ? cut.substring(0, lastSpace) : cut) + '…'
 }
