@@ -2,11 +2,13 @@ import { useSelector } from 'react-redux'
 import { AppShell } from '../components/layout/AppShell'
 import { IdeaInput } from '../components/validator/IdeaInput'
 import { ResultsPanel } from '../components/validator/ResultsPanel'
+import { ProgressBar } from '../components/validator/ProgressBar'
 import { Arrow } from '../components/decorative/Arrow'
 import { AuthModal } from '../components/auth/AuthModal'
 
 export function HomePage() {
   const status = useSelector(s => s.validator.status)
+  const progress = useSelector(s => s.validator.progress)
 
   return (
     <AppShell>
@@ -27,6 +29,13 @@ export function HomePage() {
         <div className="w-full max-w-2xl mb-20 md:mb-24">
           <IdeaInput />
         </div>
+
+        {/* Progress bar — visible during loading and streaming */}
+        <ProgressBar
+          isVisible={status === 'loading' || status === 'streaming'}
+          progress={progress}
+          label={status === 'loading' ? 'Sending to Claude…' : 'Analyzing your idea…'}
+        />
 
         {/* Arrow decoration — hidden on mobile */}
         {status !== 'idle' && (

@@ -11,6 +11,38 @@ import { useHistory } from '../hooks/useHistory'
 import { selectFilteredHistory } from '../store/slices/historySlice'
 import { useAuth } from '../hooks/useAuth'
 
+function SkeletonHistoryRow({ delay = 0 }) {
+  return (
+    <div className="flex items-start gap-4">
+      {/* Ranking placeholder */}
+      <div className="w-10 pt-4 flex-shrink-0 flex justify-center">
+        <div className="w-7 h-7 bg-muted rounded animate-pulse" style={{ animationDelay: `${delay}s` }} />
+      </div>
+
+      {/* Card placeholder */}
+      <div
+        style={{ borderRadius: '255px 15px 225px 15px / 15px 225px 15px 255px' }}
+        className="flex-1 bg-white border-2 border-muted shadow-hardSm p-6 space-y-4"
+      >
+        {/* Title skeleton */}
+        <div className="h-6 bg-muted rounded animate-pulse w-2/3" style={{ animationDelay: `${delay}s` }} />
+
+        {/* Snippet skeleton — 2 lines */}
+        <div className="space-y-2">
+          <div className="h-4 bg-muted rounded animate-pulse" style={{ animationDelay: `${delay}s` }} />
+          <div className="h-4 bg-muted rounded animate-pulse w-4/5" style={{ animationDelay: `${delay}s` }} />
+        </div>
+
+        {/* Footer skeleton */}
+        <div className="flex items-center justify-between pt-2">
+          <div className="h-4 bg-muted rounded animate-pulse w-1/4" style={{ animationDelay: `${delay}s` }} />
+          <div className="h-4 bg-muted rounded animate-pulse w-1/5" style={{ animationDelay: `${delay}s` }} />
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export function HistoryPage() {
   const user = useSelector(s => s.auth.user)
   const { openModal } = useAuth()
@@ -127,10 +159,12 @@ export function HistoryPage() {
           </div>
         )}
 
-        {/* Loading state */}
+        {/* Loading state — skeleton rows */}
         {status === 'loading' && (
-          <div className="w-full max-w-4xl text-center py-8">
-            <p className="font-body text-lg text-pencil opacity-60">Loading...</p>
+          <div className="w-full max-w-4xl flex flex-col gap-4 mb-12">
+            {[0, 0.1, 0.2, 0.3, 0.4].map((delay, i) => (
+              <SkeletonHistoryRow key={`skeleton-${i}`} delay={delay} />
+            ))}
           </div>
         )}
 
