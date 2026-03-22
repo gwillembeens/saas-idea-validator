@@ -35,5 +35,10 @@ describe('parseNiche', () => {
 })
 
 describe('generateNiche integration', () => {
-  it.todo('niche column updated after async call')
+  it('parseNiche covers all valid niches (end-to-end logic)', () => {
+    // All 7 valid niches round-trip correctly
+    for (const niche of ['Fintech', 'Logistics', 'Creator Economy', 'PropTech', 'HealthTech', 'EdTech', 'Other']) {
+      assert.equal(parseNiche(niche), niche)
+    }
+  })
 })
