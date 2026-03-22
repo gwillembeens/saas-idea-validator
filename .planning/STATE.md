@@ -4,19 +4,19 @@ milestone: v2.0
 milestone_name: Social Layer
 current_phase: 15
 status: executing
-last_updated: "2026-03-22T14:25:00.000Z"
+last_updated: "2026-03-22T15:45:00.000Z"
 progress:
   total_phases: 1
-  completed_phases: 0
+  completed_phases: 1
   total_plans: 2
-  completed_plans: 1
+  completed_plans: 2
 ---
 
 # Project State
 
 **Last updated:** 2026-03-22
 **Current phase:** 15
-**Status:** Executing Phase 15
+**Status:** Phase 15 Complete — Awaiting Phase 16
 
 ---
 
@@ -28,7 +28,7 @@ See: `.planning/PROJECT.md` (updated 2026-03-22)
 
 **Current focus:** Phase 15 — tech-debt-resolution
 - Plan 15-01 (Password Reset Frontend Wiring): COMPLETED ✓
-- Plan 15-02 (E2E Tests for Split-Card Layout): IN PROGRESS
+- Plan 15-02 (E2E Tests for Split-Card Layout): COMPLETED ✓
 
 ---
 
@@ -37,7 +37,7 @@ See: `.planning/PROJECT.md` (updated 2026-03-22)
 - Stack: React 19 + Vite + Redux Toolkit + Tailwind CSS v3 frontend; Node.js + Express 5 backend; Anthropic SDK (streaming); PostgreSQL for persistence.
 - Auth: JWT 15m access + 30d refresh rotation, bcrypt 12 rounds, Google/GitHub OAuth, password reset flow now complete.
 - Shipped v1.0: ~3,425 LOC across 14 phases. All v1.0 requirements verified.
-- Tech debt resolved: password reset frontend wired (15-01 ✓), E2E tests for split-card layout pending (15-02).
+- Tech debt resolved: password reset frontend wired (15-01 ✓), E2E tests for split-card layout complete (15-02 ✓).
 - Phase numbering: v2.0 continues from Phase 15 (v1.0 ended at Phase 14).
 
 ## 15-01 Completion Details
@@ -54,6 +54,27 @@ Key changes:
 
 Backend was already complete from previous phase. Full end-to-end password reset flow now operational.
 
+## 15-02 Completion Details
+
+**Plan:** E2E Tests for Split-Card Layout
+**Tasks:** 4/4 completed
+**Commits:** 4 implementation commits
+**Status:** All 8 tests passing
+
+Key implementation:
+- playwright.config.js: Configured Playwright with baseURL http://localhost:5173, webServer auto-start
+- tests/e2e/split-cards.spec.js: 8 test cases covering form rendering, component visibility, responsive layouts, font validation
+- client/package.json: Added test:e2e, test:e2e:ui, test:e2e:debug scripts
+- tests/e2e/README.md: Complete documentation for running tests and troubleshooting
+
+Frontend E2E test suite now validates all critical UI components across responsive viewports. All tests exit with code 0.
+
 ---
 
-*State updated: 2026-03-22 — Milestone v2.0 started*
+## Next Phase
+
+**Phase 16:** Social Layer v2.0 — Build initial feature set for founder collaboration and idea sharing.
+
+---
+
+*State updated: 2026-03-22 — Phase 15 complete, all tech debt resolved for v1.0*
