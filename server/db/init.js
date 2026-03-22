@@ -18,5 +18,10 @@ export async function runMigrations() {
     ALTER TABLE IF EXISTS saved_results
       ADD COLUMN IF NOT EXISTS is_public BOOLEAN NOT NULL DEFAULT true
   `)
+  // Phase 18: username for leaderboard attribution
+  await pool.query(`
+    ALTER TABLE users
+      ADD COLUMN IF NOT EXISTS username VARCHAR(50) UNIQUE
+  `)
   console.log('DB migrations applied')
 }
