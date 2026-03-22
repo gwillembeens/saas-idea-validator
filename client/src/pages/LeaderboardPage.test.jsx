@@ -19,6 +19,23 @@ vi.mock('../hooks/useLeaderboard', () => ({
   }),
 }))
 
+vi.mock('../hooks/useChallengeScores', () => ({
+  useChallengeScores: () => ({
+    topScores: [
+      { niche: 'Fintech', score: 4.8, count: 5 },
+      { niche: 'Logistics', score: null, count: 0 },
+      { niche: 'Creator Economy', score: 3.9, count: 2 },
+      { niche: 'PropTech', score: null, count: 0 },
+      { niche: 'HealthTech', score: 4.2, count: 3 },
+      { niche: 'EdTech', score: null, count: 0 },
+      { niche: 'HRTech', score: 3.5, count: 1 },
+      { niche: 'Other', score: null, count: 0 },
+    ],
+    loading: false,
+    error: null,
+  }),
+}))
+
 import { LeaderboardPage } from './LeaderboardPage'
 
 const makeStore = (user = null) =>
@@ -63,5 +80,10 @@ describe('LeaderboardPage', () => {
   it('shows empty state when no items', () => {
     renderPage()
     expect(screen.getByText(/No validations yet/)).toBeInTheDocument()
+  })
+
+  it('renders ChallengeSection between CTA banner and niche filter pills', () => {
+    renderPage(null)
+    expect(screen.getByText('Beat the Leaderboard')).toBeInTheDocument()
   })
 })
