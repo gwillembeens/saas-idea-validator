@@ -26,11 +26,11 @@ export async function runMigrations() {
   // Phase 19: idea versioning — parent chain
   await pool.query(`
     ALTER TABLE saved_results
-      ADD COLUMN IF NOT EXISTS parent_id INTEGER REFERENCES saved_results(id) ON DELETE SET NULL
+      ADD COLUMN IF NOT EXISTS parent_id UUID REFERENCES saved_results(id) ON DELETE SET NULL
   `)
   await pool.query(`
     ALTER TABLE saved_results
-      ADD COLUMN IF NOT EXISTS suggested_parent_id INTEGER REFERENCES saved_results(id) ON DELETE SET NULL
+      ADD COLUMN IF NOT EXISTS suggested_parent_id UUID REFERENCES saved_results(id) ON DELETE SET NULL
   `)
   // Phase 20: user profiles — display name
   await pool.query(`
