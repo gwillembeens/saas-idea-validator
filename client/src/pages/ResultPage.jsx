@@ -1,22 +1,22 @@
 import { useParams, useNavigate } from 'react-router-dom'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppShell } from '../components/layout/AppShell'
-import { SignInButton } from '../components/auth/SignInButton'
 import { AuthModal } from '../components/auth/AuthModal'
-import { Button } from '../components/ui/Button'
 import { Card } from '../components/ui/Card'
 import { ScoreBar } from '../components/ui/ScoreBar'
 import { IdeaSummaryCard } from '../components/validator/IdeaSummaryCard'
 import { CommentaryCard } from '../components/validator/CommentaryCard'
 import { VerdictCard } from '../components/validator/VerdictCard'
+import { TitleHeader } from '../components/validator/TitleHeader'
+import { ActionButtons } from '../components/validator/ActionButtons'
+import { DeleteConfirmModal } from '../components/validator/DeleteConfirmModal'
 import { parseSections } from '../utils/parseSections'
 import { parseScores } from '../utils/parseResult'
-import { generateShareUrls } from '../utils/shareUrls'
 import { getVerdict } from '../constants/verdictColors'
 import { setIdea } from '../store/slices/validatorSlice'
 import { fetchWithAuth } from '../utils/fetchWithAuth'
-import { Trash2, RefreshCw } from 'lucide-react'
+import { useHistoryResult } from '../hooks/useHistoryResult'
 
 const PHASE_LABELS = [
   { key: 'phase1', label: '1. Market & Niche', weight: '30%' },
@@ -25,46 +25,21 @@ const PHASE_LABELS = [
   { key: 'phase4', label: '4. Pricing & Moat', weight: '10%' },
 ]
 
-
 export function ResultPage() {
   const { id } = useParams()
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const user = useSelector(s => s.auth.user)
 
-  const [result, setResult] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const { result, loading, error, refetch } = useHistoryResult(id)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
   const [isEditingTitle, setIsEditingTitle] = useState(false)
   const [editingTitle, setEditingTitle] = useState('')
   const [isSavingTitle, setIsSavingTitle] = useState(false)
 
-  useEffect(() => {
-    async function fetchResult() {
-      try {
-        const res = await fetch(`/api/history/${id}`)
-        if (!res.ok) throw new Error('Result not found')
-        const data = await res.json()
-        setResult(data)
-      } catch (err) {
-        setError(err.message)
-      } finally {
-        setLoading(false)
-      }
-    }
-    fetchResult()
-  }, [id])
-
-  const handleTitleClick = () => {
-    if (!result?.isOwner) return
-    setEditingTitle(result.title)
-    setIsEditingTitle(true)
-  }
-
-  const handleTitleSave = async () => {
-    if (editingTitle.trim() === result.title || !editingTitle.trim()) {
+  const handleTitleSave = async (newTitle) => {
+    if (!newTitle || newTitle.trim() === result.title) {
       setIsEditingTitle(false)
       return
     }
@@ -73,11 +48,10 @@ export function ResultPage() {
       const res = await fetchWithAuth(`/api/history/${id}/title`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title: editingTitle.trim() }),
+        body: JSON.stringify({ title: newTitle.trim() }),
       })
       if (res.ok) {
-        const data = await res.json()
-        setResult(prev => ({ ...prev, title: data.title }))
+        await refetch()
       }
     } finally {
       setIsSavingTitle(false)
@@ -99,7 +73,7 @@ export function ResultPage() {
       if (!res.ok) throw new Error('Failed to delete')
       navigate('/history')
     } catch (err) {
-      setError(err.message)
+      console.error(err)
     } finally {
       setIsDeleting(false)
       setShowDeleteConfirm(false)
@@ -128,11 +102,8 @@ export function ResultPage() {
     )
   }
 
-  // Use pre-parsed scores from DB JSONB if available, otherwise parse from markdown
   const scores = result?.scores || parseScores(result?.markdown_result)
   const sections = parseSections(result?.markdown_result)
-  const shareUrls = generateShareUrls(result?.title, window.location.href)
-
   const weighted = scores?.weighted || 0
   const verdict = weighted > 0 ? getVerdict(weighted) : null
 
@@ -140,46 +111,16 @@ export function ResultPage() {
     <AppShell>
       <div className="flex flex-col items-center justify-start min-h-screen px-4 py-20 md:px-8 relative">
 
-        {/* Title */}
-        <div className="w-full max-w-2xl text-center mb-12">
-          {isEditingTitle ? (
-            <div className="flex items-center justify-center gap-3 mb-2">
-              <input
-                type="text"
-                value={editingTitle}
-                onChange={(e) => setEditingTitle(e.target.value)}
-                autoFocus
-                className="font-heading text-3xl md:text-4xl text-pencil bg-paper border-2 border-blue px-4 py-2 text-center outline-none w-full max-w-xl"
-                style={{ borderRadius: '255px 15px 225px 15px / 15px 225px 15px 255px' }}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') handleTitleSave()
-                  if (e.key === 'Escape') setIsEditingTitle(false)
-                }}
-              />
-              <button
-                onClick={handleTitleSave}
-                disabled={isSavingTitle}
-                className="px-4 py-2 font-body text-lg bg-blue text-white hover:opacity-80 transition flex-shrink-0"
-                style={{ borderRadius: '255px 15px 225px 15px / 15px 225px 15px 255px' }}
-              >
-                {isSavingTitle ? 'Saving…' : 'Save'}
-              </button>
-            </div>
-          ) : (
-            <h1
-              className={`font-heading text-5xl md:text-6xl text-pencil mb-2 ${result?.isOwner ? 'cursor-text hover:opacity-70 transition-opacity' : ''}`}
-              onClick={handleTitleClick}
-              title={result?.isOwner ? 'Click to rename' : undefined}
-            >
-              {result?.title}
-            </h1>
-          )}
-          <p className="font-body text-sm text-pencil opacity-50">
-            {new Date(result?.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
-          </p>
-        </div>
+        <TitleHeader
+          result={result}
+          isEditingTitle={isEditingTitle}
+          editingTitle={editingTitle}
+          isSavingTitle={isSavingTitle}
+          onEditStart={() => { setEditingTitle(result.title); setIsEditingTitle(true) }}
+          onEditCancel={() => setIsEditingTitle(false)}
+          onEditSave={handleTitleSave}
+        />
 
-        {/* Verdict badge */}
         {verdict && (
           <div className="mb-8 flex justify-center">
             <div
@@ -198,15 +139,9 @@ export function ResultPage() {
           </div>
         )}
 
-        {/* Content cards */}
         <div className="w-full max-w-2xl mb-12 flex flex-col gap-8">
+          {sections?.ideaSummary && <IdeaSummaryCard markdown={sections.ideaSummary} />}
 
-          {/* Idea Summary */}
-          {sections?.ideaSummary && (
-            <IdeaSummaryCard markdown={sections.ideaSummary} />
-          )}
-
-          {/* Scorecard */}
           {scores && (
             <Card decoration="tack" rotate={1} className="w-full max-w-2xl mx-auto">
               <h2 className="font-heading text-2xl text-pencil mb-4">🔬 Scorecard</h2>
@@ -228,84 +163,16 @@ export function ResultPage() {
             </Card>
           )}
 
-          {/* Verdict section */}
-          {sections?.verdict && (
-            <VerdictCard markdown={sections.verdict} />
-          )}
-
-          {/* Commentary */}
-          {sections?.commentary && (
-            <CommentaryCard markdown={sections.commentary} />
-          )}
+          {sections?.verdict && <VerdictCard markdown={sections.verdict} />}
+          {sections?.commentary && <CommentaryCard markdown={sections.commentary} />}
         </div>
+        <ActionButtons
+          result={result}
+          isDeleting={isDeleting}
+          onRevalidate={handleRevalidate}
+          onDelete={() => setShowDeleteConfirm(true)}
+        />
 
-        {/* Action buttons */}
-        <div className="w-full max-w-2xl mb-12">
-          <div className="flex flex-wrap gap-4 justify-center">
-
-            {/* Re-validate */}
-            <Button variant="primary" onClick={handleRevalidate}>
-              <RefreshCw size={18} className="mr-2 inline" />
-              Re-validate This Idea
-            </Button>
-
-            {/* Share buttons */}
-            <button
-              onClick={() => window.open(shareUrls.twitter, '_blank')}
-              className="px-4 py-3 font-body text-lg bg-blue text-white hover:opacity-80 transition"
-              style={{ borderRadius: '255px 15px 225px 15px / 15px 225px 15px 255px' }}
-            >
-              Share on X
-            </button>
-            <button
-              onClick={() => window.open(shareUrls.linkedin, '_blank')}
-              className="px-4 py-3 font-body text-lg bg-blue text-white hover:opacity-80 transition"
-              style={{ borderRadius: '255px 15px 225px 15px / 15px 225px 15px 255px' }}
-            >
-              Share on LinkedIn
-            </button>
-            <button
-              onClick={() => window.open(shareUrls.whatsapp, '_blank')}
-              className="px-4 py-3 font-body text-lg bg-blue text-white hover:opacity-80 transition"
-              style={{ borderRadius: '255px 15px 225px 15px / 15px 225px 15px 255px' }}
-            >
-              Share on WhatsApp
-            </button>
-
-            {/* Delete (owner only) */}
-            {result?.isOwner && (
-              <button
-                onClick={() => setShowDeleteConfirm(true)}
-                className="px-4 py-3 font-body text-lg text-accent hover:opacity-70 transition flex items-center gap-2"
-              >
-                <Trash2 size={18} strokeWidth={2.5} />
-                Delete
-              </button>
-            )}
-          </div>
-        </div>
-
-        {/* Delete confirmation modal */}
-        {showDeleteConfirm && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black/20 z-50">
-            <Card decoration="tack" className="w-full max-w-sm p-8">
-              <h2 className="font-heading text-2xl text-pencil mb-4">Delete Result?</h2>
-              <p className="font-body text-lg text-pencil mb-6">
-                This cannot be undone.
-              </p>
-              <div className="flex gap-4">
-                <Button variant="secondary" onClick={() => setShowDeleteConfirm(false)}>
-                  Cancel
-                </Button>
-                <Button variant="primary" onClick={handleDelete} disabled={isDeleting}>
-                  {isDeleting ? 'Deleting...' : 'Delete'}
-                </Button>
-              </div>
-            </Card>
-          </div>
-        )}
-
-        {/* Non-owner CTA — only for unauthenticated visitors viewing someone else's result */}
         {!result?.isOwner && !user && (
           <div className="w-full max-w-2xl text-center mb-12">
             <p className="font-body text-lg text-pencil opacity-60">
@@ -317,11 +184,15 @@ export function ResultPage() {
           </div>
         )}
 
-        {/* Footer spacing */}
         <div className="mt-20 md:mt-24" />
-
       </div>
 
+      <DeleteConfirmModal
+        isOpen={showDeleteConfirm}
+        isDeleting={isDeleting}
+        onConfirm={handleDelete}
+        onCancel={() => setShowDeleteConfirm(false)}
+      />
       <AuthModal />
     </AppShell>
   )
