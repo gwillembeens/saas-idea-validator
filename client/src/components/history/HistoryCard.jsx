@@ -64,7 +64,7 @@ export function HistoryCard({ item, onDelete }) {
           {ideaSnippet}
         </p>
 
-        {/* Footer: verdict, date, delete */}
+        {/* Footer: verdict, niche, date, delete */}
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-4">
             <div
@@ -72,6 +72,17 @@ export function HistoryCard({ item, onDelete }) {
             >
               {getVerdictLabel(weighted)} ({weighted}/5)
             </div>
+
+            {/* Niche pill — hidden on mobile, visible md+ (D-17) */}
+            {item.niche && (
+              <div
+                className="hidden md:inline-flex px-3 py-1 font-body text-xs text-pencil border border-pencil rounded"
+                style={{ backgroundColor: '#e5e0d8' }}
+              >
+                {item.niche}
+              </div>
+            )}
+
             <span className="font-body text-xs text-pencil opacity-50">
               {createdDate}
             </span>
