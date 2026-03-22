@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Trash2 } from 'lucide-react'
+import { Trash2, Globe, Lock } from 'lucide-react'
 import { Card } from '../ui/Card'
 import { Button } from '../ui/Button'
 import { NichePill } from '../ui/NichePill'
@@ -19,12 +19,14 @@ function getVerdictLabel(weighted) {
   return '🔴 Too Vague'
 }
 
-export function HistoryCard({ item, onDelete }) {
+export function HistoryCard({ item, onDelete, onToggleVisibility }) {
   const navigate = useNavigate()
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
+  const [isTogglingVisibility, setIsTogglingVisibility] = useState(false)
 
   const weighted = item.scores?.weighted || 0
+  const niche = item.niche
   const ideaSnippet = item.idea_text.substring(0, 100).replace(/\n/g, ' ') + (item.idea_text.length > 100 ? '...' : '')
   const createdDate = new Date(item.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
 
@@ -65,7 +67,7 @@ export function HistoryCard({ item, onDelete }) {
           {ideaSnippet}
         </p>
 
-        {/* Footer: verdict, niche, date, delete */}
+        {/* Footer: verdict, niche, visibility badge, toggle, date, delete */}
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-4">
             <div
@@ -74,10 +76,33 @@ export function HistoryCard({ item, onDelete }) {
               {getVerdictLabel(weighted)} ({weighted}/5)
             </div>
 
-            {/* Niche pill — hidden on mobile, visible md+ (D-17) */}
-            {item.niche && (
-              <NichePill niche={item.niche} size="sm" className="hidden md:inline-flex" />
-            )}
+            <NichePill niche={niche} size="sm" />
+
+            {/* Public/Private badge */}
+            <span
+              className="px-3 py-1 font-body text-xs text-pencil border border-pencil"
+              style={{ backgroundColor: '#e5e0d8', borderRadius: '255px 15px 225px 15px / 15px 225px 15px 255px' }}
+            >
+              {item.is_public ? 'Public' : 'Private'}
+            </span>
+
+            {/* Toggle visibility button */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                if (!isTogglingVisibility && onToggleVisibility) {
+                  setIsTogglingVisibility(true)
+                  onToggleVisibility(item.id, item.is_public).finally(() => setIsTogglingVisibility(false))
+                }
+              }}
+              disabled={isTogglingVisibility}
+              className="flex items-center gap-1 font-body text-xs text-pencil opacity-60 hover:opacity-100 transition-opacity disabled:opacity-30"
+            >
+              {item.is_public
+                ? <><Lock size={12} strokeWidth={2.5} /> Make Private</>
+                : <><Globe size={12} strokeWidth={2.5} /> Make Public</>
+              }
+            </button>
 
             <span className="font-body text-xs text-pencil opacity-50">
               {createdDate}
