@@ -286,6 +286,16 @@ Plans:
 Plans:
 - [ ] TBD (run /gsd:plan-phase 13 to break down)
 
+### Phase 14: improve code on ResultPage
+
+**Goal:** [To be planned]
+**Requirements**: TBD
+**Depends on:** Phase 13
+**Plans:** 1/3 plans executed
+
+Plans:
+- [ ] TBD (run /gsd:plan-phase 14 to break down)
+
 ---
 
 *Roadmap updated: 2026-03-21*
