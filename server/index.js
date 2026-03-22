@@ -9,6 +9,7 @@ import {
   googleAuthRoute, googleCallbackRoute, githubAuthRoute, githubCallbackRoute,
 } from './routes/auth.js'
 import { saveResultRoute, listHistoryRoute, getResultRoute, updateTitleRoute, updateVisibilityRoute, deleteResultRoute } from './routes/history.js'
+import { leaderboardRoute } from './routes/leaderboard.js'
 import { requireAuth } from './middleware/requireAuth.js'
 import { optionalAuth } from './middleware/optionalAuth.js'
 import { runMigrations } from './db/init.js'
@@ -51,6 +52,9 @@ app.get('/api/history/:id', optionalAuth, getResultRoute)
 app.patch('/api/history/:id/title', requireAuth, updateTitleRoute)
 app.patch('/api/history/:id/visibility', requireAuth, updateVisibilityRoute)
 app.delete('/api/history/:id', requireAuth, deleteResultRoute)
+
+// Mount leaderboard route
+app.get('/api/leaderboard', optionalAuth, leaderboardRoute)
 
 runMigrations().catch(err => {
   console.error('Migration failed:', err)
