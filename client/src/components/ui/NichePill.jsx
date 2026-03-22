@@ -10,14 +10,10 @@ export function NichePill({ niche, size = 'lg', className = '' }) {
   if (size === 'sm') {
     return (
       <div
-        className={`inline-flex items-center gap-1.5 px-3 py-1.5 font-body text-xs text-pencil ${className}`}
-        style={{
-          backgroundColor: '#e5e0d8',
-          border: '1px solid #2d2d2d',
-          borderRadius: '255px 15px 225px 15px / 15px 225px 15px 255px',
-        }}
+        className={`inline-flex items-center gap-1 px-3 py-1 font-body text-xs text-pencil rounded border border-pencil ${className}`}
+        style={{ backgroundColor: '#e5e0d8' }}
       >
-        <Icon size={12} strokeWidth={2.5} />
+        <Icon size={11} strokeWidth={2.5} />
         {niche}
       </div>
     )
