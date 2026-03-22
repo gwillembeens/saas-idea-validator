@@ -1,8 +1,8 @@
 import { useMemo } from 'react'
-import { Trash2, RefreshCw } from 'lucide-react'
+import { Trash2, RefreshCw, Globe, Lock } from 'lucide-react'
 import { Button } from '../ui/Button'
 
-export function ActionButtons({ result, isDeleting, onRevalidate, onDelete }) {
+export function ActionButtons({ result, isDeleting, onRevalidate, onDelete, isPublic, onToggleVisibility, isTogglingVisibility }) {
   const shareUrls = useMemo(() => {
     const shareText = `I validated my SaaS idea: "${result?.title}"`
     return {
@@ -42,14 +42,27 @@ export function ActionButtons({ result, isDeleting, onRevalidate, onDelete }) {
       </button>
 
       {result?.isOwner && (
-        <button
-          onClick={onDelete}
-          disabled={isDeleting}
-          className="flex-shrink-0 px-4 py-3 font-body text-lg text-accent hover:opacity-70 transition flex items-center gap-2 whitespace-nowrap"
-        >
-          <Trash2 size={18} strokeWidth={2.5} />
-          {isDeleting ? 'Deleting...' : 'Delete'}
-        </button>
+        <>
+          <button
+            onClick={onToggleVisibility}
+            disabled={isTogglingVisibility}
+            className="flex items-center gap-2 font-body text-pencil opacity-70 hover:opacity-100 transition-opacity disabled:opacity-40"
+          >
+            {isPublic
+              ? <Lock size={16} strokeWidth={2.5} />
+              : <Globe size={16} strokeWidth={2.5} />
+            }
+            <span>{isPublic ? 'Make Private' : 'Make Public'}</span>
+          </button>
+          <button
+            onClick={onDelete}
+            disabled={isDeleting}
+            className="flex-shrink-0 px-4 py-3 font-body text-lg text-accent hover:opacity-70 transition flex items-center gap-2 whitespace-nowrap"
+          >
+            <Trash2 size={18} strokeWidth={2.5} />
+            {isDeleting ? 'Deleting...' : 'Delete'}
+          </button>
+        </>
       )}
     </div>
   )
