@@ -114,11 +114,6 @@ export function ResultPage() {
     <AppShell>
       <div className="flex flex-col items-center justify-start min-h-screen px-4 py-20 md:px-8 relative">
 
-        {/* Header with SignInButton */}
-        <header className="absolute top-4 right-4 md:top-6 md:right-6">
-          <SignInButton />
-        </header>
-
         {/* Title */}
         <div className="w-full max-w-4xl text-center mb-12">
           <h1 className="font-heading text-5xl md:text-6xl text-pencil mb-2">

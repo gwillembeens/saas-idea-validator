@@ -266,6 +266,16 @@ Plans:
 Plans:
 - [ ] TBD (run /gsd:plan-phase 11 to break down)
 
+### Phase 12: History Detail View
+
+**Goal:** Clicking a row in the history list opens a detail page showing the full validation result (markdown) that was generated for that idea.
+**Requirements**: TBD
+**Depends on:** Phase 11
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (run /gsd:plan-phase 12 to break down)
+
 ---
 
 *Roadmap updated: 2026-03-21*

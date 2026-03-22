@@ -1,6 +1,7 @@
-export function Card({ decoration = 'none', rotate = 0, children, className = '' }) {
+export function Card({ decoration = 'none', rotate = 0, children, className = '', onClick }) {
   return (
     <div
+      onClick={onClick}
       style={{
         borderRadius: '255px 15px 225px 15px / 15px 225px 15px 255px',
         transform: `rotate(${rotate}deg)`,

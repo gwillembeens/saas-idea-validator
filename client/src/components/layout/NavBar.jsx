@@ -1,9 +1,12 @@
 import { Link, useLocation } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
 import { useAuth } from '../../hooks/useAuth'
 import { Button } from '../ui/Button'
 import { SearchBar } from './SearchBar'
+import { reset } from '../../store/slices/validatorSlice'
 
 export function NavBar() {
+  const dispatch = useDispatch()
   const location = useLocation()
   const { user, logout, openModal } = useAuth()
   const isHistoryPage = location.pathname === '/history'
@@ -14,6 +17,7 @@ export function NavBar() {
         {/* LEFT: Logo */}
         <Link
           to="/"
+          onClick={() => dispatch(reset())}
           className="font-heading text-xl md:text-2xl text-pencil hover:text-accent transition-colors flex-shrink-0"
         >
           SaaS Validator
