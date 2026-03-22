@@ -13,6 +13,7 @@ import { VerdictCard } from '../components/validator/VerdictCard'
 import { parseSections } from '../utils/parseSections'
 import { parseScores } from '../utils/parseResult'
 import { generateShareUrls } from '../utils/shareUrls'
+import { getVerdict } from '../constants/verdictColors'
 import { setIdea } from '../store/slices/validatorSlice'
 import { fetchWithAuth } from '../utils/fetchWithAuth'
 import { Trash2, RefreshCw } from 'lucide-react'
@@ -24,12 +25,6 @@ const PHASE_LABELS = [
   { key: 'phase4', label: '4. Pricing & Moat', weight: '10%' },
 ]
 
-function getVerdict(weighted) {
-  if (weighted >= 4.5) return { emoji: '🟢', label: 'Strong Signal', bg: '#d1fae5', border: '#6ee7b7' }
-  if (weighted >= 3.5) return { emoji: '🟡', label: 'Promising', bg: '#fef9c3', border: '#fde047' }
-  if (weighted >= 2.5) return { emoji: '🟠', label: 'Needs Work', bg: '#ffedd5', border: '#fdba74' }
-  return { emoji: '🔴', label: 'Too Vague', bg: '#fee2e2', border: '#fca5a5' }
-}
 
 export function ResultPage() {
   const { id } = useParams()
@@ -146,10 +141,39 @@ export function ResultPage() {
       <div className="flex flex-col items-center justify-start min-h-screen px-4 py-20 md:px-8 relative">
 
         {/* Title */}
-        <div className="w-full max-w-4xl text-center mb-12">
-          <h1 className="font-heading text-5xl md:text-6xl text-pencil mb-2">
-            {result?.title}
-          </h1>
+        <div className="w-full max-w-2xl text-center mb-12">
+          {isEditingTitle ? (
+            <div className="flex items-center justify-center gap-3 mb-2">
+              <input
+                type="text"
+                value={editingTitle}
+                onChange={(e) => setEditingTitle(e.target.value)}
+                autoFocus
+                className="font-heading text-3xl md:text-4xl text-pencil bg-paper border-2 border-blue px-4 py-2 text-center outline-none w-full max-w-xl"
+                style={{ borderRadius: '255px 15px 225px 15px / 15px 225px 15px 255px' }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') handleTitleSave()
+                  if (e.key === 'Escape') setIsEditingTitle(false)
+                }}
+              />
+              <button
+                onClick={handleTitleSave}
+                disabled={isSavingTitle}
+                className="px-4 py-2 font-body text-lg bg-blue text-white hover:opacity-80 transition flex-shrink-0"
+                style={{ borderRadius: '255px 15px 225px 15px / 15px 225px 15px 255px' }}
+              >
+                {isSavingTitle ? 'Saving…' : 'Save'}
+              </button>
+            </div>
+          ) : (
+            <h1
+              className={`font-heading text-5xl md:text-6xl text-pencil mb-2 ${result?.isOwner ? 'cursor-text hover:opacity-70 transition-opacity' : ''}`}
+              onClick={handleTitleClick}
+              title={result?.isOwner ? 'Click to rename' : undefined}
+            >
+              {result?.title}
+            </h1>
+          )}
           <p className="font-body text-sm text-pencil opacity-50">
             {new Date(result?.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
           </p>
@@ -175,7 +199,7 @@ export function ResultPage() {
         )}
 
         {/* Content cards */}
-        <div className="w-full max-w-4xl mb-12 flex flex-col gap-8">
+        <div className="w-full max-w-2xl mb-12 flex flex-col gap-8">
 
           {/* Idea Summary */}
           {sections?.ideaSummary && (
@@ -216,7 +240,7 @@ export function ResultPage() {
         </div>
 
         {/* Action buttons */}
-        <div className="w-full max-w-4xl mb-12">
+        <div className="w-full max-w-2xl mb-12">
           <div className="flex flex-wrap gap-4 justify-center">
 
             {/* Re-validate */}
