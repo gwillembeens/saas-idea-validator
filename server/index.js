@@ -11,6 +11,7 @@ import {
 import { saveResultRoute, listHistoryRoute, getResultRoute, updateTitleRoute, updateVisibilityRoute, deleteResultRoute } from './routes/history.js'
 import { requireAuth } from './middleware/requireAuth.js'
 import { optionalAuth } from './middleware/optionalAuth.js'
+import { runMigrations } from './db/init.js'
 
 const app = express()
 const PORT = process.env.PORT || 3001
@@ -50,6 +51,11 @@ app.get('/api/history/:id', optionalAuth, getResultRoute)
 app.patch('/api/history/:id/title', requireAuth, updateTitleRoute)
 app.patch('/api/history/:id/visibility', requireAuth, updateVisibilityRoute)
 app.delete('/api/history/:id', requireAuth, deleteResultRoute)
+
+runMigrations().catch(err => {
+  console.error('Migration failed:', err)
+  process.exit(1)
+})
 
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`)
