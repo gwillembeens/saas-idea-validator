@@ -46,7 +46,7 @@ function SkeletonHistoryRow({ delay = 0 }) {
 export function HistoryPage() {
   const user = useSelector(s => s.auth.user)
   const { openModal } = useAuth()
-  const { items, status, hasMore, sort, fetchHistory, loadMore, deleteItem, renameItem, toggleSort } = useHistory()
+  const { items, status, hasMore, sort, fetchHistory, loadMore, deleteItem, renameItem, toggleSort, toggleItemVisibility } = useHistory()
   const filteredItems = useSelector(selectFilteredHistory)
   const sentinelRef = useRef(null)
 
@@ -151,6 +151,7 @@ export function HistoryPage() {
                   <HistoryCard
                     item={item}
                     onDelete={deleteItem}
+                    onToggleVisibility={(id, isPublic) => toggleItemVisibility(id, isPublic)}
                   />
                 </div>
               </div>
