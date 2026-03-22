@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { startValidation, startStreaming, appendResult, finishValidation, setError, setProgress } from '../store/slices/validatorSlice.js'
+import { startValidation, startStreaming, appendResult, finishValidation, setError, setProgress, setRevisionCandidate } from '../store/slices/validatorSlice.js'
 import { parseScores } from '../utils/parseResult.js'
 import { fetchWithAuth } from '../utils/fetchWithAuth.js'
 
@@ -44,7 +44,7 @@ export function useValidate() {
         const scores = parseScores(fullResult)
         if (scores) {
           try {
-            await fetchWithAuth('/api/history', {
+            const saveRes = await fetchWithAuth('/api/history', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
@@ -53,6 +53,12 @@ export function useValidate() {
                 scores,
               }),
             })
+            if (saveRes.ok) {
+              const saveData = await saveRes.json()
+              if (saveData.similarTo) {
+                dispatch(setRevisionCandidate(saveData.similarTo))
+              }
+            }
           } catch (saveErr) {
             console.error('Auto-save failed:', saveErr)
             // Silent fail — validation result is still visible

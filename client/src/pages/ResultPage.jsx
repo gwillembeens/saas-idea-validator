@@ -39,6 +39,8 @@ export function ResultPage() {
   const [editingTitle, setEditingTitle] = useState('')
   const [isSavingTitle, setIsSavingTitle] = useState(false)
   const [isTogglingVisibility, setIsTogglingVisibility] = useState(false)
+  const [isLinkingRevision, setIsLinkingRevision] = useState(false)
+  const [isDismissingRevision, setIsDismissingRevision] = useState(false)
 
   const handleTitleSave = async (newTitle) => {
     if (!newTitle || newTitle.trim() === result.title) {
@@ -97,6 +99,37 @@ export function ResultPage() {
       await refetch()
     } finally {
       setIsTogglingVisibility(false)
+    }
+  }
+
+  const handleLinkRevision = async () => {
+    if (!result?.suggested_parent_id) return
+    setIsLinkingRevision(true)
+    try {
+      await fetchWithAuth(`/api/history/${id}/parent`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ parent_id: result.suggested_parent_id }),
+      })
+      await refetch()
+    } catch (err) {
+      console.error('Link revision failed:', err)
+    } finally {
+      setIsLinkingRevision(false)
+    }
+  }
+
+  const handleDismissRevision = async () => {
+    setIsDismissingRevision(true)
+    try {
+      await fetchWithAuth(`/api/history/${id}/dismiss-revision`, {
+        method: 'PATCH',
+      })
+      await refetch()
+    } catch (err) {
+      console.error('Dismiss revision failed:', err)
+    } finally {
+      setIsDismissingRevision(false)
     }
   }
 
@@ -159,7 +192,54 @@ export function ResultPage() {
                 <span className="font-body text-base opacity-60">({weighted.toFixed(1)}/5)</span>
               </div>
             )}
+            {result?.parent_scores && scores && scores.weighted > result.parent_scores.weighted && (
+              <div
+                className="inline-flex items-center gap-2 px-4 py-2 font-heading text-pencil text-lg shadow-hard"
+                style={{
+                  backgroundColor: '#d1fae5',
+                  border: '2px solid #6ee7b7',
+                  borderRadius: '15px 225px 15px 255px / 225px 15px 255px 15px',
+                  transform: 'rotate(1deg)',
+                }}
+              >
+                ↑ Improved
+              </div>
+            )}
             <NichePill niche={niche} />
+          </div>
+        )}
+
+        {result?.suggested_parent_id && !result?.parent_id && result?.isOwner && (
+          <div
+            className="w-full max-w-2xl mb-4 px-4 py-3 flex flex-wrap justify-between items-center gap-3"
+            style={{
+              backgroundColor: '#fef9c3',
+              border: '2px solid #fde047',
+              borderRadius: '15px 225px 15px 255px / 225px 15px 255px 15px',
+            }}
+          >
+            <p className="font-body text-pencil text-base">
+              Looks like a revision of{' '}
+              <span className="font-heading">"{result.suggested_parent_title}"</span>. Link it?
+            </p>
+            <div className="flex gap-2">
+              <button
+                onClick={handleDismissRevision}
+                disabled={isDismissingRevision}
+                className="font-body text-pencil text-sm px-3 py-1 border-2 border-pencil shadow-hardSm hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all disabled:opacity-50"
+                style={{ borderRadius: '15px 225px 15px 255px / 225px 15px 255px 15px' }}
+              >
+                Not a revision
+              </button>
+              <button
+                onClick={handleLinkRevision}
+                disabled={isLinkingRevision}
+                className="font-body text-paper bg-pencil text-sm px-3 py-1 border-2 border-pencil shadow-hardSm hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all disabled:opacity-50"
+                style={{ borderRadius: '255px 15px 225px 15px / 15px 225px 15px 255px' }}
+              >
+                Link as revision
+              </button>
+            </div>
           </div>
         )}
 
@@ -170,19 +250,36 @@ export function ResultPage() {
             <Card decoration="tack" rotate={1} className="w-full max-w-2xl mx-auto">
               <h2 className="font-heading text-2xl text-pencil mb-4">🔬 Scorecard</h2>
               <div className="flex flex-col gap-3">
-                {PHASE_LABELS.map(({ key, label, weight }) => (
-                  <div key={key} className="flex flex-col gap-1">
-                    <div className="flex justify-between items-center">
-                      <span className="font-body text-pencil text-sm">{label}</span>
-                      <span className="font-body text-muted text-xs">{weight}</span>
+                {PHASE_LABELS.map(({ key, label, weight }) => {
+                  const parentScore = result?.parent_scores?.[key]
+                  const delta = parentScore != null ? +(scores[key] - parentScore).toFixed(1) : null
+                  return (
+                    <div key={key} className="flex flex-col gap-1">
+                      <div className="flex justify-between items-center">
+                        <span className="font-body text-pencil text-sm">{label}</span>
+                        <div className="flex items-center gap-1">
+                          <span className="font-body text-muted text-xs">{weight}</span>
+                          {delta != null && delta > 0 && <span className="font-body text-sm" style={{ color: '#16a34a' }}>+{delta}</span>}
+                          {delta != null && delta < 0 && <span className="font-body text-sm" style={{ color: '#dc2626' }}>{delta}</span>}
+                          {delta != null && delta === 0 && <span className="font-body text-sm text-muted">±0.0</span>}
+                        </div>
+                      </div>
+                      <ScoreBar score={scores[key]} />
                     </div>
-                    <ScoreBar score={scores[key]} />
-                  </div>
-                ))}
+                  )
+                })}
               </div>
               <div className="mt-4 pt-4 border-t border-muted flex justify-between items-center">
                 <span className="font-heading text-pencil text-lg">Weighted Total</span>
-                <span className="font-heading text-pencil text-2xl">{scores.weighted.toFixed(1)}/5</span>
+                <div className="flex items-center gap-2">
+                  <span className="font-heading text-pencil text-2xl">{scores.weighted.toFixed(1)}/5</span>
+                  {result?.parent_scores?.weighted != null && (() => {
+                    const d = +(scores.weighted - result.parent_scores.weighted).toFixed(1)
+                    if (d > 0) return <span className="font-body text-base" style={{ color: '#16a34a' }}>+{d}</span>
+                    if (d < 0) return <span className="font-body text-base" style={{ color: '#dc2626' }}>{d}</span>
+                    return <span className="font-body text-base text-muted">±0.0</span>
+                  })()}
+                </div>
               </div>
             </Card>
           )}

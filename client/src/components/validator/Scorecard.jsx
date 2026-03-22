@@ -11,7 +11,19 @@ const PHASE_LABELS = [
   { key: 'phase4', label: '4. Pricing & Moat', weight: '10%' },
 ]
 
-export function Scorecard() {
+function ScoreDelta({ current, parent }) {
+  if (parent == null || current == null) return null
+  const delta = +(current - parent).toFixed(1)
+  if (delta > 0) {
+    return <span className="font-body text-sm ml-2" style={{ color: '#16a34a' }}>+{delta}</span>
+  }
+  if (delta < 0) {
+    return <span className="font-body text-sm ml-2" style={{ color: '#dc2626' }}>{delta}</span>
+  }
+  return <span className="font-body text-sm ml-2 text-muted">±0.0</span>
+}
+
+export function Scorecard({ parentScores }) {
   const result = useSelector(s => s.validator.result)
 
   if (!result) return null
@@ -34,7 +46,10 @@ export function Scorecard() {
           <div key={key} className="flex flex-col gap-1">
             <div className="flex justify-between items-center">
               <span className="font-body text-pencil text-sm">{label}</span>
-              <span className="font-body text-muted text-xs">{weight}</span>
+              <div className="flex items-center">
+                <span className="font-body text-muted text-xs">{weight}</span>
+                <ScoreDelta current={scores[key]} parent={parentScores?.[key]} />
+              </div>
             </div>
             <ScoreBar score={scores[key]} />
           </div>
@@ -42,7 +57,10 @@ export function Scorecard() {
       </div>
       <div className="mt-4 pt-4 border-t border-muted flex justify-between items-center">
         <span className="font-heading text-pencil text-lg">Weighted Total</span>
-        <span className="font-heading text-pencil text-2xl">{scores.weighted.toFixed(1)}/5</span>
+        <div className="flex items-center gap-2">
+          <span className="font-heading text-pencil text-2xl">{scores.weighted.toFixed(1)}/5</span>
+          <ScoreDelta current={scores.weighted} parent={parentScores?.weighted} />
+        </div>
       </div>
     </Card>
   )

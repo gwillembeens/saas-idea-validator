@@ -10,6 +10,7 @@ import { IdeaSummaryCard } from './IdeaSummaryCard'
 import { VerdictCard } from './VerdictCard'
 import { CommentaryCard } from './CommentaryCard'
 import { Scorecard } from './Scorecard'
+import { RevisionModal } from './RevisionModal'
 
 const markdownComponents = {
   h1: ({ children }) => (
@@ -116,6 +117,7 @@ export function ResultsPanel() {
         <Scorecard />
         <VerdictCard markdown={sections.verdict} />
         <CommentaryCard markdown={sections.commentary} />
+        <RevisionModal resultId={null} />
       </div>
     )
   }

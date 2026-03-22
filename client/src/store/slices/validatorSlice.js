@@ -8,6 +8,7 @@ const validatorSlice = createSlice({
     result: '',
     error: null,
     progress: 0,
+    revisionCandidate: null,  // { id, title, scores } | null
   },
   reducers: {
     setIdea: (state, action) => { state.idea = action.payload },
@@ -18,8 +19,10 @@ const validatorSlice = createSlice({
     setError: (state, action) => { state.status = 'error'; state.error = action.payload },
     reset: (state) => { state.idea = ''; state.status = 'idle'; state.result = ''; state.error = null; state.progress = 0 },
     setProgress: (state, action) => { state.progress = action.payload },
+    setRevisionCandidate: (state, action) => { state.revisionCandidate = action.payload },
+    clearRevisionCandidate: (state) => { state.revisionCandidate = null },
   },
 })
 
-export const { setIdea, startValidation, startStreaming, appendResult, finishValidation, setError, reset, setProgress } = validatorSlice.actions
+export const { setIdea, startValidation, startStreaming, appendResult, finishValidation, setError, reset, setProgress, setRevisionCandidate, clearRevisionCandidate } = validatorSlice.actions
 export default validatorSlice.reducer
