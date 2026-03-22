@@ -122,7 +122,7 @@ export async function listHistoryRoute(req, res) {
 
     if (sort === 'score') {
       query = `
-        SELECT id, title, idea_text, scores, created_at, niche
+        SELECT id, title, idea_text, scores, created_at, niche, is_public
         FROM saved_results
         WHERE user_id = $1 AND deleted_at IS NULL
         ORDER BY (scores->>'weighted')::float DESC, created_at DESC
@@ -132,7 +132,7 @@ export async function listHistoryRoute(req, res) {
     } else {
       // date (default)
       query = `
-        SELECT id, title, idea_text, scores, created_at, niche
+        SELECT id, title, idea_text, scores, created_at, niche, is_public
         FROM saved_results
         WHERE user_id = $1 AND deleted_at IS NULL
         ORDER BY created_at DESC
@@ -150,6 +150,7 @@ export async function listHistoryRoute(req, res) {
       scores: r.scores,
       created_at: r.created_at,
       niche: r.niche,
+      is_public: r.is_public,
     }))
 
     // Lazy backfill: fire niche generation for items still at default 'Other'
