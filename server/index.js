@@ -9,7 +9,7 @@ import {
   googleAuthRoute, googleCallbackRoute, githubAuthRoute, githubCallbackRoute,
 } from './routes/auth.js'
 import { saveResultRoute, listHistoryRoute, getResultRoute, updateTitleRoute, updateVisibilityRoute, deleteResultRoute, setParentRoute, dismissRevisionRoute } from './routes/history.js'
-import { leaderboardRoute } from './routes/leaderboard.js'
+import { leaderboardRoute, topPerNicheRoute } from './routes/leaderboard.js'
 import { profileRoute } from './routes/profile.js'
 import { getMeRoute, updateSettingsRoute } from './routes/settings.js'
 import { requireAuth } from './middleware/requireAuth.js'
@@ -57,7 +57,8 @@ app.delete('/api/history/:id', requireAuth, deleteResultRoute)
 app.patch('/api/history/:id/parent', requireAuth, setParentRoute)
 app.patch('/api/history/:id/dismiss-revision', requireAuth, dismissRevisionRoute)
 
-// Mount leaderboard route
+// Mount leaderboard routes
+app.get('/api/leaderboard/top-per-niche', topPerNicheRoute)
 app.get('/api/leaderboard', optionalAuth, leaderboardRoute)
 
 // Mount profile routes
