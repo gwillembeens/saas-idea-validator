@@ -61,7 +61,7 @@ See archive: `.planning/milestones/v1.0-ROADMAP.md`
 |-------|------|------|--------------|--------|
 | 15 | Tech Debt Resolution | Wire password reset frontend and write split-card E2E tests | Complete    | 2026-03-22 |
 | 16 | Niche Auto-Detection | Implement secondary Claude call to auto-detect 7-value niche taxonomy | NICHE-01, NICHE-02, NICHE-03 | Complete ✓ 2026-03-22 |
-| 17 | Publish & Privacy | Add public/private toggle and publishing controls | PUB-01, PUB-02, PUB-03 | Pending |
+| 17 | Publish & Privacy | Add public/private toggle and publishing controls | Complete    | 2026-03-22 |
 | 18 | Public Leaderboard | Build ranked leaderboard by score, filterable by niche | LEAD-01, LEAD-02, LEAD-03, LEAD-04, LEAD-05 | Pending |
 | 19 | Idea Versioning | Implement similarity detection and revision chains with score delta | VER-01, VER-02, VER-03, VER-04 | Pending |
 | 20 | User Profiles | Create public profile pages with stats, badges, and display names | PROF-01, PROF-02, PROF-03, PROF-04, PROF-05 | Pending |
