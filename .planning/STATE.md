@@ -14,9 +14,9 @@ progress:
 
 # Project State
 
-**Last updated:** 2026-03-22
+**Last updated:** 2026-03-23
 **Current phase:** 21
-**Status:** Executing Phase 21
+**Status:** Phase 21 Complete ✓
 
 ---
 
@@ -32,6 +32,8 @@ See: `.planning/PROJECT.md` (updated 2026-03-22)
 - Plan 20-02 (Frontend Wave 1A — Avatar Component, authSlice Update & Settings Page): COMPLETED ✓
 - Plan 20-03 (Frontend Wave 1B — Profile Page): COMPLETED ✓
 - Plan 20-04 (Frontend Wave 2 — NavBar Updates & Route Registration): COMPLETED ✓
+- Plan 21-01 (Backend — Top Score Per Niche Endpoint): COMPLETED ✓
+- Plan 21-02 (Frontend — Challenge Cards UI): COMPLETED ✓
 
 ---
 
@@ -219,10 +221,57 @@ Live revision modal appears after streaming completes. Saved result page shows r
 
 **Phase 19 is now COMPLETE.** Idea versioning fully implemented and verified.
 
+## 20-01 through 20-04 Completion Details
+
+**Status:** All completed ✓
+
+- Phase 20-01: Backend migrations, profile routes, settings routes
+- Phase 20-02: Frontend avatar component, authSlice updates, settings page
+- Phase 20-03: Frontend profile page
+- Phase 20-04: Frontend NavBar updates and route registration
+
+## 21-01 Completion Details
+
+**Plan:** Backend — Top Score Per Niche Endpoint
+**Tasks:** 4/4 completed
+**Commits:** 5 implementation/test commits + 1 summary commit
+**Status:** Complete ✓
+
+Key implementation:
+
+- `GET /api/leaderboard/top-per-niche` endpoint returns `{ topScores: [...] }`
+- Query finds MAX weighted score per niche from public, non-deleted results
+- All 8 VALID_NICHES always returned (missing niches have score: null, count: 0)
+- Response shape: `{ niche, score, count }` per entry
+- No pagination, single database query
+- Route registered before general `/api/leaderboard` route (order matters)
+- 6 comprehensive integration tests, all passing
+- Added `supertest` dependency for route testing
+- Dotenv imported in test file before app instantiation
+
+Backend test suite: 48/48 passing (6 new top-per-niche tests + 42 existing tests)
+
+## 21-02 Completion Details
+
+**Plan:** Frontend Challenge Cards UI
+**Tasks:** 6/6 completed (21-02-00 through 21-02-06)
+**Commits:** 6 implementation/test commits
+**Status:** Ready for manual smoke test
+
+Key changes:
+
+- useChallengeScores.js: Fetches `/api/leaderboard/top-per-niche`, manages loading/error state
+- ChallengeCard.jsx: Displays niche icon, score, labels, "Try This Niche" button
+- ChallengeSection.jsx: Renders 8 cards in horizontal scroll, loading skeleton, error message
+- LeaderboardPage.jsx: Integrated ChallengeSection between CTA banner and filter pills
+- All tests: 52/52 passing (14 new tests + 38 existing tests)
+
+Frontend challenge cards fully functional. Users can see top scores per niche and click to validate ideas in those niches.
+
 ## Next Phase
 
-**Phase 20:** User profiles with version chains, or next milestone feature
+**Phase 22:** Profile Analytics (expanded stats + activity heatmap)
 
 ---
 
-*State updated: 2026-03-22 — Phase 19 (19-01 + 19-02) complete, all requirements verified*
+*State updated: 2026-03-23 — Phase 21 complete ✓ (Plan 21-01 backend + Plan 21-02 frontend), all tests passing 52/52*

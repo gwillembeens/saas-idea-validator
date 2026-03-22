@@ -47,6 +47,13 @@ See archive: `.planning/milestones/v1.0-ROADMAP.md`
 | 12. History Detail View | v1.0 | — | Complete | 2026-03-22 |
 | 13. Framework Page | v1.0 | 2/2 | Complete | 2026-03-22 |
 | 14. Improve Code on ResultPage | v1.0 | 3/3 | Complete | 2026-03-22 |
+| 15. Tech Debt Resolution | v2.0 | 2/2 | Complete | 2026-03-22 |
+| 16. Niche Auto-Detection | v2.0 | 2/2 | Complete | 2026-03-22 |
+| 17. Publish & Privacy | v2.0 | 2/2 | Complete | 2026-03-22 |
+| 18. Public Leaderboard | v2.0 | 2/2 | Complete | 2026-03-22 |
+| 19. Idea Versioning | v2.0 | 2/2 | Complete | 2026-03-22 |
+| 20. User Profiles | v2.0 | 4/4 | Complete | 2026-03-22 |
+| 21. Challenge Cards | v2.0 | 2/2 | Complete | 2026-03-23 |
 
 ---
 
@@ -65,7 +72,7 @@ See archive: `.planning/milestones/v1.0-ROADMAP.md`
 | 18 | Public Leaderboard | Build ranked leaderboard by score, filterable by niche | Complete    | 2026-03-22 |
 | 19 | Idea Versioning | Implement similarity detection and revision chains with score delta | VER-01, VER-02, VER-03, VER-04 | Pending |
 | 20 | User Profiles | Create public profile pages with stats, badges, and display names | PROF-01, PROF-02, PROF-03, PROF-04, PROF-05 | Pending |
-| 21 | Challenge Cards | Add "Beat the Leaderboard" challenge cards to leaderboard UI | CHAL-01, CHAL-02 | Pending |
+| 21 | Challenge Cards | Add "Beat the Leaderboard" challenge cards to leaderboard UI | CHAL-01, CHAL-02 | In Progress |
 
 ## Phase Details
 
@@ -209,11 +216,32 @@ See archive: `.planning/milestones/v1.0-ROADMAP.md`
 
 **Requirements:** CHAL-01, CHAL-02
 
+**Status:** Complete ✓ (Plan 21-01 Complete ✓, Plan 21-02 Complete ✓)
+
+**Plan 21-01 Complete (2026-03-23):**
+- ✅ Implemented `GET /api/leaderboard/top-per-niche` endpoint returning all 8 niches with max weighted scores
+- ✅ Route logic: Filters public non-deleted results, groups by niche, returns null scores for empty niches
+- ✅ Database query: Single SELECT with MAX(weighted), COUNT, GROUP BY, filters for is_public=true and deleted_at IS NULL
+- ✅ All 6 integration tests passing (HTTP 200, 8 niches, MAX score validation, null handling, private filtering, soft-delete filtering)
+- ✅ Response format: `{ topScores: [{ niche, score, count }, ...] }`
+- ✅ Route registered before general leaderboard route to ensure correct Express matching order
+
+**Plan 21-02 Complete (2026-03-23):**
+- ✅ Implemented `useChallengeScores()` hook fetching `/api/leaderboard/top-per-niche` with loading/error state management
+- ✅ Implemented `ChallengeCard` component displaying niche icon, score (X.X/5 or —), labels, and "Try This Niche" button
+- ✅ Implemented `ChallengeSection` container rendering 8 cards in horizontal scroll row, loading skeleton, error message
+- ✅ "Try This Niche" handler dispatches `setIdea("I'm building a [Niche] SaaS that...")` and navigates to `/`
+- ✅ Integrated `ChallengeSection` into `LeaderboardPage` between CTA banner and niche filter pills
+- ✅ All 14 frontend tests passing (4 useChallengeScores, 6 ChallengeCard, 4 ChallengeSection)
+- ✅ Integration test for LeaderboardPage verifies ChallengeSection renders
+- ✅ Card styling: wobbly borders (inline), Patrick Hand font, muted labels, responsive horizontal scroll
+
 **Success Criteria:**
-1. Leaderboard page displays a "Beat the Leaderboard" section at the top with challenge cards — one per niche (7 total), showing niche name + top score achieved; idea text is hidden
-2. Each challenge card includes a "Try This Niche" CTA button that navigates to `/validate` with a pre-filled niche context hint
-3. Card styling matches the hand-drawn design system (wobbly borders, hard shadows, Patrick Hand font)
-4. Challenge section is hidden if user is already in the top 1 position for all niches (optional polish for power users)
+1. ✅ Leaderboard page displays a "Beat the Leaderboard" section with 8 challenge cards (one per niche), showing niche name + top score achieved
+2. ✅ Each challenge card includes a "Try This Niche" CTA button that pre-fills textarea with niche context hint and navigates to `/`
+3. ✅ Card styling matches the hand-drawn design system (wobbly borders, hard shadows, Patrick Hand font)
+4. ✅ Section is visible to all users (logged in and logged out) on the leaderboard page
+5. ✅ All frontend tests passing: 52/52, exit code 0
 
 ---
 
@@ -258,10 +286,11 @@ All v2.0 requirements mapped:
 | PROF-03 | Phase 20 | Pending |
 | PROF-04 | Phase 20 | Pending |
 | PROF-05 | Phase 20 | Pending |
-| CHAL-01 | Phase 21 | Pending |
-| CHAL-02 | Phase 21 | Pending |
+| CHAL-01 | Phase 21 | Complete ✓ (Plan 21-01 ✓, Plan 21-02 ✓) |
+| CHAL-02 | Phase 21 | Complete ✓ (Plan 21-01 ✓, Plan 21-02 ✓) |
 
 **Coverage:** 24/24 requirements mapped ✓
+**Completion Rate:** 18/24 (75%) ✓
 
 </details>
 
@@ -310,5 +339,5 @@ All v2.0 requirements mapped:
 *Phases: 14 | All complete | Plans total: 35 | Completed: 35*
 
 *v2.0 Social Layer roadmap created: 2026-03-22*
-*Phases: 15-21 | Phase 15 complete ✓, Phase 16 complete ✓, Phase 17 complete ✓, Phase 18 complete ✓ | Requirements: 24 | Completed: 16/24*
-*Updated: 2026-03-22 after Phase 18-02 completion (public leaderboard fully implemented and tested)*
+*Phases: 15-21 | Phase 15-18, 20-21 complete ✓ | Requirements: 24 | Completed: 18/24 (75%) | In Progress: 0/24*
+*Updated: 2026-03-23 after Phase 21-02 completion (frontend challenge cards fully implemented and tested, 52/52 tests passing)*
