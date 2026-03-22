@@ -8,6 +8,8 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
     "test:e2e": "cd .. && npx playwright test",
     "test:e2e:ui": "cd .. && npx playwright test --ui",
     "test:e2e:debug": "cd .. && npx playwright test --debug"
