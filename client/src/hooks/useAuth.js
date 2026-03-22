@@ -70,6 +70,25 @@ export function useAuth() {
     }
   }
 
+  async function resetPassword(token, newPassword) {
+    dispatch(setAuthLoading())
+    try {
+      const res = await fetch('/api/auth/reset-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token, password: newPassword }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || 'Password reset failed')
+      sessionStorage.removeItem('resetToken')
+      dispatch(setAuthError(null))
+      return { success: true, message: data.message || 'Password reset successful' }
+    } catch (e) {
+      dispatch(setAuthError(e.message))
+      return { success: false, message: e.message }
+    }
+  }
+
   async function refreshSession() {
     try {
       const res = await fetch('/api/auth/refresh', { method: 'POST', credentials: 'include' })
@@ -84,7 +103,7 @@ export function useAuth() {
 
   return {
     user, accessToken, status, error, showAuthModal, authModalMode, pendingValidation,
-    login, register, logout, forgotPassword, refreshSession,
+    login, register, logout, forgotPassword, resetPassword, refreshSession,
     openModal: (mode = 'login') => {
       dispatch(setAuthModalMode(mode))
       dispatch(setShowAuthModal(true))
