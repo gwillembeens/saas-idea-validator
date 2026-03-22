@@ -251,6 +251,48 @@ export async function updateTitleRoute(req, res) {
   }
 }
 
+// PATCH /api/history/:id/visibility — toggle public/private with ownership check
+export async function updateVisibilityRoute(req, res) {
+  if (!req.user) {
+    return res.status(401).json({ error: 'Unauthorized' })
+  }
+
+  const { id } = req.params
+  const { is_public } = req.body
+
+  if (typeof is_public !== 'boolean') {
+    return res.status(400).json({ error: 'is_public must be a boolean' })
+  }
+
+  try {
+    const { rows } = await pool.query(
+      'SELECT user_id FROM saved_results WHERE id = $1 AND deleted_at IS NULL',
+      [id]
+    )
+
+    if (!rows.length) {
+      return res.status(404).json({ error: 'Result not found' })
+    }
+
+    if (rows[0].user_id !== req.user.id) {
+      return res.status(403).json({ error: 'Forbidden' })
+    }
+
+    const updateRows = await pool.query(
+      'UPDATE saved_results SET is_public = $1, updated_at = now() WHERE id = $2 RETURNING id, is_public',
+      [is_public, id]
+    )
+
+    res.json({
+      id: updateRows.rows[0].id,
+      is_public: updateRows.rows[0].is_public,
+    })
+  } catch (err) {
+    console.error('Update visibility error:', err)
+    res.status(500).json({ error: 'Failed to update visibility' })
+  }
+}
+
 // DELETE /api/history/:id — soft delete with ownership check
 export async function deleteResultRoute(req, res) {
   if (!req.user) {
