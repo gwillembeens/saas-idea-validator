@@ -2,6 +2,8 @@ import { useSelector } from 'react-redux'
 import ReactMarkdown from 'react-markdown'
 import { Card } from '../ui/Card'
 import { parseSections } from '../../utils/parseSections'
+import { parseScores } from '../../utils/parseResult'
+import { getVerdict } from '../../constants/verdictColors'
 import { IdeaSummaryCard } from './IdeaSummaryCard'
 import { VerdictCard } from './VerdictCard'
 import { CommentaryCard } from './CommentaryCard'
@@ -81,8 +83,27 @@ export function ResultsPanel() {
       )
     }
 
+    const scores = parseScores(result)
+    const weighted = scores?.weighted || 0
+    const verdict = weighted > 0 ? getVerdict(weighted) : null
+
     return (
       <div className="w-full flex flex-col items-center gap-8 animate-fadeIn">
+        {verdict && (
+          <div
+            className="inline-flex items-center gap-2 px-6 py-3 font-heading text-pencil text-xl shadow-hard"
+            style={{
+              backgroundColor: verdict.bg,
+              border: `2px solid ${verdict.border}`,
+              borderRadius: '255px 15px 225px 15px / 15px 225px 15px 255px',
+              transform: 'rotate(-1deg)',
+            }}
+          >
+            <span>{verdict.emoji}</span>
+            <span>{verdict.label}</span>
+            <span className="font-body text-base opacity-60">({weighted}/5)</span>
+          </div>
+        )}
         <IdeaSummaryCard markdown={sections.ideaSummary} />
         <Scorecard />
         <VerdictCard markdown={sections.verdict} />

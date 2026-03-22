@@ -121,30 +121,24 @@ export function ResultPage() {
           onEditSave={handleTitleSave}
         />
 
-        {verdict && (
-          <div className="mb-8 flex justify-center">
-            <div
-              className="inline-flex items-center gap-2 px-6 py-3 font-heading text-pencil text-xl shadow-hard"
-              style={{
-                backgroundColor: verdict.bg,
-                border: `2px solid ${verdict.border}`,
-                borderRadius: '255px 15px 225px 15px / 15px 225px 15px 255px',
-                transform: 'rotate(-1deg)',
-              }}
-            >
-              <span>{verdict.emoji}</span>
-              <span>{verdict.label}</span>
-              <span className="font-body text-base opacity-60">({weighted}/5)</span>
-            </div>
-          </div>
-        )}
-
-        <div className="w-full max-w-2xl mb-12 flex flex-col gap-8">
-          {sections?.ideaSummary && <IdeaSummaryCard markdown={sections.ideaSummary} />}
-
-          {/* Niche pill — only when niche is present (D-11, D-13) */}
-          {result?.niche && (
-            <div className="flex justify-center">
+        {(verdict || result?.niche) && (
+          <div className="mb-8 flex flex-wrap justify-center items-center gap-3">
+            {verdict && (
+              <div
+                className="inline-flex items-center gap-2 px-6 py-3 font-heading text-pencil text-xl shadow-hard"
+                style={{
+                  backgroundColor: verdict.bg,
+                  border: `2px solid ${verdict.border}`,
+                  borderRadius: '255px 15px 225px 15px / 15px 225px 15px 255px',
+                  transform: 'rotate(-1deg)',
+                }}
+              >
+                <span>{verdict.emoji}</span>
+                <span>{verdict.label}</span>
+                <span className="font-body text-base opacity-60">({weighted}/5)</span>
+              </div>
+            )}
+            {result?.niche && (
               <div
                 className="inline-flex items-center px-4 py-2 font-body text-xs text-pencil"
                 style={{
@@ -155,8 +149,12 @@ export function ResultPage() {
               >
                 {result.niche}
               </div>
-            </div>
-          )}
+            )}
+          </div>
+        )}
+
+        <div className="w-full max-w-2xl mb-12 flex flex-col gap-8">
+          {sections?.ideaSummary && <IdeaSummaryCard markdown={sections.ideaSummary} />}
 
           {scores && (
             <Card decoration="tack" rotate={1} className="w-full max-w-2xl mx-auto">

@@ -13,7 +13,7 @@ export function ActionButtons({ result, isDeleting, onRevalidate, onDelete }) {
   }, [result?.title])
 
   return (
-    <div className="w-full max-w-2xl flex flex-wrap gap-4 justify-center mb-12">
+    <div className="flex flex-nowrap gap-4 justify-center items-center mb-12 overflow-x-auto px-4">
       <Button variant="primary" onClick={onRevalidate}>
         <RefreshCw size={18} className="mr-2 inline" strokeWidth={2.5} />
         Re-validate This Idea
@@ -21,21 +21,21 @@ export function ActionButtons({ result, isDeleting, onRevalidate, onDelete }) {
 
       <button
         onClick={() => window.open(shareUrls.twitter, '_blank')}
-        className="px-4 py-3 font-body text-lg bg-blue text-white hover:opacity-80 transition"
+        className="flex-shrink-0 px-4 py-3 font-body text-lg bg-blue text-white hover:opacity-80 transition whitespace-nowrap"
         style={{ borderRadius: '255px 15px 225px 15px / 15px 225px 15px 255px' }}
       >
         Share on X
       </button>
       <button
         onClick={() => window.open(shareUrls.linkedin, '_blank')}
-        className="px-4 py-3 font-body text-lg bg-blue text-white hover:opacity-80 transition"
+        className="flex-shrink-0 px-4 py-3 font-body text-lg bg-blue text-white hover:opacity-80 transition whitespace-nowrap"
         style={{ borderRadius: '255px 15px 225px 15px / 15px 225px 15px 255px' }}
       >
         Share on LinkedIn
       </button>
       <button
         onClick={() => window.open(shareUrls.whatsapp, '_blank')}
-        className="px-4 py-3 font-body text-lg bg-blue text-white hover:opacity-80 transition"
+        className="flex-shrink-0 px-4 py-3 font-body text-lg bg-blue text-white hover:opacity-80 transition whitespace-nowrap"
         style={{ borderRadius: '255px 15px 225px 15px / 15px 225px 15px 255px' }}
       >
         Share on WhatsApp
@@ -45,7 +45,7 @@ export function ActionButtons({ result, isDeleting, onRevalidate, onDelete }) {
         <button
           onClick={onDelete}
           disabled={isDeleting}
-          className="px-4 py-3 font-body text-lg text-accent hover:opacity-70 transition flex items-center gap-2"
+          className="flex-shrink-0 px-4 py-3 font-body text-lg text-accent hover:opacity-70 transition flex items-center gap-2 whitespace-nowrap"
         >
           <Trash2 size={18} strokeWidth={2.5} />
           {isDeleting ? 'Deleting...' : 'Delete'}
