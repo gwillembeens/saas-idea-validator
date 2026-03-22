@@ -10,6 +10,8 @@ import {
 } from './routes/auth.js'
 import { saveResultRoute, listHistoryRoute, getResultRoute, updateTitleRoute, updateVisibilityRoute, deleteResultRoute, setParentRoute, dismissRevisionRoute } from './routes/history.js'
 import { leaderboardRoute } from './routes/leaderboard.js'
+import { profileRoute } from './routes/profile.js'
+import { getMeRoute, updateSettingsRoute } from './routes/settings.js'
 import { requireAuth } from './middleware/requireAuth.js'
 import { optionalAuth } from './middleware/optionalAuth.js'
 import { runMigrations } from './db/init.js'
@@ -57,6 +59,11 @@ app.patch('/api/history/:id/dismiss-revision', requireAuth, dismissRevisionRoute
 
 // Mount leaderboard route
 app.get('/api/leaderboard', optionalAuth, leaderboardRoute)
+
+// Mount profile routes
+app.get('/api/profile/:username', profileRoute)
+app.get('/api/me', requireAuth, getMeRoute)
+app.patch('/api/me/settings', requireAuth, updateSettingsRoute)
 
 runMigrations().catch(err => {
   console.error('Migration failed:', err)

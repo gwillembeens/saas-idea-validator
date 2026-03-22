@@ -32,5 +32,10 @@ export async function runMigrations() {
     ALTER TABLE saved_results
       ADD COLUMN IF NOT EXISTS suggested_parent_id INTEGER REFERENCES saved_results(id) ON DELETE SET NULL
   `)
+  // Phase 20: user profiles — display name
+  await pool.query(`
+    ALTER TABLE users
+      ADD COLUMN IF NOT EXISTS display_name VARCHAR(100)
+  `)
   console.log('DB migrations applied')
 }
