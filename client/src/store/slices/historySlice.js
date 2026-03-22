@@ -43,6 +43,13 @@ const historySlice = createSlice({
         item.title = title
       }
     },
+    updateItemVisibility: (state, action) => {
+      const { id, is_public } = action.payload
+      const item = state.items.find(i => i.id === id)
+      if (item) {
+        item.is_public = is_public
+      }
+    },
     setError: (state, action) => {
       state.error = action.payload
     },
@@ -53,7 +60,7 @@ const historySlice = createSlice({
 })
 
 export const {
-  setItems, appendItems, setStatus, setSort, setCursor, setHasMore, removeItem, updateItemTitle, setError, setSearchTerm,
+  setItems, appendItems, setStatus, setSort, setCursor, setHasMore, removeItem, updateItemTitle, updateItemVisibility, setError, setSearchTerm,
 } = historySlice.actions
 
 export const selectFilteredHistory = createSelector(
