@@ -6,7 +6,6 @@ import { fetchWithAuth } from '../utils/fetchWithAuth'
 import { Card } from '../components/ui/Card'
 import { Button } from '../components/ui/Button'
 import { AppShell } from '../components/layout/AppShell'
-import { NavBar } from '../components/layout/NavBar'
 import { Lock } from 'lucide-react'
 
 export function SettingsPage() {
@@ -80,7 +79,6 @@ export function SettingsPage() {
 
   return (
     <AppShell>
-      <NavBar />
       <main className="max-w-xl mx-auto px-6 py-12">
         <h1 className="font-heading text-3xl md:text-4xl text-pencil mb-8" style={{ transform: 'rotate(-1deg)' }}>
           Settings

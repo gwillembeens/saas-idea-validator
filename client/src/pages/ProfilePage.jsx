@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { AppShell } from '../components/layout/AppShell'
-import { NavBar } from '../components/layout/NavBar'
 import { Avatar } from '../components/ui/Avatar'
 import { NichePill } from '../components/ui/NichePill'
 import { ProfileValidationCard } from '../components/profile/ProfileValidationCard'
@@ -49,7 +48,6 @@ export function ProfilePage() {
 
   return (
     <AppShell>
-      <NavBar />
       <main className="max-w-4xl mx-auto px-6 py-12">
 
         {loading && (
