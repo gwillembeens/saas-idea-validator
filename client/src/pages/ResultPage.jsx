@@ -38,6 +38,7 @@ export function ResultPage() {
   const [isEditingTitle, setIsEditingTitle] = useState(false)
   const [editingTitle, setEditingTitle] = useState('')
   const [isSavingTitle, setIsSavingTitle] = useState(false)
+  const [isTogglingVisibility, setIsTogglingVisibility] = useState(false)
 
   const handleTitleSave = async (newTitle) => {
     if (!newTitle || newTitle.trim() === result.title) {
@@ -81,6 +82,24 @@ export function ResultPage() {
     }
   }
 
+  const handleToggleVisibility = async () => {
+    if (!result) return
+    setIsTogglingVisibility(true)
+    try {
+      const res = await fetchWithAuth(`/api/history/${id}/visibility`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ is_public: !result.is_public }),
+      })
+      await refetch()
+    } catch (err) {
+      console.error(err)
+      await refetch()
+    } finally {
+      setIsTogglingVisibility(false)
+    }
+  }
+
   if (loading) {
     return (
       <AppShell>
@@ -107,6 +126,7 @@ export function ResultPage() {
   const sections = parseSections(result?.markdown_result)
   const weighted = scores?.weighted || 0
   const verdict = weighted > 0 ? getVerdict(weighted) : null
+  const niche = result?.niche
 
   return (
     <AppShell>
@@ -122,7 +142,7 @@ export function ResultPage() {
           onEditSave={handleTitleSave}
         />
 
-        {(verdict || result?.niche) && (
+        {(verdict || niche) && (
           <div className="mb-8 flex flex-wrap justify-center items-center gap-3">
             {verdict && (
               <div
@@ -139,7 +159,7 @@ export function ResultPage() {
                 <span className="font-body text-base opacity-60">({weighted}/5)</span>
               </div>
             )}
-            <NichePill niche={result?.niche} />
+            <NichePill niche={niche} />
           </div>
         )}
 
@@ -175,6 +195,9 @@ export function ResultPage() {
           isDeleting={isDeleting}
           onRevalidate={handleRevalidate}
           onDelete={() => setShowDeleteConfirm(true)}
+          isPublic={result?.is_public}
+          onToggleVisibility={handleToggleVisibility}
+          isTogglingVisibility={isTogglingVisibility}
         />
 
         {!result?.isOwner && !user && (
