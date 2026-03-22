@@ -44,7 +44,7 @@ export function useLeaderboard() {
   }, [currentNiche, fetchPage])
 
   const loadMore = useCallback(async () => {
-    if (loading || !hasMore) return
+    if (loading || !hasMore || error) return
     const nextPage = page + 1
     const result = await fetchPage(currentNiche, nextPage)
     if (result) {
