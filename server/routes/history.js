@@ -49,6 +49,11 @@ export async function saveResultRoute(req, res) {
       console.error('Title generation failed:', err)
     })
 
+    // Fire async niche detection via Claude (non-blocking)
+    generateNiche(result.id, idea_text, markdown_result, req.user.id).catch(err => {
+      console.error('Niche generation failed:', err)
+    })
+
     res.status(201).json({
       id: result.id,
       title: result.title,
