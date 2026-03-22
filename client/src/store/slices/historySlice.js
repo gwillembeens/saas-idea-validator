@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, createSelector } from '@reduxjs/toolkit'
 
 const historySlice = createSlice({
   name: 'history',
@@ -9,6 +9,7 @@ const historySlice = createSlice({
     sort: 'date', // date | score
     cursor: null,
     error: null,
+    searchTerm: '',
   },
   reducers: {
     setItems: (state, action) => {
@@ -45,10 +46,27 @@ const historySlice = createSlice({
     setError: (state, action) => {
       state.error = action.payload
     },
+    setSearchTerm: (state, action) => {
+      state.searchTerm = action.payload
+    },
   },
 })
 
 export const {
-  setItems, appendItems, setStatus, setSort, setCursor, setHasMore, removeItem, updateItemTitle, setError,
+  setItems, appendItems, setStatus, setSort, setCursor, setHasMore, removeItem, updateItemTitle, setError, setSearchTerm,
 } = historySlice.actions
+
+export const selectFilteredHistory = createSelector(
+  (s) => s.history.items,
+  (s) => s.history.searchTerm,
+  (items, searchTerm) => {
+    if (!searchTerm) return items
+    const lower = searchTerm.toLowerCase()
+    return items.filter(item =>
+      (item.title || '').toLowerCase().includes(lower) ||
+      (item.idea_text || item.idea || '').toLowerCase().includes(lower)
+    )
+  }
+)
+
 export default historySlice.reducer
