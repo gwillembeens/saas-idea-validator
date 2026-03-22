@@ -62,3 +62,7 @@ CREATE INDEX IF NOT EXISTS saved_results_created_at_idx ON saved_results(created
 -- Phase 16: niche auto-detection
 ALTER TABLE IF EXISTS saved_results
   ADD COLUMN IF NOT EXISTS niche VARCHAR(50) NOT NULL DEFAULT 'Other';
+
+-- Phase 17: public/private visibility
+ALTER TABLE IF EXISTS saved_results
+  ADD COLUMN IF NOT EXISTS is_public BOOLEAN NOT NULL DEFAULT true;
