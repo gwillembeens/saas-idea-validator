@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux'
 import { useAuth } from '../../hooks/useAuth'
 import { Button } from '../ui/Button'
 import { SearchBar } from './SearchBar'
+import { Avatar } from '../ui/Avatar'
 import { reset } from '../../store/slices/validatorSlice'
 
 export function NavBar() {
@@ -50,9 +51,24 @@ export function NavBar() {
               >
                 History
               </Link>
+              <Link
+                to="/settings"
+                className="font-body text-lg text-blue hover:text-accent transition-colors"
+              >
+                Settings
+              </Link>
               <Button variant="secondary" onClick={logout}>
                 Sign Out
               </Button>
+              {user.username && (
+                <Link to={`/profile/${user.username}`} aria-label="Your profile">
+                  <Avatar
+                    displayName={user.displayName}
+                    username={user.username}
+                    size="sm"
+                  />
+                </Link>
+              )}
             </>
           ) : (
             <Button variant="secondary" onClick={() => openModal('login')}>

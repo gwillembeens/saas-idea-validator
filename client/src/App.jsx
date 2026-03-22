@@ -6,6 +6,8 @@ import { HistoryPage } from './pages/HistoryPage'
 import { ResultPage } from './pages/ResultPage'
 import { FrameworkPage } from './pages/FrameworkPage'
 import { LeaderboardPage } from './pages/LeaderboardPage'
+import { ProfilePage } from './pages/ProfilePage'
+import { SettingsPage } from './pages/SettingsPage'
 import { useAuth } from './hooks/useAuth'
 import { setUser, setAuthModalMode, setShowAuthModal } from './store/slices/authSlice'
 
@@ -62,6 +64,8 @@ export default function App() {
       <Route path="/history/:id" element={<ResultPage />} />
       <Route path="/framework" element={<FrameworkPage />} />
       <Route path="/leaderboard" element={<LeaderboardPage />} />
+      <Route path="/profile/:username" element={<ProfilePage />} />
+      <Route path="/settings" element={<SettingsPage />} />
     </Routes>
   )
 }
