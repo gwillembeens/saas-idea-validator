@@ -1,15 +1,15 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.0
-milestone_name: milestone
+milestone: v2.0
+milestone_name: Social Layer
 current_phase: 16
 status: executing
-last_updated: "2026-03-22T17:08:09.005Z"
+last_updated: "2026-03-22T17:45:00.000Z"
 progress:
   total_phases: 2
   completed_phases: 1
   total_plans: 4
-  completed_plans: 2
+  completed_plans: 3
 ---
 
 # Project State
@@ -74,10 +74,27 @@ Frontend E2E test suite now validates all critical UI components across responsi
 
 ---
 
+## 16-01 Completion Details
+
+**Plan:** Backend — Niche Detection
+**Tasks:** 7/7 completed (Wave 0: 1, Wave 1: 3, Wave 2: 3)
+**Commits:** 7 implementation commits
+**Status:** Ready for Phase 16-02 (client-side display)
+
+Key implementation:
+
+- `parseNiche()` utility: case-insensitive matching against 7 valid niches, defaults to 'Other'
+- `generateNiche()` async function: fires alongside `generateAITitle` after INSERT, max_tokens=10
+- DB migration: adds `niche VARCHAR(50) DEFAULT 'Other'` to `saved_results`
+- API routes: niche field added to listHistoryRoute and getResultRoute responses
+- All tests passing: 13/13, including 5 unit tests for parseNiche
+
+Backend infrastructure now complete. Phase 16-02 will add client-side UI (NichePill component, standalone niche row on result page).
+
 ## Next Phase
 
-**Phase 16:** Social Layer v2.0 — Build initial feature set for founder collaboration and idea sharing.
+**Phase 16-02:** Client-side — Display niche pills on result pages and history cards.
 
 ---
 
-*State updated: 2026-03-22 — Phase 15 complete, all tech debt resolved for v1.0*
+*State updated: 2026-03-22 — Phase 16-01 complete, backend niche detection ready*
