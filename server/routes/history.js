@@ -79,6 +79,29 @@ async function generateAITitle(resultId, ideaText, userId) {
   }
 }
 
+async function generateNiche(resultId, ideaText, markdownResult, userId) {
+  const client = new Anthropic()
+  try {
+    const response = await client.messages.create({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 10,
+      system: 'You are a niche classifier for startup validation. Categorize the idea into exactly one of these 7 niches: Fintech, Logistics, Creator Economy, PropTech, HealthTech, EdTech, Other. Return ONLY the niche name. No preamble, no explanation.',
+      messages: [{
+        role: 'user',
+        content: `Idea: ${ideaText}\n\nResult summary:\n${markdownResult.substring(0, 2000)}\n\nReturn the niche name only:`
+      }],
+    })
+    const niche = parseNiche(response.content[0].text)
+    await pool.query(
+      'UPDATE saved_results SET niche = $1, updated_at = now() WHERE id = $2 AND user_id = $3',
+      [niche, resultId, userId]
+    )
+  } catch (err) {
+    console.error('generateNiche error:', err)
+    // Silent failure — niche remains column DEFAULT 'Other'
+  }
+}
+
 // GET /api/history — list user's saved results
 export async function listHistoryRoute(req, res) {
   if (!req.user) {
