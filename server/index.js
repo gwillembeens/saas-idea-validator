@@ -71,6 +71,12 @@ runMigrations().catch(err => {
   process.exit(1)
 })
 
-app.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}`)
-})
+// Export app for testing
+export { app }
+
+// Start server if not in test mode
+if (import.meta.url === `file://${process.argv[1]}`) {
+  app.listen(PORT, () => {
+    console.log(`Server listening on port ${PORT}`)
+  })
+}
