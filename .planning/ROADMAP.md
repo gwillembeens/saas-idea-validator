@@ -276,6 +276,16 @@ Plans:
 Plans:
 - [ ] TBD (run /gsd:plan-phase 12 to break down)
 
+### Phase 13: Framework Page
+
+**Goal:** Dedicated `/framework` route showing the full 30-step validation framework grouped by phase, linked from the navbar and home page hero.
+**Requirements**: TBD
+**Depends on:** Phase 12
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (run /gsd:plan-phase 13 to break down)
+
 ---
 
 *Roadmap updated: 2026-03-21*

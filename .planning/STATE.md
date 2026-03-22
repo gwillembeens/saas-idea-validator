@@ -2,20 +2,20 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-current_phase: 11
-status: unknown
-last_updated: "2026-03-22T00:22:06.432Z"
+current_phase: 13
+status: complete
+last_updated: "2026-03-22"
 progress:
-  total_phases: 11
-  completed_phases: 10
-  total_plans: 27
-  completed_plans: 23
+  total_phases: 13
+  completed_phases: 13
+  total_plans: 31
+  completed_plans: 31
 ---
 
 # Project State
 
 **Last updated:** 2026-03-22
-**Current phase:** 11
+**Current phase:** 13
 **Last completed plan:** 10-04
 **All plans complete — milestone v1.0 done**
 
@@ -27,7 +27,7 @@ See: `.planning/PROJECT.md` (updated 2026-03-21)
 
 **Core value:** A founder pastes an idea and gets an honest, investor-grade analysis in under a minute, streamed live with a visual scorecard.
 
-**Current focus:** Phase 11 — improve-ui-across-app
+**Current focus:** Phase 13 — framework-page
 
 ---
 
@@ -45,6 +45,9 @@ See: `.planning/PROJECT.md` (updated 2026-03-21)
 | 8 | Results Layout Redesign — Option A Split Cards | ✓ Complete (2026-03-21) | 08-01, 08-02 |
 | 9 | Authentication System — User Registration & Login | ✓ Complete (2026-03-21) | 09-01, 09-02, 09-03 |
 | 10 | Saved Ideas — Persist & Browse Validation History | ✓ Complete (2026-03-22) | 10-01, 10-02, 10-03, 10-04 |
+| 11 | UI Polish | ✓ Complete (2026-03-22) | — |
+| 12 | History Detail View | ✓ Complete (2026-03-22) | — |
+| 13 | Framework Page | ✓ Complete (2026-03-22) | 13-01, 13-02 |
 
 ---
 
@@ -69,6 +72,7 @@ See: `.planning/PROJECT.md` (updated 2026-03-21)
 - Phase 10 added: Saved ideas — persist and browse validation history
 - Phase 11 added: improve UI across app
 - Phase 12 added: History Detail View — clicking a history row opens full validation result
+- Phase 13 added: Framework Page — dedicated /framework route with 30-step framework, linked from navbar and home hero
 - Plan 08-01 complete: `parseSections` utility and three card components created
 - Phase 09 complete: Full auth system — email/password, OAuth (Google + GitHub), JWT rotation, auth-gated Validate action, AuthModal, SignInButton
 - Note: Password reset UI (reset mode in AuthModal) is a minor gap — backend complete, frontend form not wired
