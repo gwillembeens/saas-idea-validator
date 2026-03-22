@@ -1,15 +1,15 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.0
-milestone_name: milestone
+milestone: v2.0
+milestone_name: Social Layer
 current_phase: 18
-status: executing
-last_updated: "2026-03-22T20:25:00.000Z"
+status: complete
+last_updated: "2026-03-22T21:35:00.000Z"
 progress:
   total_phases: 4
-  completed_phases: 3
+  completed_phases: 4
   total_plans: 9
-  completed_plans: 8
+  completed_plans: 9
 ---
 
 # Project State
@@ -152,10 +152,29 @@ Key implementation:
 
 Coverage: LEAD-01 ✓ LEAD-02 ✓ LEAD-03 ✓ LEAD-04 ✓ LEAD-05 ✓
 
+## 18-02 Completion Details
+
+**Plan:** Frontend — Leaderboard UI
+**Tasks:** 8/8 completed
+**Commits:** 9 implementation + summary commits
+**Status:** Complete ✓
+
+Key implementation:
+
+- `useLeaderboard()` hook: Fetches from `/api/leaderboard?page=N&niche=...`, manages state, provides `setNiche()` and `loadMore()`
+- `LeaderboardCard` component: Renders idea preview, author (link if username set), niche pill, score badge, "You" badge
+- `LeaderboardPage`: Page with title, CTA banner (unauth only), niche filter pills, card list, infinite scroll, loading skeleton, empty state
+- `NavBar`: Added always-visible Leaderboard link (logged out: `Leaderboard | Framework | Sign In`; logged in: `Leaderboard | Framework | History | Sign Out`)
+- `App.jsx`: Added `/leaderboard` route
+- Tests: 31/31 passing (9 LeaderboardCard + 6 LeaderboardPage + 4 useLeaderboard + 12 other tests)
+- Test setup: Added `vitest` config with IntersectionObserver mock, imported @testing-library/jest-dom matchers
+
+All 8 tasks executed per 18-02-PLAN.md. Wave 0 (18-01) + Wave 1 (18-02) = Phase 18 complete.
+
 ## Next Phase
 
-**Phase 18-02:** Frontend — Leaderboard Page (with pagination, niche filter, score visualization)
+**Phase 18-03 or Phase 19:** User profiles, challenge cards, or next milestone feature
 
 ---
 
-*State updated: 2026-03-22 — 18-01 complete, SUMMARY.md created*
+*State updated: 2026-03-22 — Phase 18 (18-01 + 18-02) complete, SUMMARY.md files created*
