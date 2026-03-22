@@ -1,6 +1,20 @@
 import Anthropic from '@anthropic-ai/sdk'
 import { pool } from '../db/init.js'
 
+const VALID_NICHES = ['Fintech', 'Logistics', 'Creator Economy', 'PropTech', 'HealthTech', 'EdTech', 'Other']
+
+export function parseNiche(raw) {
+  if (!raw || !raw.trim()) return 'Other'
+  let parsed = raw.trim().split('\n')[0].trim()
+  // Special-case two-word niche
+  if (parsed.toLowerCase() === 'creator economy') return 'Creator Economy'
+  // Try exact match first (case-insensitive)
+  for (const niche of VALID_NICHES) {
+    if (parsed.toLowerCase() === niche.toLowerCase()) return niche
+  }
+  return 'Other'
+}
+
 // POST /api/history — auto-save validation result
 export async function saveResultRoute(req, res) {
   if (!req.user) {
