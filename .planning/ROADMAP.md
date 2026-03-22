@@ -62,7 +62,7 @@ See archive: `.planning/milestones/v1.0-ROADMAP.md`
 | 15 | Tech Debt Resolution | Wire password reset frontend and write split-card E2E tests | Complete    | 2026-03-22 |
 | 16 | Niche Auto-Detection | Implement secondary Claude call to auto-detect 7-value niche taxonomy | NICHE-01, NICHE-02, NICHE-03 | Complete ✓ 2026-03-22 |
 | 17 | Publish & Privacy | Add public/private toggle and publishing controls | Complete    | 2026-03-22 |
-| 18 | Public Leaderboard | Build ranked leaderboard by score, filterable by niche | LEAD-01, LEAD-02, LEAD-03, LEAD-04, LEAD-05 | In Progress (18-01 ✓, 18-02 pending) |
+| 18 | Public Leaderboard | Build ranked leaderboard by score, filterable by niche | LEAD-01, LEAD-02, LEAD-03, LEAD-04, LEAD-05 | Complete ✓ (18-01 ✓, 18-02 ✓) |
 | 19 | Idea Versioning | Implement similarity detection and revision chains with score delta | VER-01, VER-02, VER-03, VER-04 | Pending |
 | 20 | User Profiles | Create public profile pages with stats, badges, and display names | PROF-01, PROF-02, PROF-03, PROF-04, PROF-05 | Pending |
 | 21 | Challenge Cards | Add "Beat the Leaderboard" challenge cards to leaderboard UI | CHAL-01, CHAL-02 | Pending |
@@ -147,7 +147,7 @@ See archive: `.planning/milestones/v1.0-ROADMAP.md`
 
 **Requirements:** LEAD-01, LEAD-02, LEAD-03, LEAD-04, LEAD-05
 
-**Status:** In Progress (Plan 18-01 Complete ✓, Plan 18-02 Pending)
+**Status:** Complete ✓ (Plan 18-01 Complete ✓, Plan 18-02 Complete ✓)
 
 **Plan 18-01 Complete (2026-03-22):**
 - ✅ DB migration: `username VARCHAR(50) UNIQUE` column added to `users` table (backward compatible)
@@ -159,12 +159,21 @@ See archive: `.planning/milestones/v1.0-ROADMAP.md`
 - ✅ All tests passing: 7/7 (VALID_NICHES: 3, truncateIdeaText: 4)
 - ✅ Requirements coverage: LEAD-01 ✓ LEAD-02 ✓ LEAD-03 ✓ LEAD-04 ✓ LEAD-05 ✓
 
+**Plan 18-02 Complete (2026-03-22):**
+- ✅ Created `useLeaderboard()` hook with infinite scroll, niche filtering, and URL param state management
+- ✅ Created `LeaderboardCard` component rendering idea preview, score badge, author link, niche pill, "You" badge
+- ✅ Created `LeaderboardPage` with title, CTA banner (unauthenticated), niche filter pill row, card list, infinite scroll
+- ✅ Updated `NavBar` with always-visible Leaderboard link (logged out: Leaderboard | Framework | Sign In; logged in: Leaderboard | Framework | History | Sign Out)
+- ✅ Added `/leaderboard` route in App.jsx
+- ✅ Test suite: 31/31 tests passing (9 LeaderboardCard, 6 LeaderboardPage, 4 useLeaderboard, 12 other)
+- ✅ Requirements coverage: LEAD-01 ✓ LEAD-02 ✓ LEAD-03 ✓ LEAD-04 ✓ LEAD-05 ✓
+
 **Success Criteria:**
-1. `/leaderboard` route renders a page with all public validations sorted by weighted score descending
-2. Niche filter dropdown allows user to show only validations tagged with a specific niche; "All" shows unfiltered list
-3. Each leaderboard entry card displays: idea preview (~150 chars truncated), weighted score, author name, author avatar, and niche tag
-4. Clicking an entry card navigates to the full public result page (`/results/:id`)
-5. Clicking an author name/avatar navigates to the user's profile page (`/profile/:username`)
+1. ✅ `/leaderboard` route renders a page with all public validations sorted by weighted score descending (LEAD-01)
+2. ✅ Niche filter pill row allows user to show only validations tagged with a specific niche; "All" shows unfiltered list (LEAD-02)
+3. ✅ Each leaderboard entry card displays: idea preview (~150 chars truncated), weighted score, author name (link if set), and niche tag (LEAD-03)
+4. ✅ Clicking an entry card navigates to the full public result page (`/history/:id`) (LEAD-04)
+5. ✅ Clicking an author name navigates to the user's profile page (`/profile/:username`); Anonymous entries have no link (LEAD-05)
 
 ---
 
@@ -222,11 +231,11 @@ All v2.0 requirements mapped:
 | PUB-01 | Phase 17 | Pending |
 | PUB-02 | Phase 17 | Pending |
 | PUB-03 | Phase 17 | Pending |
-| LEAD-01 | Phase 18 | Complete ✓ (Plan 18-01) |
-| LEAD-02 | Phase 18 | Complete ✓ (Plan 18-01) |
-| LEAD-03 | Phase 18 | Complete ✓ (Plan 18-01) |
-| LEAD-04 | Phase 18 | Complete ✓ (Plan 18-01) |
-| LEAD-05 | Phase 18 | Complete ✓ (Plan 18-01) |
+| LEAD-01 | Phase 18 | Complete ✓ (Plan 18-01, Plan 18-02) |
+| LEAD-02 | Phase 18 | Complete ✓ (Plan 18-01, Plan 18-02) |
+| LEAD-03 | Phase 18 | Complete ✓ (Plan 18-01, Plan 18-02) |
+| LEAD-04 | Phase 18 | Complete ✓ (Plan 18-01, Plan 18-02) |
+| LEAD-05 | Phase 18 | Complete ✓ (Plan 18-01, Plan 18-02) |
 | VER-01 | Phase 19 | Pending |
 | VER-02 | Phase 19 | Pending |
 | VER-03 | Phase 19 | Pending |
@@ -249,5 +258,5 @@ All v2.0 requirements mapped:
 *Phases: 14 | All complete | Plans total: 35 | Completed: 35*
 
 *v2.0 Social Layer roadmap created: 2026-03-22*
-*Phases: 15-21 | Phase 15 complete ✓, Phase 16 complete ✓, Phase 17 complete ✓, Phase 18-01 complete ✓ | Requirements: 24 | Completed: 11/24*
-*Updated: 2026-03-22 after Phase 18-01 completion (backend leaderboard route ready for frontend integration)*
+*Phases: 15-21 | Phase 15 complete ✓, Phase 16 complete ✓, Phase 17 complete ✓, Phase 18 complete ✓ | Requirements: 24 | Completed: 16/24*
+*Updated: 2026-03-22 after Phase 18-02 completion (public leaderboard fully implemented and tested)*
