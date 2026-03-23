@@ -8,7 +8,7 @@ export default function ChallengeCard({ niche, topScore, onTryNiche }) {
   const hasScore = topScore !== null && topScore !== undefined
 
   return (
-    <Card decoration="none" rotate={-1} className="w-40 flex-shrink-0 flex flex-col items-center text-center p-4 gap-2">
+    <Card decoration="none" rotate={-1} className="flex flex-col items-center text-center p-4 gap-2">
       {/* Niche icon + name */}
       <div className="flex flex-col items-center gap-1">
         <Icon size={24} strokeWidth={2.5} className="text-pencil" />

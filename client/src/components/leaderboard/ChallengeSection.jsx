@@ -6,11 +6,11 @@ import ChallengeCard from './ChallengeCard'
 
 function LoadingSkeleton() {
   return (
-    <div className="flex gap-3 overflow-x-auto pb-2">
-      {Array.from({ length: 3 }).map((_, i) => (
+    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      {Array.from({ length: 8 }).map((_, i) => (
         <div
           key={i}
-          className="w-40 flex-shrink-0 h-48 bg-muted animate-pulse"
+          className="h-48 bg-muted animate-pulse"
           style={{ borderRadius: '255px 15px 225px 15px / 15px 225px 15px 255px' }}
         />
       ))}
@@ -46,7 +46,7 @@ export default function ChallengeSection() {
       )}
 
       {!loading && !error && (
-        <div className="flex gap-3 overflow-x-auto pb-2">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           {topScores.map(({ niche, score }) => (
             <ChallengeCard
               key={niche}
