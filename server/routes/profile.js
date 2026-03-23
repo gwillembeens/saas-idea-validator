@@ -39,6 +39,9 @@ export async function profileRoute(req, res) {
     // Build heatmap: 365-day array with filled gaps
     const heatmap = buildHeatmapArray(heatmapRows)
 
+    // Calculate streaks from heatmap
+    const streaks = calculateStreaks(heatmap)
+
     // Score trend: last 20 validations, oldest → newest
     const scoreTrend = validations
       .slice(0, 20)
@@ -176,4 +179,57 @@ function buildHeatmapArray(heatmapRows) {
     result.push({ date: iso, count: lookup[iso] ?? 0 })
   }
   return result
+}
+
+function calculateStreaks(heatmap) {
+  // Extract sorted array of active ISO date strings
+  const activeDays = heatmap
+    .filter(d => d.count > 0)
+    .map(d => d.date) // already ISO strings, already sorted oldest→newest
+
+  if (activeDays.length === 0) return { current: 0, longest: 0 }
+
+  // Longest streak
+  let longest = 1
+  let run = 1
+  for (let i = 1; i < activeDays.length; i++) {
+    const prev = new Date(activeDays[i - 1])
+    const curr = new Date(activeDays[i])
+    const diffDays = Math.round((curr - prev) / 86400000)
+    if (diffDays === 1) {
+      run++
+      if (run > longest) longest = run
+    } else {
+      run = 1
+    }
+  }
+
+  // Current streak: consecutive days ending on today or yesterday
+  const todayStr = new Date().toISOString().slice(0, 10)
+  const yesterdayStr = (() => {
+    const d = new Date()
+    d.setDate(d.getDate() - 1)
+    return d.toISOString().slice(0, 10)
+  })()
+
+  const lastActive = activeDays[activeDays.length - 1]
+  // If last active day is neither today nor yesterday, current streak is 0
+  if (lastActive !== todayStr && lastActive !== yesterdayStr) {
+    return { current: 0, longest }
+  }
+
+  // Walk backwards counting consecutive days
+  let current = 1
+  for (let i = activeDays.length - 2; i >= 0; i--) {
+    const later = new Date(activeDays[i + 1])
+    const earlier = new Date(activeDays[i])
+    const diff = Math.round((later - earlier) / 86400000)
+    if (diff === 1) {
+      current++
+    } else {
+      break
+    }
+  }
+
+  return { current, longest }
 }
