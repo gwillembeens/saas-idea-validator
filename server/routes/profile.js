@@ -239,3 +239,5 @@ function calculateStreaks(heatmap) {
 
   return { current, longest }
 }
+
+export { calculateStreaks, buildHeatmapArray }
