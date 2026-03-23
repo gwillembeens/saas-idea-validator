@@ -142,6 +142,12 @@ export async function profileRoute(req, res) {
       },
       validations: formattedValidations,
       chains,
+      analytics: {
+        heatmap,
+        scoreTrend,
+        nicheBreakdown,
+        streaks,
+      },
     })
   } catch (err) {
     console.error('profileRoute error:', err)
