@@ -24,12 +24,14 @@ describe('ActivityHeatmap', () => {
     expect(container.firstChild).toBeNull()
   })
 
-  test('renders 365 cells for a full year', () => {
+  test('renders cells for a full year of data', () => {
     const heatmap = make365Days()
     const { container } = render(<ActivityHeatmap heatmap={heatmap} />)
-    // Each day is a div with border style
-    const cells = container.querySelectorAll('[style*="border: 1px solid"]')
-    expect(cells.length).toBe(365)
+    // Count all cells with border style, minus the 4 legend cells
+    const allBorderedCells = container.querySelectorAll('[style*="border: 1px solid"]')
+    // Subtract legend's 4 color squares to get actual data cells
+    const dataCellCount = allBorderedCells.length - 4
+    expect(dataCellCount).toBe(365)
   })
 
   test('uses paper color for zero-count days', () => {
