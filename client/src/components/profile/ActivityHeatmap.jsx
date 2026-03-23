@@ -124,31 +124,32 @@ export function ActivityHeatmap({ heatmap, availableYears, selectedYear, onYearC
         {totalCount} {totalCount === 1 ? 'activity' : 'activities'}{selectedYear ? ` in ${selectedYear}` : ' in the last year'}
       </p>
 
+      {/* Fixed tooltip — outside scroll/overflow context so it never clips */}
+      {tooltip && (
+        <div
+          style={{
+            position: 'fixed',
+            left: tooltip.x,
+            top: tooltip.y,
+            transform: 'translate(-50%, -100%)',
+            fontFamily: 'Patrick Hand, cursive',
+            fontSize: '12px',
+            backgroundColor: '#2d2d2d',
+            color: '#fdfbf7',
+            padding: '4px 10px',
+            borderRadius: '4px',
+            whiteSpace: 'nowrap',
+            pointerEvents: 'none',
+            zIndex: 9999,
+            boxShadow: '2px 2px 0px 0px rgba(0,0,0,0.3)',
+          }}
+        >
+          {tooltip.text}
+        </div>
+      )}
+
       <div className="overflow-x-auto" style={{ WebkitOverflowScrolling: 'touch' }}>
-        <div data-heatmap-container style={{ minWidth: 'max-content', position: 'relative' }}>
-          {/* Custom tooltip */}
-          {tooltip && (
-            <div
-              style={{
-                position: 'absolute',
-                left: tooltip.x,
-                top: tooltip.y,
-                transform: 'translate(-50%, -100%)',
-                fontFamily: 'Patrick Hand, cursive',
-                fontSize: '12px',
-                backgroundColor: '#2d2d2d',
-                color: '#fdfbf7',
-                padding: '4px 8px',
-                borderRadius: '4px',
-                whiteSpace: 'nowrap',
-                pointerEvents: 'none',
-                zIndex: 10,
-                boxShadow: '2px 2px 0px 0px rgba(0,0,0,0.3)',
-              }}
-            >
-              {tooltip.text}
-            </div>
-          )}
+        <div style={{ minWidth: 'max-content', position: 'relative' }}>
 
           {/* Month labels row */}
           <div style={{ display: 'flex', marginBottom: '4px', position: 'relative', height: '16px' }}>
