@@ -67,6 +67,11 @@ export async function profileRoute(req, res) {
         nicheCounts[n] = (nicheCounts[n] || 0) + 1
       }
       topNiche = Object.entries(nicheCounts).sort((a, b) => b[1] - a[1])[0][0]
+
+      // Niche breakdown: all niches sorted by count descending
+      var nicheBreakdown = Object.entries(nicheCounts)
+        .sort((a, b) => b[1] - a[1])
+        .map(([niche, count]) => ({ niche, count }))
     }
 
     // Build revision chains from public validations
