@@ -39,6 +39,16 @@ export async function profileRoute(req, res) {
     // Build heatmap: 365-day array with filled gaps
     const heatmap = buildHeatmapArray(heatmapRows)
 
+    // Score trend: last 20 validations, oldest → newest
+    const scoreTrend = validations
+      .slice(0, 20)
+      .reverse()
+      .map(v => ({
+        title: v.title || 'Untitled',
+        score: v.scores?.weighted ?? 0,
+        created_at: v.created_at,
+      }))
+
     // Compute stats
     const totalPublic = validations.length
     let avgScore = null
