@@ -6,7 +6,7 @@ import ChallengeCard from './ChallengeCard'
 
 function LoadingSkeleton() {
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+    <div className="grid grid-cols-2 gap-3">
       {Array.from({ length: 8 }).map((_, i) => (
         <div
           key={i}
@@ -46,7 +46,7 @@ export default function ChallengeSection() {
       )}
 
       {!loading && !error && (
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 gap-3">
           {topScores.map(({ niche, score }) => (
             <ChallengeCard
               key={niche}

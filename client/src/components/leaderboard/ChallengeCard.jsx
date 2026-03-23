@@ -1,5 +1,4 @@
 import { Card } from '../ui/Card'
-import { Button } from '../ui/Button'
 import { NICHE_CONFIG } from '../../constants/nicheConfig'
 
 export default function ChallengeCard({ niche, topScore, onTryNiche }) {
@@ -29,13 +28,13 @@ export default function ChallengeCard({ niche, topScore, onTryNiche }) {
       </div>
 
       {/* CTA */}
-      <Button
-        variant="primary"
+      <button
         onClick={onTryNiche}
-        className="w-full text-sm"
+        className="w-full font-body text-sm h-9 px-3 bg-paper text-pencil shadow-hard hover:bg-accent hover:text-white active:translate-x-1 active:translate-y-1 active:shadow-none transition-all duration-100"
+        style={{ borderRadius: '255px 15px 225px 15px / 15px 225px 15px 255px' }}
       >
         Try This Niche
-      </Button>
+      </button>
     </Card>
   )
 }
