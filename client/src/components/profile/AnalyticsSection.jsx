@@ -12,10 +12,10 @@ function SubSection({ title, children }) {
   )
 }
 
-export function AnalyticsSection({ analytics }) {
+export function AnalyticsSection({ analytics, selectedYear, onYearChange }) {
   if (!analytics) return null
 
-  const { heatmap, scoreTrend, nicheBreakdown } = analytics
+  const { heatmap, scoreTrend, nicheBreakdown, availableYears } = analytics
 
   const hasActivity =
     heatmap?.some(d => d.count > 0) ||
@@ -31,7 +31,12 @@ export function AnalyticsSection({ analytics }) {
       {/* Heatmap */}
       {heatmap && heatmap.length > 0 && (
         <SubSection title="Validation Activity">
-          <ActivityHeatmap heatmap={heatmap} />
+          <ActivityHeatmap
+            heatmap={heatmap}
+            availableYears={availableYears}
+            selectedYear={selectedYear}
+            onYearChange={onYearChange}
+          />
         </SubSection>
       )}
 
@@ -57,9 +62,12 @@ AnalyticsSection.propTypes = {
     heatmap: PropTypes.array,
     scoreTrend: PropTypes.array,
     nicheBreakdown: PropTypes.array,
+    availableYears: PropTypes.arrayOf(PropTypes.number),
     streaks: PropTypes.shape({
       current: PropTypes.number,
       longest: PropTypes.number,
     }),
   }),
+  selectedYear: PropTypes.number,
+  onYearChange: PropTypes.func,
 }

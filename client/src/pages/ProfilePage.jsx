@@ -22,6 +22,7 @@ export function ProfilePage() {
   const [loading, setLoading] = useState(true)
   const [notFound, setNotFound] = useState(false)
   const [error, setError] = useState(null)
+  const [selectedYear, setSelectedYear] = useState(null)
 
   useEffect(() => {
     async function fetchProfile() {
@@ -29,7 +30,10 @@ export function ProfilePage() {
       setNotFound(false)
       setError(null)
       try {
-        const res = await fetch(`/api/profile/${encodeURIComponent(username)}`)
+        const url = selectedYear
+          ? `/api/profile/${encodeURIComponent(username)}?year=${selectedYear}`
+          : `/api/profile/${encodeURIComponent(username)}`
+        const res = await fetch(url)
         if (res.status === 404) {
           setNotFound(true)
           return
@@ -44,7 +48,7 @@ export function ProfilePage() {
       }
     }
     fetchProfile()
-  }, [username])
+  }, [username, selectedYear])
 
   return (
     <AppShell>
@@ -122,7 +126,11 @@ export function ProfilePage() {
             <RevisionChains chains={profile.chains} />
 
             {/* Analytics Section */}
-            <AnalyticsSection analytics={profile.analytics} />
+            <AnalyticsSection
+              analytics={profile.analytics}
+              selectedYear={selectedYear}
+              onYearChange={setSelectedYear}
+            />
           </>
         )}
 

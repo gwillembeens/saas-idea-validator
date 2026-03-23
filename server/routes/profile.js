@@ -23,21 +23,51 @@ export async function profileRoute(req, res) {
       [user.id]
     )
 
-    // Fetch heatmap: active days in last 365 days
+    // Available years with activity
+    const { rows: yearRows } = await pool.query(
+      `SELECT DISTINCT EXTRACT(YEAR FROM created_at)::int AS year
+       FROM saved_results
+       WHERE user_id = $1 AND is_public = true AND deleted_at IS NULL
+       ORDER BY year DESC`,
+      [user.id]
+    )
+    const availableYears = yearRows.map(r => r.year)
+
+    // Heatmap date range: specific year or last 365 days
+    const requestedYear = req.query.year ? parseInt(req.query.year, 10) : null
+    const currentYear = new Date().getFullYear()
+    let heatmapStart, heatmapEnd
+
+    if (requestedYear && !isNaN(requestedYear)) {
+      heatmapStart = `${requestedYear}-01-01`
+      heatmapEnd = requestedYear === currentYear
+        ? new Date().toISOString().slice(0, 10)
+        : `${requestedYear}-12-31`
+    } else {
+      const today = new Date()
+      today.setHours(0, 0, 0, 0)
+      heatmapEnd = today.toISOString().slice(0, 10)
+      const startD = new Date(today)
+      startD.setDate(today.getDate() - 364)
+      heatmapStart = startD.toISOString().slice(0, 10)
+    }
+
+    // Fetch heatmap for computed date range
     const { rows: heatmapRows } = await pool.query(
       `SELECT DATE(created_at) AS day, COUNT(*)::int AS count
        FROM saved_results
        WHERE user_id = $1
          AND is_public = true
          AND deleted_at IS NULL
-         AND created_at >= NOW() - INTERVAL '365 days'
+         AND DATE(created_at) >= $2
+         AND DATE(created_at) <= $3
        GROUP BY DATE(created_at)
        ORDER BY day ASC`,
-      [user.id]
+      [user.id, heatmapStart, heatmapEnd]
     )
 
-    // Build heatmap: 365-day array with filled gaps
-    const heatmap = buildHeatmapArray(heatmapRows)
+    // Build heatmap: full date-range array with filled gaps
+    const heatmap = buildHeatmapArray(heatmapRows, heatmapStart, heatmapEnd)
 
     // Calculate streaks from heatmap
     const streaks = calculateStreaks(heatmap)
@@ -147,6 +177,7 @@ export async function profileRoute(req, res) {
         scoreTrend,
         nicheBreakdown,
         streaks,
+        availableYears,
       },
     })
   } catch (err) {
@@ -164,7 +195,7 @@ function truncateText(text, maxLen) {
   return (lastSpace > maxLen * 0.7 ? cut.substring(0, lastSpace) : cut) + '…'
 }
 
-function buildHeatmapArray(heatmapRows) {
+function buildHeatmapArray(heatmapRows, startDate, endDate) {
   // Build a lookup map: ISO date string → count
   const lookup = {}
   for (const row of heatmapRows) {
@@ -174,13 +205,20 @@ function buildHeatmapArray(heatmapRows) {
     lookup[iso] = row.count
   }
 
-  // Generate full 365-day array ending today
+  // Default range: 365 days ending today
+  if (!startDate || !endDate) {
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+    endDate = today.toISOString().slice(0, 10)
+    const startD = new Date(today)
+    startD.setDate(today.getDate() - 364)
+    startDate = startD.toISOString().slice(0, 10)
+  }
+
   const result = []
-  const today = new Date()
-  today.setHours(0, 0, 0, 0)
-  for (let i = 364; i >= 0; i--) {
-    const d = new Date(today)
-    d.setDate(today.getDate() - i)
+  const start = new Date(startDate + 'T00:00:00')
+  const end = new Date(endDate + 'T00:00:00')
+  for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
     const iso = d.toISOString().slice(0, 10)
     result.push({ date: iso, count: lookup[iso] ?? 0 })
   }

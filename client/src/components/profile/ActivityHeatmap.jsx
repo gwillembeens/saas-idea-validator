@@ -9,7 +9,7 @@ function getCellColor(count) {
   return '#2d2d2d'                     // pencil — high activity
 }
 
-export function ActivityHeatmap({ heatmap }) {
+export function ActivityHeatmap({ heatmap, availableYears, selectedYear, onYearChange }) {
   if (!heatmap || heatmap.length === 0) return null
 
   const totalCount = heatmap.reduce((sum, d) => sum + d.count, 0)
@@ -49,9 +49,48 @@ export function ActivityHeatmap({ heatmap }) {
 
   return (
     <div>
+      {/* Year toggle */}
+      {availableYears && availableYears.length > 0 && (
+        <div className="flex items-center gap-2 mb-3">
+          <button
+            onClick={() => onYearChange && onYearChange(null)}
+            className="font-body text-xs text-pencil transition-all"
+            style={{
+              padding: '2px 10px',
+              border: '1.5px solid #2d2d2d',
+              borderRadius: '255px 15px 225px 15px / 15px 225px 15px 255px',
+              backgroundColor: selectedYear === null ? '#2d2d2d' : '#fdfbf7',
+              color: selectedYear === null ? '#fdfbf7' : '#2d2d2d',
+              boxShadow: selectedYear === null ? 'none' : '2px 2px 0px 0px #2d2d2d',
+              cursor: 'pointer',
+            }}
+          >
+            Last year
+          </button>
+          {availableYears.map(year => (
+            <button
+              key={year}
+              onClick={() => onYearChange && onYearChange(year)}
+              className="font-body text-xs text-pencil transition-all"
+              style={{
+                padding: '2px 10px',
+                border: '1.5px solid #2d2d2d',
+                borderRadius: '255px 15px 225px 15px / 15px 225px 15px 255px',
+                backgroundColor: selectedYear === year ? '#2d2d2d' : '#fdfbf7',
+                color: selectedYear === year ? '#fdfbf7' : '#2d2d2d',
+                boxShadow: selectedYear === year ? 'none' : '2px 2px 0px 0px #2d2d2d',
+                cursor: 'pointer',
+              }}
+            >
+              {year}
+            </button>
+          ))}
+        </div>
+      )}
+
       {/* Total count */}
       <p className="font-body text-sm text-pencil opacity-60 mb-2">
-        {totalCount} {totalCount === 1 ? 'activity' : 'activities'} in the last year
+        {totalCount} {totalCount === 1 ? 'activity' : 'activities'}{selectedYear ? ` in ${selectedYear}` : ' in the last year'}
       </p>
 
       <div className="overflow-x-auto" style={{ WebkitOverflowScrolling: 'touch' }}>
@@ -127,4 +166,7 @@ ActivityHeatmap.propTypes = {
       count: PropTypes.number.isRequired,
     })
   ),
+  availableYears: PropTypes.arrayOf(PropTypes.number),
+  selectedYear: PropTypes.number,
+  onYearChange: PropTypes.func,
 }
