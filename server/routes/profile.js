@@ -36,6 +36,9 @@ export async function profileRoute(req, res) {
       [user.id]
     )
 
+    // Build heatmap: 365-day array with filled gaps
+    const heatmap = buildHeatmapArray(heatmapRows)
+
     // Compute stats
     const totalPublic = validations.length
     let avgScore = null
@@ -135,4 +138,27 @@ function truncateText(text, maxLen) {
   const cut = cleaned.substring(0, maxLen)
   const lastSpace = cut.lastIndexOf(' ')
   return (lastSpace > maxLen * 0.7 ? cut.substring(0, lastSpace) : cut) + '…'
+}
+
+function buildHeatmapArray(heatmapRows) {
+  // Build a lookup map: ISO date string → count
+  const lookup = {}
+  for (const row of heatmapRows) {
+    const iso = row.day instanceof Date
+      ? row.day.toISOString().slice(0, 10)
+      : String(row.day).slice(0, 10)
+    lookup[iso] = row.count
+  }
+
+  // Generate full 365-day array ending today
+  const result = []
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  for (let i = 364; i >= 0; i--) {
+    const d = new Date(today)
+    d.setDate(today.getDate() - i)
+    const iso = d.toISOString().slice(0, 10)
+    result.push({ date: iso, count: lookup[iso] ?? 0 })
+  }
+  return result
 }
