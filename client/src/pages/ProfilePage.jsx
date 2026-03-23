@@ -93,7 +93,7 @@ export function ProfilePage() {
               {/* Stat row */}
               {profile.stats.total_public > 0 && (
                 <div
-                  className="flex items-center gap-5 px-6 py-3 bg-paper border-2 border-pencil shadow-hard mt-2"
+                  className="flex flex-wrap justify-center items-center gap-5 px-6 py-3 bg-paper border-2 border-pencil shadow-hard mt-2"
                   style={{ borderRadius: '255px 15px 225px 15px / 15px 225px 15px 255px' }}
                 >
                   <StatItem label="validations" value={profile.stats.total_public} />
@@ -106,6 +106,14 @@ export function ProfilePage() {
                   </div>
                   <span className="text-pencil opacity-20 font-body text-lg">·</span>
                   <StatItem label="personal best" value={`${parseFloat(profile.stats.personal_best).toFixed(1)}/5`} />
+                  {profile.analytics?.streaks && (
+                    <>
+                      <span className="text-pencil opacity-20 font-body text-lg">·</span>
+                      <StatItem label="day streak" value={`🔥 ${profile.analytics.streaks.current}`} />
+                      <span className="text-pencil opacity-20 font-body text-lg">·</span>
+                      <StatItem label="longest streak" value={profile.analytics.streaks.longest} />
+                    </>
+                  )}
                 </div>
               )}
             </div>

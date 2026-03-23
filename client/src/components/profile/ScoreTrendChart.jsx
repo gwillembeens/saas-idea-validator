@@ -4,21 +4,26 @@ import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'rec
 export function ScoreTrendChart({ scoreTrend }) {
   if (!scoreTrend || scoreTrend.length < 2) return null
 
-  const data = scoreTrend.map((v, i) => ({
-    name: `#${i + 1}`,
+  const data = scoreTrend.map((v) => ({
+    name: v.created_at
+      ? new Date(v.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+      : '',
     score: v.score,
     title: v.title,
   }))
 
   return (
-    <div style={{ width: '100%', height: 160 }}>
+    <div style={{ width: '100%', height: 180 }}>
       <ResponsiveContainer width="100%" height="100%">
-        <LineChart data={data} margin={{ top: 8, right: 8, bottom: 8, left: 0 }}>
+        <LineChart data={data} margin={{ top: 8, right: 8, bottom: 24, left: 0 }}>
           <XAxis
             dataKey="name"
-            tick={{ fontFamily: 'Patrick Hand, cursive', fontSize: 11, fill: '#2d2d2d' }}
+            tick={{ fontFamily: 'Patrick Hand, cursive', fontSize: 10, fill: '#2d2d2d' }}
             axisLine={{ stroke: '#2d2d2d' }}
             tickLine={false}
+            angle={-35}
+            textAnchor="end"
+            interval="preserveStartEnd"
           />
           <YAxis
             domain={[0, 5]}

@@ -1,18 +1,22 @@
 import PropTypes from 'prop-types'
 
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+
 function getCellColor(count) {
   if (count === 0) return '#fdfbf7'    // paper — no activity
   if (count === 1) return '#e5e0d8'    // muted — light
-  if (count <= 3) return '#c8bfb0'     // between muted and pencil
+  if (count <= 3) return '#c8bfb0'     // mid
   return '#2d2d2d'                     // pencil — high activity
 }
 
 export function ActivityHeatmap({ heatmap }) {
   if (!heatmap || heatmap.length === 0) return null
 
-  // Build 52 columns × 7 rows (pad front with empty cells to start on correct weekday)
-  const firstDay = new Date(heatmap[0].date)
-  const startPad = firstDay.getDay() // 0=Sun, pad cells before first real day
+  const totalCount = heatmap.reduce((sum, d) => sum + d.count, 0)
+
+  // Pad front so first day lands on correct weekday column
+  const firstDay = new Date(heatmap[0].date + 'T00:00:00')
+  const startPad = firstDay.getDay() // 0=Sun
   const cells = [
     ...Array(startPad).fill(null),
     ...heatmap,
@@ -24,33 +28,77 @@ export function ActivityHeatmap({ heatmap }) {
     weeks.push(cells.slice(i, i + 7))
   }
 
+  // Build month labels: for each week, check if the first real cell is the
+  // start of a new month, and record which column index that month begins at.
+  const monthLabels = [] // { label, colIndex }
+  let lastMonth = -1
+  weeks.forEach((week, wi) => {
+    const firstReal = week.find(c => c !== null)
+    if (firstReal) {
+      const m = new Date(firstReal.date + 'T00:00:00').getMonth()
+      if (m !== lastMonth) {
+        monthLabels.push({ label: MONTHS[m], colIndex: wi })
+        lastMonth = m
+      }
+    }
+  })
+
+  const CELL = 12
+  const GAP = 3
+  const colWidth = CELL + GAP
+
   return (
     <div>
-      <div
-        className="overflow-x-auto"
-        style={{ WebkitOverflowScrolling: 'touch' }}
-      >
-        <div style={{ display: 'flex', gap: '3px', minWidth: 'max-content' }}>
-          {weeks.map((week, wi) => (
-            <div key={wi} style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
-              {week.map((cell, di) => (
-                <div
-                  key={di}
-                  title={cell ? `${cell.date}: ${cell.count} validation${cell.count !== 1 ? 's' : ''}` : ''}
-                  style={{
-                    width: '12px',
-                    height: '12px',
-                    backgroundColor: cell ? getCellColor(cell.count) : 'transparent',
-                    border: cell ? '1px solid #2d2d2d' : 'none',
-                    borderRadius: '2px',
-                    flexShrink: 0,
-                  }}
-                />
-              ))}
-            </div>
-          ))}
+      {/* Total count */}
+      <p className="font-body text-sm text-pencil opacity-60 mb-2">
+        {totalCount} {totalCount === 1 ? 'activity' : 'activities'} in the last year
+      </p>
+
+      <div className="overflow-x-auto" style={{ WebkitOverflowScrolling: 'touch' }}>
+        <div style={{ minWidth: 'max-content' }}>
+          {/* Month labels row */}
+          <div style={{ display: 'flex', marginBottom: '4px', position: 'relative', height: '16px' }}>
+            {monthLabels.map(({ label, colIndex }) => (
+              <span
+                key={label + colIndex}
+                className="font-body text-pencil"
+                style={{
+                  position: 'absolute',
+                  left: `${colIndex * colWidth}px`,
+                  fontSize: '11px',
+                  opacity: 0.5,
+                  lineHeight: 1,
+                }}
+              >
+                {label}
+              </span>
+            ))}
+          </div>
+
+          {/* Grid */}
+          <div style={{ display: 'flex', gap: `${GAP}px` }}>
+            {weeks.map((week, wi) => (
+              <div key={wi} style={{ display: 'flex', flexDirection: 'column', gap: `${GAP}px` }}>
+                {week.map((cell, di) => (
+                  <div
+                    key={di}
+                    title={cell ? `${cell.date}: ${cell.count} ${cell.count === 1 ? 'activity' : 'activities'}` : ''}
+                    style={{
+                      width: `${CELL}px`,
+                      height: `${CELL}px`,
+                      backgroundColor: cell ? getCellColor(cell.count) : 'transparent',
+                      border: cell ? '1px solid #2d2d2d' : 'none',
+                      borderRadius: '2px',
+                      flexShrink: 0,
+                    }}
+                  />
+                ))}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
+
       {/* Legend */}
       <div className="flex items-center gap-2 mt-2">
         <span className="font-body text-xs text-pencil opacity-50">Less</span>
