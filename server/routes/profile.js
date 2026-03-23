@@ -23,6 +23,19 @@ export async function profileRoute(req, res) {
       [user.id]
     )
 
+    // Fetch heatmap: active days in last 365 days
+    const { rows: heatmapRows } = await pool.query(
+      `SELECT DATE(created_at) AS day, COUNT(*)::int AS count
+       FROM saved_results
+       WHERE user_id = $1
+         AND is_public = true
+         AND deleted_at IS NULL
+         AND created_at >= NOW() - INTERVAL '365 days'
+       GROUP BY DATE(created_at)
+       ORDER BY day ASC`,
+      [user.id]
+    )
+
     // Compute stats
     const totalPublic = validations.length
     let avgScore = null
