@@ -4,6 +4,7 @@ import { AppShell } from '../components/layout/AppShell'
 import { Avatar } from '../components/ui/Avatar'
 import { NichePill } from '../components/ui/NichePill'
 import { RevisionChains } from '../components/profile/RevisionChains'
+import { AnalyticsSection } from '../components/profile/AnalyticsSection'
 
 function StatItem({ label, value }) {
   if (value === null || value === undefined) return null
@@ -111,6 +112,9 @@ export function ProfilePage() {
 
             {/* Revision Chains */}
             <RevisionChains chains={profile.chains} />
+
+            {/* Analytics Section */}
+            <AnalyticsSection analytics={profile.analytics} />
           </>
         )}
 
