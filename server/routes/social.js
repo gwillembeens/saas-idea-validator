@@ -2,7 +2,7 @@ import { pool } from '../db/init.js'
 
 // POST /api/results/:id/like (requires auth)
 export async function toggleLikeRoute(req, res) {
-  const resultId = parseInt(req.params.id, 10)
+  const resultId = req.params.id
   const userId = req.user.id
 
   try {
@@ -43,7 +43,7 @@ export async function toggleLikeRoute(req, res) {
 
 // GET /api/results/:id/like-status (auth optional)
 export async function getLikeStatusRoute(req, res) {
-  const resultId = parseInt(req.params.id, 10)
+  const resultId = req.params.id
 
   try {
     const resultCheck = await pool.query(
@@ -76,7 +76,7 @@ export async function getLikeStatusRoute(req, res) {
 
 // GET /api/results/:id/comments (public)
 export async function getCommentsRoute(req, res) {
-  const resultId = parseInt(req.params.id, 10)
+  const resultId = req.params.id
 
   try {
     const resultCheck = await pool.query(
@@ -131,7 +131,7 @@ export async function getCommentsRoute(req, res) {
 
 // POST /api/results/:id/comments (requires auth)
 export async function postCommentRoute(req, res) {
-  const resultId = parseInt(req.params.id, 10)
+  const resultId = req.params.id
   const userId = req.user.id
   const { body } = req.body
 
@@ -172,7 +172,7 @@ export async function postCommentRoute(req, res) {
 
 // POST /api/comments/:id/replies (requires auth)
 export async function postReplyRoute(req, res) {
-  const parentId = parseInt(req.params.id, 10)
+  const parentId = parseInt(req.params.id, 10)  // comments.id is SERIAL (integer)
   const userId = req.user.id
   const { body } = req.body
 
@@ -229,7 +229,7 @@ export async function postReplyRoute(req, res) {
 
 // DELETE /api/comments/:id (requires auth)
 export async function deleteCommentRoute(req, res) {
-  const commentId = parseInt(req.params.id, 10)
+  const commentId = parseInt(req.params.id, 10)  // comments.id is SERIAL (integer)
   const userId = req.user.id
 
   try {

@@ -41,8 +41,8 @@ export async function runMigrations() {
   await pool.query(`
     CREATE TABLE IF NOT EXISTS likes (
       id SERIAL PRIMARY KEY,
-      user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-      result_id INTEGER NOT NULL REFERENCES saved_results(id) ON DELETE CASCADE,
+      user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      result_id UUID NOT NULL REFERENCES saved_results(id) ON DELETE CASCADE,
       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
       UNIQUE(user_id, result_id)
     )
@@ -56,8 +56,8 @@ export async function runMigrations() {
   await pool.query(`
     CREATE TABLE IF NOT EXISTS comments (
       id SERIAL PRIMARY KEY,
-      user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-      result_id INTEGER NOT NULL REFERENCES saved_results(id) ON DELETE CASCADE,
+      user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      result_id UUID NOT NULL REFERENCES saved_results(id) ON DELETE CASCADE,
       parent_id INTEGER REFERENCES comments(id) ON DELETE CASCADE,
       body TEXT NOT NULL CHECK (char_length(body) <= 500),
       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
