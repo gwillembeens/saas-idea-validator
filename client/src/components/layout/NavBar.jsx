@@ -72,7 +72,7 @@ export function NavBar() {
               <div className="relative">
                 <button
                   onClick={handleBellClick}
-                  className="relative inline-flex items-center justify-center p-2 text-blue hover:text-accent transition-colors"
+                  className="relative inline-flex items-center justify-center p-1 text-blue hover:text-accent transition-colors focus:outline-none"
                   aria-label="Notifications"
                 >
                   <Bell size={24} strokeWidth={2.5} />
