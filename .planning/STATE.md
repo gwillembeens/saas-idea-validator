@@ -4,12 +4,12 @@ milestone: v1.0
 milestone_name: milestone
 current_phase: 24
 status: executing
-last_updated: "2026-03-24T21:40:00.000Z"
+last_updated: "2026-03-24T22:26:00.000Z"
 progress:
   total_phases: 3
   completed_phases: 1
   total_plans: 9
-  completed_plans: 5
+  completed_plans: 6
 ---
 
 # Project State
@@ -40,6 +40,7 @@ See: `.planning/PROJECT.md` (updated 2026-03-22)
 - Plan 21-01 (Backend — Top Score Per Niche Endpoint): COMPLETED ✓
 - Plan 21-02 (Frontend — Challenge Cards UI): COMPLETED ✓
 - Plan 24-01 (Backend — Notifications Table & API Routes): COMPLETED ✓
+- Plan 24-02 (Frontend Hook: useNotifications): COMPLETED ✓
 
 ---
 
@@ -292,10 +293,28 @@ Key implementation:
 - Self-notification prevention: Checks `actor !== result owner` in both routes
 - Express routes registered with `requireAuth` middleware, proper route order (specific before general)
 
+## 24-02 Completion Details
+
+**Plan:** Frontend Hook: useNotifications
+**Tasks:** 2/2 completed
+**Commits:** 2 implementation commits
+**Status:** Complete ✓
+
+Key implementation:
+
+- `useNotifications()` hook: Manages notifications array + unreadCount state
+- `fetchUnreadCount()`: Polls `/api/notifications/unread-count` every 30 seconds with Authorization header
+- `fetchNotifications()`: Fetches full grouped notifications from `/api/notifications`
+- `markAllRead()`: POSTs to `/api/notifications/mark-read` with optimistic zero
+- Polling behavior: Starts on mount, pauses when `document.visibilityState === 'hidden'`, resumes with refetch when visible
+- Early exit when no token in localStorage
+- Comprehensive unit tests: 7 test cases covering mount fetch, fetch list, mark read, no-token case, network error resilience, and response parsing
+- All 7 tests passing, no regressions in existing suite (80/81)
+
 ## Next Phase
 
-**Phase 24-02:** Frontend — Notifications UI (notification bell, dropdown, Redux slice)
+**Phase 24-03:** Frontend — Notifications Modal & NavBar Integration
 
 ---
 
-*State updated: 2026-03-24 — Phase 24-01 complete ✓ (Backend notifications), 5/5 tasks, 5 commits*
+*State updated: 2026-03-24 — Phase 24-02 complete ✓ (Frontend hook foundation), 2/2 tasks, 2 commits*
