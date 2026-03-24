@@ -18,6 +18,8 @@ import { getVerdict } from '../constants/verdictColors'
 import { setIdea } from '../store/slices/validatorSlice'
 import { fetchWithAuth } from '../utils/fetchWithAuth'
 import { useHistoryResult } from '../hooks/useHistoryResult'
+import { LikeButton } from '../components/social/LikeButton'
+import { CommentsSection } from '../components/social/CommentsSection'
 
 const PHASE_LABELS = [
   { key: 'phase1', label: '1. Market & Niche', weight: '30%' },
@@ -296,6 +298,20 @@ export function ResultPage() {
           onToggleVisibility={handleToggleVisibility}
           isTogglingVisibility={isTogglingVisibility}
         />
+
+        {result?.is_public && (
+          <>
+            {/* Like */}
+            <div className="flex justify-center mt-4 mb-2">
+              <LikeButton resultId={result.id} mode="prominent" />
+            </div>
+
+            {/* Comments */}
+            <div className="w-full max-w-2xl mt-6 mb-8">
+              <CommentsSection resultId={result.id} />
+            </div>
+          </>
+        )}
 
         {!result?.isOwner && !user && (
           <div className="w-full max-w-2xl text-center mb-12">
