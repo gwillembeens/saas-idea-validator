@@ -12,6 +12,7 @@ import { saveResultRoute, listHistoryRoute, getResultRoute, updateTitleRoute, up
 import { leaderboardRoute, topPerNicheRoute } from './routes/leaderboard.js'
 import { profileRoute } from './routes/profile.js'
 import { getMeRoute, updateSettingsRoute } from './routes/settings.js'
+import { toggleLikeRoute, getLikeStatusRoute, getCommentsRoute, postCommentRoute, postReplyRoute, deleteCommentRoute } from './routes/social.js'
 import { requireAuth } from './middleware/requireAuth.js'
 import { optionalAuth } from './middleware/optionalAuth.js'
 import { runMigrations } from './db/init.js'
@@ -60,6 +61,14 @@ app.patch('/api/history/:id/dismiss-revision', requireAuth, dismissRevisionRoute
 // Mount leaderboard routes
 app.get('/api/leaderboard/top-per-niche', topPerNicheRoute)
 app.get('/api/leaderboard', optionalAuth, leaderboardRoute)
+
+// Mount social routes
+app.post('/api/results/:id/like', requireAuth, toggleLikeRoute)
+app.get('/api/results/:id/like-status', optionalAuth, getLikeStatusRoute)
+app.get('/api/results/:id/comments', getCommentsRoute)
+app.post('/api/results/:id/comments', requireAuth, postCommentRoute)
+app.post('/api/comments/:id/replies', requireAuth, postReplyRoute)
+app.delete('/api/comments/:id', requireAuth, deleteCommentRoute)
 
 // Mount profile routes
 app.get('/api/profile/:username', profileRoute)
