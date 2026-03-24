@@ -8,6 +8,7 @@ import { FrameworkPage } from './pages/FrameworkPage'
 import { LeaderboardPage } from './pages/LeaderboardPage'
 import { ProfilePage } from './pages/ProfilePage'
 import { SettingsPage } from './pages/SettingsPage'
+import { NotificationsPage } from './pages/NotificationsPage'
 import { useAuth } from './hooks/useAuth'
 import { setUser, setAuthModalMode, setShowAuthModal } from './store/slices/authSlice'
 
@@ -66,6 +67,7 @@ export default function App() {
       <Route path="/leaderboard" element={<LeaderboardPage />} />
       <Route path="/profile/:username" element={<ProfilePage />} />
       <Route path="/settings" element={<SettingsPage />} />
+      <Route path="/notifications" element={<NotificationsPage />} />
     </Routes>
   )
 }
