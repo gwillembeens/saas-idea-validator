@@ -171,6 +171,22 @@ export async function postCommentRoute(req, res) {
     )
     const comment = rows[0]
 
+    // Insert notification (comment trigger)
+    const resultOwnerResult = await pool.query(
+      'SELECT user_id FROM saved_results WHERE id = $1',
+      [resultId]
+    )
+    const resultOwner = resultOwnerResult.rows[0]?.user_id
+
+    // Only notify if actor !== owner (no self-notifications)
+    if (resultOwner && resultOwner !== userId) {
+      await pool.query(
+        `INSERT INTO notifications (recipient_id, actor_id, event_type, result_id)
+         VALUES ($1, $2, 'comment', $3)`,
+        [resultOwner, userId, resultId]
+      )
+    }
+
     const userResult = await pool.query('SELECT username FROM users WHERE id = $1', [userId])
     return res.status(201).json({
       id: comment.id,
