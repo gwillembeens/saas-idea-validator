@@ -166,7 +166,7 @@ export async function profileRoute(req, res) {
         `SELECT result_id,
            (SELECT COUNT(*)::int FROM likes l WHERE l.result_id = sc.result_id) AS like_count,
            (SELECT COUNT(*)::int FROM comments c WHERE c.result_id = sc.result_id AND c.deleted_at IS NULL) AS comment_count
-         FROM (SELECT UNNEST($1::int[]) AS result_id) sc`,
+         FROM (SELECT UNNEST($1::uuid[]) AS result_id) sc`,
         [validationIds]
       )
       for (const row of socialResult.rows) {

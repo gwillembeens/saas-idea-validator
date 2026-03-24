@@ -73,5 +73,29 @@ export async function runMigrations() {
   await pool.query(`
     CREATE INDEX IF NOT EXISTS comments_user_created_idx ON comments(user_id, created_at)
   `)
+  // Phase 24: Notifications
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS notifications (
+      id SERIAL PRIMARY KEY,
+      recipient_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      actor_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      event_type VARCHAR(20) NOT NULL CHECK (event_type IN ('like', 'comment')),
+      result_id UUID NOT NULL REFERENCES saved_results(id) ON DELETE CASCADE,
+      is_read BOOLEAN NOT NULL DEFAULT false,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `)
+  await pool.query(`
+    CREATE INDEX IF NOT EXISTS notifications_recipient_unread_idx
+      ON notifications(recipient_id, is_read, created_at DESC)
+  `)
+  await pool.query(`
+    CREATE INDEX IF NOT EXISTS notifications_recipient_event_result_idx
+      ON notifications(recipient_id, event_type, result_id, is_read)
+  `)
+  await pool.query(`
+    CREATE INDEX IF NOT EXISTS notifications_created_at_idx
+      ON notifications(created_at DESC)
+  `)
   console.log('DB migrations applied')
 }
