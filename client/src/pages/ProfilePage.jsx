@@ -4,6 +4,7 @@ import { AppShell } from '../components/layout/AppShell'
 import { Avatar } from '../components/ui/Avatar'
 import { NichePill } from '../components/ui/NichePill'
 import { RevisionChains } from '../components/profile/RevisionChains'
+import { ValidationsGrid } from '../components/profile/ValidationsGrid'
 import { AnalyticsSection } from '../components/profile/AnalyticsSection'
 
 function StatItem({ label, value }) {
@@ -110,6 +111,12 @@ export function ProfilePage() {
                   </div>
                   <span className="text-pencil opacity-20 font-body text-lg">·</span>
                   <StatItem label="personal best" value={`${parseFloat(profile.stats.personal_best).toFixed(1)}/5`} />
+                  {profile.stats.total_likes_received > 0 && (
+                    <>
+                      <span className="text-pencil opacity-20 font-body text-lg">·</span>
+                      <StatItem label="likes received" value={profile.stats.total_likes_received} />
+                    </>
+                  )}
                   {profile.analytics?.streaks && (
                     <>
                       <span className="text-pencil opacity-20 font-body text-lg">·</span>
@@ -124,6 +131,9 @@ export function ProfilePage() {
 
             {/* Revision Chains */}
             <RevisionChains chains={profile.chains} />
+
+            {/* Validations Grid */}
+            <ValidationsGrid validations={profile.validations} />
 
             {/* Analytics Section */}
             <AnalyticsSection

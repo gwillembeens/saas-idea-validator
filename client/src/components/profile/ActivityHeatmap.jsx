@@ -21,8 +21,8 @@ function formatTooltip(date, count) {
   const d = new Date(date + 'T00:00:00')
   const day = ordinal(d.getDate())
   const month = MONTH_NAMES[d.getMonth()]
-  if (count === 0) return `No validations on ${month} ${day}`
-  return `${count} ${count === 1 ? 'validation' : 'validations'} on ${month} ${day}`
+  if (count === 0) return `No activity on ${month} ${day}`
+  return `${count} ${count === 1 ? 'action' : 'actions'} on ${month} ${day}`
 }
 
 export function ActivityHeatmap({ heatmap, availableYears, selectedYear, onYearChange }) {

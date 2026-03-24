@@ -1,9 +1,11 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useSearchParams, Link } from 'react-router-dom'
 import { AppShell } from '../components/layout/AppShell'
 import { LeaderboardCard } from '../components/leaderboard/LeaderboardCard'
 import ChallengeSection from '../components/leaderboard/ChallengeSection'
+import { LeaderboardSort } from '../components/leaderboard/LeaderboardSort'
+import { CommentModal } from '../components/social/CommentModal'
 import { Card } from '../components/ui/Card'
 import { Button } from '../components/ui/Button'
 import { useLeaderboard } from '../hooks/useLeaderboard'
@@ -11,8 +13,9 @@ import { NICHE_CONFIG } from '../constants/nicheConfig'
 
 export function LeaderboardPage() {
   const user = useSelector(s => s.auth.user)
-  const { items, hasMore, loading, error, sentinelRef, setNiche, loadMore, currentNiche } = useLeaderboard()
+  const { items, hasMore, loading, error, sentinelRef, setNiche, setSort, loadMore, currentNiche, currentSort } = useLeaderboard()
   const [searchParams] = useSearchParams()
+  const [openCommentId, setOpenCommentId] = useState(null)
 
   // IntersectionObserver for infinite scroll
   useEffect(() => {
@@ -72,6 +75,11 @@ export function LeaderboardPage() {
           <ChallengeSection />
         </div>
 
+        {/* Sort tabs */}
+        <div className="w-full max-w-3xl mb-4">
+          <LeaderboardSort sort={currentSort} onSort={setSort} />
+        </div>
+
         {/* Niche filter pill row */}
         <div className="w-full max-w-3xl mb-8">
           <div className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1">
@@ -125,6 +133,7 @@ export function LeaderboardPage() {
                     entry={item}
                     rank={index + 1}
                     isOwn={!!user && user.id === item.user_id}
+                    onCommentClick={e => { e.stopPropagation(); setOpenCommentId(item.id) }}
                   />
                 </div>
               </div>
@@ -173,6 +182,13 @@ export function LeaderboardPage() {
         <div className="h-20" />
 
       </div>
+
+      {openCommentId !== null && (
+        <CommentModal
+          resultId={openCommentId}
+          onClose={() => setOpenCommentId(null)}
+        />
+      )}
     </AppShell>
   )
 }
