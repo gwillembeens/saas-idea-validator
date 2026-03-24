@@ -1,5 +1,5 @@
-import { useParams, useNavigate } from 'react-router-dom'
-import { useState } from 'react'
+import { useParams, useNavigate, useLocation } from 'react-router-dom'
+import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppShell } from '../components/layout/AppShell'
 import { AuthModal } from '../components/auth/AuthModal'
@@ -20,6 +20,7 @@ import { fetchWithAuth } from '../utils/fetchWithAuth'
 import { useHistoryResult } from '../hooks/useHistoryResult'
 import { LikeButton } from '../components/social/LikeButton'
 import { CommentsSection } from '../components/social/CommentsSection'
+import { CommentModal } from '../components/social/CommentModal'
 
 const PHASE_LABELS = [
   { key: 'phase1', label: '1. Market & Niche', weight: '30%' },
@@ -31,6 +32,7 @@ const PHASE_LABELS = [
 export function ResultPage() {
   const { id } = useParams()
   const navigate = useNavigate()
+  const location = useLocation()
   const dispatch = useDispatch()
   const user = useSelector(s => s.auth.user)
 
@@ -43,6 +45,13 @@ export function ResultPage() {
   const [isTogglingVisibility, setIsTogglingVisibility] = useState(false)
   const [isLinkingRevision, setIsLinkingRevision] = useState(false)
   const [isDismissingRevision, setIsDismissingRevision] = useState(false)
+  const [showComments, setShowComments] = useState(false)
+
+  useEffect(() => {
+    if (location.state?.openComments) {
+      setShowComments(true)
+    }
+  }, [])
 
   const handleTitleSave = async (newTitle) => {
     if (!newTitle || newTitle.trim() === result.title) {
@@ -333,6 +342,12 @@ export function ResultPage() {
         onConfirm={handleDelete}
         onCancel={() => setShowDeleteConfirm(false)}
       />
+      {showComments && (
+        <CommentModal
+          resultId={id}
+          onClose={() => setShowComments(false)}
+        />
+      )}
       <AuthModal />
     </AppShell>
   )
