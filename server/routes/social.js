@@ -28,6 +28,22 @@ export async function toggleLikeRoute(req, res) {
     } else {
       await pool.query('INSERT INTO likes (user_id, result_id) VALUES ($1, $2)', [userId, resultId])
       liked = true
+
+      // Insert notification (like trigger)
+      const resultOwnerResult = await pool.query(
+        'SELECT user_id FROM saved_results WHERE id = $1',
+        [resultId]
+      )
+      const resultOwner = resultOwnerResult.rows[0]?.user_id
+
+      // Only notify if actor !== owner (no self-notifications)
+      if (resultOwner && resultOwner !== userId) {
+        await pool.query(
+          `INSERT INTO notifications (recipient_id, actor_id, event_type, result_id)
+           VALUES ($1, $2, 'like', $3)`,
+          [resultOwner, userId, resultId]
+        )
+      }
     }
 
     const countResult = await pool.query(
