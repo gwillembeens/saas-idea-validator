@@ -13,6 +13,7 @@ import { leaderboardRoute, topPerNicheRoute } from './routes/leaderboard.js'
 import { profileRoute } from './routes/profile.js'
 import { getMeRoute, updateSettingsRoute } from './routes/settings.js'
 import { toggleLikeRoute, getLikeStatusRoute, getCommentsRoute, postCommentRoute, postReplyRoute, deleteCommentRoute } from './routes/social.js'
+import { getUnreadCountRoute, getNotificationsRoute, markReadRoute } from './routes/notifications.js'
 import { requireAuth } from './middleware/requireAuth.js'
 import { optionalAuth } from './middleware/optionalAuth.js'
 import { runMigrations } from './db/init.js'
@@ -69,6 +70,11 @@ app.get('/api/results/:id/comments', getCommentsRoute)
 app.post('/api/results/:id/comments', requireAuth, postCommentRoute)
 app.post('/api/comments/:id/replies', requireAuth, postReplyRoute)
 app.delete('/api/comments/:id', requireAuth, deleteCommentRoute)
+
+// Mount notification routes
+app.get('/api/notifications/unread-count', requireAuth, getUnreadCountRoute)
+app.get('/api/notifications', requireAuth, getNotificationsRoute)
+app.post('/api/notifications/mark-read', requireAuth, markReadRoute)
 
 // Mount profile routes
 app.get('/api/profile/:username', profileRoute)
