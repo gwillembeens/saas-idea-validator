@@ -37,5 +37,41 @@ export async function runMigrations() {
     ALTER TABLE users
       ADD COLUMN IF NOT EXISTS display_name VARCHAR(100)
   `)
+  // Phase 23: social interactions — likes and comments
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS likes (
+      id SERIAL PRIMARY KEY,
+      user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      result_id INTEGER NOT NULL REFERENCES saved_results(id) ON DELETE CASCADE,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      UNIQUE(user_id, result_id)
+    )
+  `)
+  await pool.query(`
+    CREATE INDEX IF NOT EXISTS likes_result_id_idx ON likes(result_id)
+  `)
+  await pool.query(`
+    CREATE INDEX IF NOT EXISTS likes_user_created_idx ON likes(user_id, created_at)
+  `)
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS comments (
+      id SERIAL PRIMARY KEY,
+      user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      result_id INTEGER NOT NULL REFERENCES saved_results(id) ON DELETE CASCADE,
+      parent_id INTEGER REFERENCES comments(id) ON DELETE CASCADE,
+      body TEXT NOT NULL CHECK (char_length(body) <= 500),
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      deleted_at TIMESTAMPTZ DEFAULT NULL
+    )
+  `)
+  await pool.query(`
+    CREATE INDEX IF NOT EXISTS comments_result_id_idx ON comments(result_id)
+  `)
+  await pool.query(`
+    CREATE INDEX IF NOT EXISTS comments_parent_id_idx ON comments(parent_id)
+  `)
+  await pool.query(`
+    CREATE INDEX IF NOT EXISTS comments_user_created_idx ON comments(user_id, created_at)
+  `)
   console.log('DB migrations applied')
 }
