@@ -41,7 +41,7 @@ export async function topPerNicheRoute(req, res) {
 }
 
 export async function leaderboardRoute(req, res) {
-  const { niche, page } = req.query
+  const { niche, page, sort } = req.query
   const pageNum = parseInt(page) || 0
   const LIMIT = 20
   const OFFSET = pageNum * LIMIT
@@ -50,6 +50,9 @@ export async function leaderboardRoute(req, res) {
   if (niche && niche !== 'All' && !VALID_NICHES.includes(niche)) {
     return res.status(400).json({ error: `Invalid niche: ${niche}` })
   }
+
+  // Validate sort; default to 'score'
+  const sortMode = sort === 'most_liked' ? 'most_liked' : 'score'
 
   try {
     const nicheFilter = niche && niche !== 'All' ? niche : null
@@ -72,7 +75,12 @@ export async function leaderboardRoute(req, res) {
     const countResult = await pool.query(countQuery, params)
     const total = parseInt(countResult.rows[0].total)
 
-    // Fetch paginated entries
+    // Build ORDER BY based on sort mode
+    const orderBy = sortMode === 'most_liked'
+      ? 'ORDER BY (SELECT COUNT(*) FROM likes WHERE result_id = sr.id) DESC, sr.created_at DESC'
+      : "ORDER BY (sr.scores->>'weighted')::float DESC, sr.created_at DESC"
+
+    // Fetch paginated entries with social counts
     const dataQuery = `
       SELECT
         sr.id,
@@ -81,13 +89,15 @@ export async function leaderboardRoute(req, res) {
         sr.niche,
         sr.user_id,
         u.username AS author_username,
-        sr.created_at
+        sr.created_at,
+        (SELECT COUNT(*)::int FROM likes l WHERE l.result_id = sr.id) AS like_count,
+        (SELECT COUNT(*)::int FROM comments c WHERE c.result_id = sr.id AND c.deleted_at IS NULL) AS comment_count
       FROM saved_results sr
       LEFT JOIN users u ON sr.user_id = u.id
       WHERE sr.is_public = true
         AND sr.deleted_at IS NULL
         ${nicheClause}
-      ORDER BY (sr.scores->>'weighted')::float DESC, sr.created_at DESC
+      ${orderBy}
       LIMIT ${LIMIT} OFFSET ${OFFSET}
     `
     const { rows } = await pool.query(dataQuery, params)
@@ -100,6 +110,8 @@ export async function leaderboardRoute(req, res) {
       user_id: row.user_id,
       author_username: row.author_username || null,
       created_at: row.created_at,
+      like_count: row.like_count,
+      comment_count: row.comment_count,
     }))
 
     res.json({
