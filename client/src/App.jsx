@@ -6,6 +6,7 @@ import { HistoryPage } from './pages/HistoryPage'
 import { ResultPage } from './pages/ResultPage'
 import { FrameworkPage } from './pages/FrameworkPage'
 import { LeaderboardPage } from './pages/LeaderboardPage'
+import { FeedPage } from './pages/FeedPage'
 import { ProfilePage } from './pages/ProfilePage'
 import { SettingsPage } from './pages/SettingsPage'
 import { NotificationsPage } from './pages/NotificationsPage'
@@ -65,6 +66,7 @@ export default function App() {
       <Route path="/history/:id" element={<ResultPage />} />
       <Route path="/framework" element={<FrameworkPage />} />
       <Route path="/leaderboard" element={<LeaderboardPage />} />
+      <Route path="/feed" element={<FeedPage />} />
       <Route path="/profile/:username" element={<ProfilePage />} />
       <Route path="/settings" element={<SettingsPage />} />
       <Route path="/notifications" element={<NotificationsPage />} />

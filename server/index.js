@@ -10,6 +10,7 @@ import {
 } from './routes/auth.js'
 import { saveResultRoute, listHistoryRoute, getResultRoute, updateTitleRoute, updateVisibilityRoute, deleteResultRoute, setParentRoute, dismissRevisionRoute } from './routes/history.js'
 import { leaderboardRoute, topPerNicheRoute } from './routes/leaderboard.js'
+import { feedRoute } from './routes/feedRoute.js'
 import { profileRoute } from './routes/profile.js'
 import { getMeRoute, updateSettingsRoute } from './routes/settings.js'
 import { toggleLikeRoute, getLikeStatusRoute, getCommentsRoute, postCommentRoute, postReplyRoute, deleteCommentRoute } from './routes/social.js'
@@ -62,6 +63,9 @@ app.patch('/api/history/:id/dismiss-revision', requireAuth, dismissRevisionRoute
 // Mount leaderboard routes
 app.get('/api/leaderboard/top-per-niche', topPerNicheRoute)
 app.get('/api/leaderboard', optionalAuth, leaderboardRoute)
+
+// Mount feed route
+app.get('/api/feed', feedRoute)
 
 // Mount social routes
 app.post('/api/results/:id/like', requireAuth, toggleLikeRoute)

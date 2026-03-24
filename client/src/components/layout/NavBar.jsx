@@ -48,14 +48,20 @@ export function NavBar() {
         {/* RIGHT: Nav links + Auth */}
         <div className="flex items-center gap-3 flex-shrink-0">
           <Link
+            to="/feed"
+            className={`font-body text-lg ${location.pathname === '/feed' ? 'text-accent' : 'text-blue'} hover:text-accent transition-colors`}
+          >
+            Feed
+          </Link>
+          <Link
             to="/leaderboard"
-            className="font-body text-lg text-blue hover:text-accent transition-colors"
+            className={`font-body text-lg ${location.pathname === '/leaderboard' ? 'text-accent' : 'text-blue'} hover:text-accent transition-colors`}
           >
             Leaderboard
           </Link>
           <Link
             to="/framework"
-            className="font-body text-lg text-blue hover:text-accent transition-colors"
+            className={`font-body text-lg hidden md:inline-flex ${location.pathname === '/framework' ? 'text-accent' : 'text-blue'} hover:text-accent transition-colors`}
           >
             Framework
           </Link>
@@ -63,7 +69,7 @@ export function NavBar() {
             <>
               <Link
                 to="/history"
-                className="font-body text-lg text-blue hover:text-accent transition-colors"
+                className={`font-body text-lg ${location.pathname === '/history' ? 'text-accent' : 'text-blue'} hover:text-accent transition-colors`}
               >
                 History
               </Link>
