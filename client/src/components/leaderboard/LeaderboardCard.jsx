@@ -1,6 +1,8 @@
 import { useNavigate, Link } from 'react-router-dom'
 import { Card } from '../ui/Card'
 import { NichePill } from '../ui/NichePill'
+import { LikeButton } from '../social/LikeButton'
+import { CommentCount } from '../social/CommentCount'
 
 function getVerdictColor(weighted) {
   if (weighted >= 4.5) return 'bg-green-100 border-green-400 text-green-800'
@@ -16,7 +18,7 @@ function getVerdictLabel(weighted) {
   return 'Too Vague'
 }
 
-export function LeaderboardCard({ entry, rank, isOwn }) {
+export function LeaderboardCard({ entry, rank, isOwn, onCommentClick }) {
   const navigate = useNavigate()
   const weighted = entry.scores?.weighted ?? 0
   const verdictColor = getVerdictColor(weighted)
@@ -61,7 +63,7 @@ export function LeaderboardCard({ entry, rank, isOwn }) {
           {entry.idea_text}
         </p>
 
-        {/* Footer: score + niche */}
+        {/* Footer: score + niche + social */}
         <div className="flex items-center gap-3 pt-3 border-t border-muted">
           <div
             className={`flex-shrink-0 inline-flex items-center gap-1.5 px-3 py-1 border font-body text-xs ${verdictColor}`}
@@ -71,6 +73,10 @@ export function LeaderboardCard({ entry, rank, isOwn }) {
             <span className="opacity-80">{verdictLabel}</span>
           </div>
           <NichePill niche={entry.niche || 'Other'} size="sm" />
+          <div className="flex items-center gap-2 ml-auto">
+            <LikeButton resultId={entry.id} initialCount={entry.like_count ?? 0} mode="compact" />
+            <CommentCount count={entry.comment_count ?? 0} onClick={onCommentClick} mode="compact" />
+          </div>
         </div>
     </Card>
   )
