@@ -108,23 +108,9 @@ export function NavBar() {
               )}
             </>
           ) : (
-            <>
-              <Link
-                to="/leaderboard"
-                className="font-body text-lg text-blue hover:text-accent transition-colors"
-              >
-                Leaderboard
-              </Link>
-              <Link
-                to="/framework"
-                className="font-body text-lg text-blue hover:text-accent transition-colors"
-              >
-                Framework
-              </Link>
-              <Button variant="secondary" onClick={() => openModal('login')}>
-                Sign In
-              </Button>
-            </>
+            <Button variant="secondary" onClick={() => openModal('login')}>
+              Sign In
+            </Button>
           )}
         </div>
       </div>
