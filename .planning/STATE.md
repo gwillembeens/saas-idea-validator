@@ -4,12 +4,12 @@ milestone: v1.0
 milestone_name: milestone
 current_phase: 24
 status: executing
-last_updated: "2026-03-24T21:23:19.650Z"
+last_updated: "2026-03-24T21:40:00.000Z"
 progress:
   total_phases: 3
   completed_phases: 1
   total_plans: 9
-  completed_plans: 4
+  completed_plans: 5
 ---
 
 # Project State
@@ -39,6 +39,7 @@ See: `.planning/PROJECT.md` (updated 2026-03-22)
 - Plan 20-04 (Frontend Wave 2 — NavBar Updates & Route Registration): COMPLETED ✓
 - Plan 21-01 (Backend — Top Score Per Niche Endpoint): COMPLETED ✓
 - Plan 21-02 (Frontend — Challenge Cards UI): COMPLETED ✓
+- Plan 24-01 (Backend — Notifications Table & API Routes): COMPLETED ✓
 
 ---
 
@@ -273,10 +274,28 @@ Key changes:
 
 Frontend challenge cards fully functional. Users can see top scores per niche and click to validate ideas in those niches.
 
+## 24-01 Completion Details
+
+**Plan:** Backend — Notifications Table & API Routes
+**Tasks:** 5/5 completed
+**Commits:** 5 implementation commits
+**Status:** Complete ✓
+
+Key implementation:
+
+- DB migration: `notifications` table with recipient_id, actor_id, event_type, result_id, is_read, created_at
+- Three indexes: unread count query optimization, grouping by event type/result/status, 30-day retention
+- API routes: `GET /api/notifications/unread-count`, `GET /api/notifications`, `POST /api/notifications/mark-read`
+- `getNotificationsRoute()`: Groups by (event_type, result_id), aggregates actor counts, includes most recent actor username, 30-day filter, limit 50
+- Notifications wired into `toggleLikeRoute`: Inserts 'like' notification after like created (not on unlike)
+- Notifications wired into `postCommentRoute`: Inserts 'comment' notification after comment created
+- Self-notification prevention: Checks `actor !== result owner` in both routes
+- Express routes registered with `requireAuth` middleware, proper route order (specific before general)
+
 ## Next Phase
 
-**Phase 24:** Notifications (in-app alerts for likes, comments, unread badge in NavBar)
+**Phase 24-02:** Frontend — Notifications UI (notification bell, dropdown, Redux slice)
 
 ---
 
-*State updated: 2026-03-23 — Phase 21 complete ✓ (Plan 21-01 backend + Plan 21-02 frontend), all tests passing 52/52*
+*State updated: 2026-03-24 — Phase 24-01 complete ✓ (Backend notifications), 5/5 tasks, 5 commits*
