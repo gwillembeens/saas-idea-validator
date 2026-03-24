@@ -52,15 +52,22 @@ export async function profileRoute(req, res) {
       heatmapStart = startD.toISOString().slice(0, 10)
     }
 
-    // Fetch heatmap for computed date range
+    // Fetch heatmap using UNION of all activity types
     const { rows: heatmapRows } = await pool.query(
       `SELECT DATE(created_at) AS day, COUNT(*)::int AS count
-       FROM saved_results
-       WHERE user_id = $1
-         AND is_public = true
-         AND deleted_at IS NULL
-         AND DATE(created_at) >= $2
-         AND DATE(created_at) <= $3
+       FROM (
+         SELECT created_at FROM saved_results
+           WHERE user_id = $1 AND is_public = true AND deleted_at IS NULL
+           AND DATE(created_at) >= $2 AND DATE(created_at) <= $3
+         UNION ALL
+         SELECT created_at FROM likes
+           WHERE user_id = $1
+           AND DATE(created_at) >= $2 AND DATE(created_at) <= $3
+         UNION ALL
+         SELECT created_at FROM comments
+           WHERE user_id = $1 AND deleted_at IS NULL
+           AND DATE(created_at) >= $2 AND DATE(created_at) <= $3
+       ) AS events
        GROUP BY DATE(created_at)
        ORDER BY day ASC`,
       [user.id, heatmapStart, heatmapEnd]
@@ -151,6 +158,32 @@ export async function profileRoute(req, res) {
       })
       .filter(Boolean)
 
+    // Batch fetch like_count and comment_count for all validations
+    let socialCountsMap = {}
+    if (validations.length > 0) {
+      const validationIds = validations.map(v => v.id)
+      const socialResult = await pool.query(
+        `SELECT result_id,
+           (SELECT COUNT(*)::int FROM likes l WHERE l.result_id = sc.result_id) AS like_count,
+           (SELECT COUNT(*)::int FROM comments c WHERE c.result_id = sc.result_id AND c.deleted_at IS NULL) AS comment_count
+         FROM (SELECT UNNEST($1::int[]) AS result_id) sc`,
+        [validationIds]
+      )
+      for (const row of socialResult.rows) {
+        socialCountsMap[row.result_id] = { like_count: row.like_count, comment_count: row.comment_count }
+      }
+    }
+
+    // total_likes_received: likes on this user's public results
+    const totalLikesResult = await pool.query(
+      `SELECT COUNT(*)::int AS total
+       FROM likes l
+       INNER JOIN saved_results sr ON l.result_id = sr.id
+       WHERE sr.user_id = $1 AND sr.is_public = true AND sr.deleted_at IS NULL`,
+      [user.id]
+    )
+    const totalLikesReceived = totalLikesResult.rows[0]?.total ?? 0
+
     // Format validations for grid (truncate idea_text)
     const formattedValidations = validations.map(v => ({
       id: v.id,
@@ -159,6 +192,8 @@ export async function profileRoute(req, res) {
       scores: v.scores,
       niche: v.niche,
       created_at: v.created_at,
+      like_count: socialCountsMap[v.id]?.like_count ?? 0,
+      comment_count: socialCountsMap[v.id]?.comment_count ?? 0,
     }))
 
     res.json({
@@ -169,11 +204,13 @@ export async function profileRoute(req, res) {
         avg_score: avgScore,
         top_niche: topNiche,
         personal_best: personalBest,
+        total_likes_received: totalLikesReceived,
       },
       validations: formattedValidations,
       chains,
       analytics: {
         heatmap,
+        heatmap_label: 'actions',
         scoreTrend,
         nicheBreakdown,
         streaks,
