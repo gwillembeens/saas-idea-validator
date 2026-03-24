@@ -2,21 +2,21 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-current_phase: 24
-status: executing
-last_updated: "2026-03-24T22:26:00.000Z"
+current_phase: 25
+status: planning
+last_updated: "2026-03-24T23:30:00.000Z"
 progress:
   total_phases: 3
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 9
-  completed_plans: 6
+  completed_plans: 9
 ---
 
 # Project State
 
 **Last updated:** 2026-03-24
-**Current phase:** 24
-**Status:** Executing Phase 24
+**Current phase:** 25
+**Status:** Phase 24 complete ✓ — ready for Phase 25
 
 ---
 
@@ -26,7 +26,7 @@ See: `.planning/PROJECT.md` (updated 2026-03-22)
 
 **Core value:** A founder pastes an idea and gets an honest, investor-grade analysis in under a minute, streamed live with a visual scorecard.
 
-**Current focus:** Phase 24 — notifications
+**Current focus:** Phase 25 — Feed
 
 - Plan 23-01 (Backend — DB Migrations + All API Routes): COMPLETED ✓
 - Plan 23-02 (Frontend Wave 1 — LikeButton + Card Extensions): COMPLETED ✓
@@ -311,9 +311,13 @@ Key implementation:
 - Comprehensive unit tests: 7 test cases covering mount fetch, fetch list, mark read, no-token case, network error resilience, and response parsing
 - All 7 tests passing, no regressions in existing suite (80/81)
 
+- Plan 24-03 (NavBar bell icon + NotificationDropdown): COMPLETED ✓
+- Plan 24-04 (NotificationsPage + /notifications route): COMPLETED ✓
+- Plan 24-05 (ResultPage auto-open CommentModal): COMPLETED ✓
+
 ## Next Phase
 
-**Phase 24-03:** Frontend — Notifications Modal & NavBar Integration
+**Phase 25:** Feed — personalised engagement feed
 
 ---
 
