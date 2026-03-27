@@ -58,8 +58,13 @@ export function LeaderboardCard({ entry, rank, isOwn, onCommentClick }) {
           )}
         </div>
 
+        {/* Title */}
+        {entry.title && (
+          <p className="font-heading text-base md:text-lg text-pencil mb-1">{entry.title}</p>
+        )}
+
         {/* Idea preview */}
-        <p className="font-body text-base md:text-lg text-pencil mb-4 line-clamp-2 leading-snug">
+        <p className="font-body text-sm text-pencil opacity-70 mb-4 line-clamp-2 leading-snug">
           {entry.idea_text}
         </p>
 

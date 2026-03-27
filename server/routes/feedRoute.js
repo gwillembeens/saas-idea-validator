@@ -42,6 +42,7 @@ export async function feedRoute(req, res) {
     const dataQuery = `
       SELECT
         sr.id,
+        sr.title,
         sr.idea_text,
         sr.scores,
         sr.niche,
@@ -72,6 +73,7 @@ export async function feedRoute(req, res) {
     const total = parseInt(countResult.rows[0].total)
     const entries = dataResult.rows.map(row => ({
       id: row.id,
+      title: row.title || null,
       idea_text: truncateIdeaText(row.idea_text),
       scores: row.scores,
       niche: row.niche,

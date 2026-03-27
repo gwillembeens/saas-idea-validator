@@ -19,7 +19,7 @@ function weightedScore(scores) {
   return (phase1 * 0.30 + phase2 * 0.25 + phase3 * 0.35 + phase4 * 0.10).toFixed(1)
 }
 
-export function FeedCard({ id, idea_text, scores, niche, user_id, author_username, created_at, like_count, comment_count, liked_by_user }) {
+export function FeedCard({ id, title, idea_text, scores, niche, user_id, author_username, created_at, like_count, comment_count, liked_by_user }) {
   const navigate = useNavigate()
   const { openModal } = useAuth()
 
@@ -54,8 +54,13 @@ export function FeedCard({ id, idea_text, scores, niche, user_id, author_usernam
         )}
       </div>
 
+      {/* Title */}
+      {title && (
+        <p className="font-heading text-base text-pencil mb-1">{title}</p>
+      )}
+
       {/* Idea preview */}
-      <p className="font-body text-base text-pencil line-clamp-2 mb-3">
+      <p className="font-body text-sm text-pencil opacity-70 line-clamp-2 mb-3">
         {idea_text}
       </p>
 

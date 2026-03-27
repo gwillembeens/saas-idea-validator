@@ -84,6 +84,7 @@ export async function leaderboardRoute(req, res) {
     const dataQuery = `
       SELECT
         sr.id,
+        sr.title,
         sr.idea_text,
         sr.scores,
         sr.niche,
@@ -104,6 +105,7 @@ export async function leaderboardRoute(req, res) {
 
     const entries = rows.map(row => ({
       id: row.id,
+      title: row.title || null,
       idea_text: truncateIdeaText(row.idea_text),
       scores: row.scores,
       niche: row.niche,
